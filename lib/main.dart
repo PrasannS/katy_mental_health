@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:katy_mental_health/Pages/answer_page.dart';
+import 'package:katy_mental_health/Pages/calendar_page.dart';
 
 import 'Pages/home_page.dart';
 
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(title: 'Flutter Demo Home Page'),
+      home: CalendarPage(),
     );
   }
 }
