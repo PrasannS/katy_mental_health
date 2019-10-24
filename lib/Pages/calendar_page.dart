@@ -1,8 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CalendarPage extends StatefulWidget {
-  CalendarPage({Key key, this.title}) : super(key: key);
+import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
+    show CalendarCarousel;
+import 'package:flutter_calendar_carousel/classes/event.dart';
+import 'package:flutter_calendar_carousel/classes/event_list.dart';
+import 'package:intl/intl.dart' show DateFormat;
+
+
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key key, this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -16,72 +22,271 @@ class CalendarPage extends StatefulWidget {
   final String title;
 
   @override
-  _CalendarPageState createState() => _CalendarPageState();
+  _MyHomePageState createState() => new _MyHomePageState();
 }
 
-class _CalendarPageState extends State<CalendarPage> {
-  int _counter = 0;
+class _MyHomePageState extends State<MyHomePage> {
+  DateTime _currentDate = DateTime(2019, 2, 3);
+  DateTime _currentDate2 = DateTime(2019, 2, 3);
+  String _currentMonth = '';
+//  List<DateTime> _markedDate = [DateTime(2018, 9, 20), DateTime(2018, 10, 11)];
+  static Widget _eventIcon = new Container(
+    decoration: new BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(1000)),
+        border: Border.all(color: Colors.blue, width: 2.0)),
+    child: new Icon(
+      Icons.person,
+      color: Colors.amber,
+    ),
+  );
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  EventList<Event> _markedDateMap = new EventList<Event>(
+    events: {
+      new DateTime(2019, 2, 10): [
+        new Event(
+          date: new DateTime(2019, 2, 10),
+          title: 'Event 1',
+          icon: _eventIcon,
+          dot: Container(
+            margin: EdgeInsets.symmetric(horizontal: 1.0),
+            color: Colors.red,
+            height: 5.0,
+            width: 5.0,
+          ),
+        ),
+        new Event(
+          date: new DateTime(2019, 2, 10),
+          title: 'Event 2',
+          icon: _eventIcon,
+        ),
+        new Event(
+          date: new DateTime(2019, 2, 10),
+          title: 'Event 3',
+          icon: _eventIcon,
+        ),
+      ],
+    },
+  );
+
+  CalendarCarousel _calendarCarousel, _calendarCarouselNoHeader;
+
+  @override
+  void initState() {
+    /// Add more events to _markedDateMap EventList
+    _markedDateMap.add(
+        new DateTime(2019, 2, 25),
+        new Event(
+          date: new DateTime(2019, 2, 25),
+          title: 'Event 5',
+          icon: _eventIcon,
+        ));
+
+    _markedDateMap.add(
+        new DateTime(2019, 2, 10),
+        new Event(
+          date: new DateTime(2019, 2, 10),
+          title: 'Event 4',
+          icon: _eventIcon,
+        ));
+
+    _markedDateMap.addAll(new DateTime(2019, 2, 11), [
+      new Event(
+        date: new DateTime(2019, 2, 11),
+        title: 'Event 1',
+        icon: _eventIcon,
+      ),
+      new Event(
+        date: new DateTime(2019, 2, 11),
+        title: 'Event 2',
+        icon: _eventIcon,
+      ),
+      new Event(
+        date: new DateTime(2019, 2, 11),
+        title: 'Event 3',
+        icon: _eventIcon,
+      ),
+      new Event(
+        date: new DateTime(2019, 2, 11),
+        title: 'Event 4',
+        icon: _eventIcon,
+      ),
+      new Event(
+        date: new DateTime(2019, 2, 11),
+        title: 'Event 23',
+        icon: _eventIcon,
+      ),
+      new Event(
+        date: new DateTime(2019, 2, 11),
+        title: 'Event 123',
+        icon: _eventIcon,
+      ),
+    ]);
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the CalendarPage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+    /// Example with custom icon
+    _calendarCarousel = CalendarCarousel<Event>(
+      onDayPressed: (DateTime date, List<Event> events) {
+        this.setState(() => _currentDate = date);
+        events.forEach((event) => print(event.title));
+      },
+      weekendTextStyle: TextStyle(
+        color: Colors.red,
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
-        ),
+      thisMonthDayBorderColor: Colors.grey,
+//          weekDays: null, /// for pass null when you do not want to render weekDays
+      headerText: 'Custom Header',
+//          markedDates: _markedDate,
+      weekFormat: true,
+      markedDatesMap: _markedDateMap,
+      height: 200.0,
+      selectedDateTime: _currentDate2,
+      showIconBehindDayText: true,
+//          daysHaveCircularBorder: false, /// null for not rendering any border, true for circular border, false for rectangular border
+      customGridViewPhysics: NeverScrollableScrollPhysics(),
+      markedDateShowIcon: true,
+      markedDateIconMaxShown: 2,
+      selectedDayTextStyle: TextStyle(
+        color: Colors.yellow,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      todayTextStyle: TextStyle(
+        color: Colors.blue,
+      ),
+      markedDateIconBuilder: (event) {
+        return event.icon;
+      },
+      minSelectedDate: _currentDate.subtract(Duration(days: 360)),
+      maxSelectedDate: _currentDate.add(Duration(days: 360)),
+      todayButtonColor: Colors.transparent,
+      todayBorderColor: Colors.green,
+      markedDateMoreShowTotal:
+      false, // null for not showing hidden events indicator
+//          markedDateIconMargin: 9,
+//          markedDateIconOffset: 3,
     );
+
+    /// Example Calendar Carousel without header and custom prev & next button
+    _calendarCarouselNoHeader = CalendarCarousel<Event>(
+      todayBorderColor: Colors.green,
+      onDayPressed: (DateTime date, List<Event> events) {
+        this.setState(() => _currentDate2 = date);
+        events.forEach((event) => print(event.title));
+      },
+      daysHaveCircularBorder: true,
+      showOnlyCurrentMonthDate: false,
+      weekendTextStyle: TextStyle(
+        color: Colors.red,
+      ),
+      thisMonthDayBorderColor: Colors.grey,
+      weekFormat: false,
+//      firstDayOfWeek: 4,
+      markedDatesMap: _markedDateMap,
+      height: 420.0,
+      selectedDateTime: _currentDate2,
+      customGridViewPhysics: NeverScrollableScrollPhysics(),
+      markedDateCustomShapeBorder: CircleBorder(
+          side: BorderSide(color: Colors.yellow)
+      ),
+      markedDateCustomTextStyle: TextStyle(
+        fontSize: 18,
+        color: Colors.blue,
+      ),
+      showHeader: false,
+      // markedDateIconBuilder: (event) {
+      //   return Container(
+      //     color: Colors.blue,
+      //   );
+      // },
+      todayTextStyle: TextStyle(
+        color: Colors.blue,
+      ),
+      todayButtonColor: Colors.yellow,
+      selectedDayTextStyle: TextStyle(
+        color: Colors.yellow,
+      ),
+      minSelectedDate: _currentDate.subtract(Duration(days: 360)),
+      maxSelectedDate: _currentDate.add(Duration(days: 360)),
+      prevDaysTextStyle: TextStyle(
+        fontSize: 16,
+        color: Colors.pinkAccent,
+      ),
+      inactiveDaysTextStyle: TextStyle(
+        color: Colors.tealAccent,
+        fontSize: 16,
+      ),
+      onCalendarChanged: (DateTime date) {
+        this.setState(() => _currentMonth = DateFormat.yMMM().format(date));
+      },
+      onDayLongPressed: (DateTime date) {
+        print('long pressed date $date');
+      },
+    );
+
+    return new Scaffold(
+        appBar: new AppBar(
+          title: new Text(widget.title),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              //custom icon
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 16.0),
+                child: _calendarCarousel,
+              ), // This trailing comma makes auto-formatting nicer for build methods.
+              //custom icon without header
+              Container(
+                margin: EdgeInsets.only(
+                  top: 30.0,
+                  bottom: 16.0,
+                  left: 16.0,
+                  right: 16.0,
+                ),
+                child: new Row(
+                  children: <Widget>[
+                    Expanded(
+                        child: Text(
+                          _currentMonth,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24.0,
+                          ),
+                        )),
+                    FlatButton(
+                      child: Text('PREV'),
+                      onPressed: () {
+                        setState(() {
+                          _currentDate2 =
+                              _currentDate2.subtract(Duration(days: 30));
+                          _currentMonth =
+                              DateFormat.yMMM().format(_currentDate2);
+                        });
+                      },
+                    ),
+                    FlatButton(
+                      child: Text('NEXT'),
+                      onPressed: () {
+                        setState(() {
+                          _currentDate2 = _currentDate2.add(Duration(days: 30));
+                          _currentMonth =
+                              DateFormat.yMMM().format(_currentDate2);
+                        });
+                      },
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 16.0),
+                child: _calendarCarouselNoHeader,
+              ), //
+            ],
+          ),
+        ));
   }
 }
