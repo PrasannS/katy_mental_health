@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_circular_slider/flutter_circular_slider.dart';
 
 class AnswerPage extends StatefulWidget {
@@ -10,12 +11,21 @@ class AnswerPage extends StatefulWidget {
 class _AnswerPageState extends State<AnswerPage> {
   final baseColor = Color.fromRGBO(255, 255, 255, 0.3);
 
-  int initTime;
+  List<String> questions = ["","How Much Sleep did you get?", "What is your mood?","How much water have you drank today?",
+    "Question of the Day:","What was your most impactful activity today?", "Any Notes for Today?", "Submit?"];
 
+  List<String> moods = ["Bad","Meh","Good",];
+  int initTime;
   int inBedTime;
-  int outBedTime;
+  int outBedTime =0;
   int days = 0;
   int level = 255;
+  int currentQuestion = 0;
+  int endTime;
+
+
+
+
 
   @override
   void initState() {
@@ -30,6 +40,21 @@ class _AnswerPageState extends State<AnswerPage> {
     });
   }
 
+  void nextQuestion(){
+    setState(() {
+      if(currentQuestion!=2) {
+        currentQuestion++;
+      }
+    });
+  }
+
+  void prevQuestion(){
+      setState(() {
+      if(currentQuestion!=0)
+      currentQuestion--;
+    });
+  }
+
   LinearGradient getGradient(int a){
     return new LinearGradient(
         begin: Alignment.topRight,
@@ -40,33 +65,92 @@ class _AnswerPageState extends State<AnswerPage> {
   @override
   Widget build(BuildContext context) {
 
-    SingleCircularSlider water = new SingleCircularSlider(
-      255,
-      10,
-      height: 380.0,
-      width: 380.0,
-      primarySectors: 0,
-      secondarySectors: 0,
-      baseColor: Color.fromRGBO(255, 255, 255, 0.1),
-      selectionColor: baseColor,
-      handlerColor: Colors.white,
-      sliderStrokeWidth: 50,
-      handlerOutterRadius: 12.0,
-      onSelectionChange: _updateLabels,
-      showRoundedCapInSelection: false,
-      showHandlerOutter: true,
-      child: Padding(
-          padding: const EdgeInsets.all(42.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: 20),
-              Text('Spin Me!',
-                  style: TextStyle(fontSize: 24.0, color: Colors.white)),
-            ],
-          )),
-      shouldCountLaps: true,
-    );
+    List<Widget> questionWidgets = [
+      new SingleCircularSlider(
+        255,
+        10,
+        height: 380.0,
+        width: 380.0,
+        primarySectors: 0,
+        secondarySectors: 0,
+        baseColor: Color.fromRGBO(255, 255, 255, 0.1),
+        selectionColor: baseColor,
+        handlerColor: Colors.white,
+        sliderStrokeWidth: 50,
+        handlerOutterRadius: 12.0,
+        onSelectionChange: _updateLabels,
+        showRoundedCapInSelection: false,
+        showHandlerOutter: true,
+        child: Padding(
+            padding: const EdgeInsets.all(42.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 20),
+                Text('${((outBedTime*24)/255).round()} Hours',
+                    style: TextStyle(fontSize: 24.0, color: Colors.white)),
+              ],
+            )),
+        shouldCountLaps: false,
+      ),
+      new SingleCircularSlider(
+        255,
+        10,
+        height: 380.0,
+        width: 380.0,
+        primarySectors: 0,
+        secondarySectors: 0,
+        baseColor: Color.fromRGBO(255, 255, 255, 0.1),
+        selectionColor: Color.fromRGBO(255, 255, 255, 0.3),
+        handlerColor: Colors.white,
+        sliderStrokeWidth: 50,
+        handlerOutterRadius: 12.0,
+        onSelectionChange: _updateLabels,
+        showRoundedCapInSelection: false,
+        showHandlerOutter: true,
+        child: Padding(
+            padding: const EdgeInsets.all(42.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 20),
+                Text('${moods[((outBedTime*2.99)/255).floor()]}',
+                    style: TextStyle(fontSize: 24.0, color: Colors.white)),
+              ],
+            )),
+        shouldCountLaps: false,
+      ),
+      new SingleCircularSlider(
+        255,
+        10,
+        height: 380.0,
+        width: 380.0,
+        primarySectors: 0,
+        secondarySectors: 0,
+        baseColor: Color.fromRGBO(255, 255, 255, 0.1),
+        selectionColor: Color.fromRGBO(255, 255, 255, 0.3),
+        handlerColor: Colors.white,
+        sliderStrokeWidth: 50,
+        handlerOutterRadius: 12.0,
+        onSelectionChange: _updateLabels,
+        showRoundedCapInSelection: false,
+        showHandlerOutter: true,
+        child: Padding(
+            padding: const EdgeInsets.all(42.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 20),
+                Text('${((outBedTime*8)/255).round()} Glasses',
+                    style: TextStyle(fontSize: 24.0, color: Colors.white)),
+              ],
+            )),
+        shouldCountLaps: false,
+      ),
+
+    ];
+
+
     return Scaffold(
         body: SafeArea(
             child: Container(
@@ -78,25 +162,34 @@ class _AnswerPageState extends State<AnswerPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      'QUESTION',
+                      '${questions[currentQuestion]}',
                       style: TextStyle(color: Colors.white),
                     ),
-                    water,
+                    questionWidgets[currentQuestion],
                     Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-
-                    ]),
-                    FlatButton(
-                      child: Text('RECORD $days'),
-                      color: baseColor,
-                      textColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50.0),
+                      FlatButton(
+                        child: Text('BACK $days'),
+                        color: baseColor,
+                        textColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        onPressed: prevQuestion ,
                       ),
-                    ),
+                      FlatButton(
+                        child: Text('NEXT'),
+                        color: baseColor,
+                        textColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        onPressed:  nextQuestion,
+                      ),
+                    ]),
+
                   ],
                 )
             )));
-
   }
 
 }

@@ -25,6 +25,8 @@ dependencies:
   cupertino_icons: ^0.1.2
   flutter_calendar_carousel: ^1.4.2
   flutter_circular_slider : ^2.5.0
+  sqflite: ^1.1.7+1
+  path_provider: ^1.4.0
 
 dev_dependencies:
   flutter_test:
