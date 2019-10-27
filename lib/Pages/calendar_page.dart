@@ -100,7 +100,7 @@ class _CalendarPageState extends State<CalendarPage> {
     return new Scaffold(
         body: SingleChildScrollView(
           child:SizedBox(
-            height: 1200,
+            height: 800,
             width: double.infinity,
             child: ListView(
               children: <Widget>[
@@ -148,16 +148,115 @@ class _CalendarPageState extends State<CalendarPage> {
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 16.0),
+                  height: 300,
                   child: _calendarCarouselNoHeader,
                 ),
                 Container(
-                  height: 400,
+                  height: 300,
                   child: ListView(
                     children: <Widget>[
                       Row(
                         children: <Widget>[
+                          Container(
+                            child: Column(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.airline_seat_flat,
+                                  semanticLabel: "Hello",
+                                ),
+                                Text(
+                                  'Hello'
+                                )
+                              ],
+                            ),
+                            height: 50,
+                            width: 120,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                  begin: Alignment.topRight,
+                                  end: Alignment.bottomLeft,
+                                  colors: [Color.fromRGBO(255-200, 0, 50,.10), Color.fromRGBO(0, 200, 50,.10)])
+                            ),
+                          ),
+                          Container(
+                            child: Column(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.child_care,
+                                  semanticLabel: "Hello",
+                                ),
+                                Text(
+                                    'Hello'
+                                )
+                              ],
+                            ),
+                            height: 50,
+                            width: 120,
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                    begin: Alignment.topRight,
+                                    end: Alignment.bottomLeft,
+                                    colors: [Color.fromRGBO(255-200, 0, 50,.10), Color.fromRGBO(0, 200, 50,.10)])
+                            ),
 
+                          ),
+                          Container(
+
+                            child: Column(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.invert_colors,
+                                  semanticLabel: "Hello",
+                                ),
+                                Text(
+                                    'Hello'
+                                )
+                              ],
+                            ),
+                            height: 50,
+                            width: 120,
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                    begin: Alignment.topRight,
+                                    end: Alignment.bottomLeft,
+                                    colors: [Color.fromRGBO(255-200, 0, 50,.10), Color.fromRGBO(0, 200, 50,.10)])
+                            ),
+                          ),
                         ],
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            child: Text('HELLO'),
+                            height: 50,
+                            width: 400,
+                          ),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            child: Text('DEFAULT'),
+                            height: 50,
+                            width: 400,
+                          ),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            child: Text('HELLO'),
+                            height: 50,
+                            width: 400,
+                          ),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       )
                     ],
                   ),
