@@ -44,17 +44,24 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     )
   ];
 
+  //int _bottomNavBarIndex = 0;
   TabController _tabController;
-
+  void _tabControllerListener(){
+    setState(() {
+      _currentIndex = _tabController.index;
+    });
+  }
   @override
   void initState() {
+    _tabController = TabController(length: 4, vsync: this);
+    _tabController.addListener(_tabControllerListener);
     super.initState();
-    _tabController = TabController(vsync: this, length: _tabList.length);
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _tabController.removeListener(_tabControllerListener);
     super.dispose();
   }
 
@@ -69,15 +76,14 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         children: _tabList,
       ),
       bottomNavigationBar: BottomNavigationBar(
+
         currentIndex: _currentIndex,
         onTap: (currentIndex){
-
           setState(() {
             _currentIndex = currentIndex;
           });
 
           _tabController.animateTo(_currentIndex);
-
         },
         items: [
           BottomNavigationBarItem(
