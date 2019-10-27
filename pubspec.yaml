@@ -26,7 +26,6 @@ dependencies:
   fl_chart: ^0.3.4
   flutter_calendar_carousel: ^1.4.2
   flutter_circular_slider : ^2.5.0
-  ads: ^1.0.0
 
 dev_dependencies:
   flutter_test:
