@@ -121,10 +121,12 @@ List<String> questionsOfTheDay = [
     e.sleep=ends[0];
     e.water=ends[2];
     e.note=noteController.text;
+    e.datetime= new DateTime.now().millisecondsSinceEpoch;
     databaseHelper.insertEntry(e);
+    print(e.toString());
     Future<List<Entry>>d = databaseHelper.getEntryList();
     d.then((entryList){
-      print(entryList[0].toString());
+      print(entryList[1].toString());
     });
 
   }

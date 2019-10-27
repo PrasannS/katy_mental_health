@@ -36,7 +36,7 @@ class DatabaseHelper {
     String path = directory.path + 'appdb.db';
 
     // Open/create the database at a given path
-    var entrysDatabase = await openDatabase(path, version: 2, onCreate: _createDb);
+    var entrysDatabase = await openDatabase(path, version: 3, onCreate: _createDb);
     return entrysDatabase;
   }
 
@@ -51,9 +51,8 @@ class DatabaseHelper {
   void _createDb(Database db, int newVersion) async {
 
     await db.execute('CREATE TABLE entry_table(id INTEGER PRIMARY KEY AUTOINCREMENT, sleep INTEGER, '
-        'mood INTEGER, water INTEGER, question_id INTEGER, answer TEXT, note TEXT, activity TEXT)');
+        'mood INTEGER, water INTEGER, question_id INTEGER, answer TEXT, note TEXT, activity TEXT, datetime TEXT)');
 
-    await db.execute('CREATE TABLE question_table(id INTEGER PRIMARY KEY AUTOINCREMENT, answer TEXT)');
   }
 
   // Fetch Operation: Get all entry objects from database

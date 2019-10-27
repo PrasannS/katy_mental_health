@@ -33,13 +33,13 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
   List<Widget> _tabList = [
     Container(
-      child:StatsPage()
+      child:CalendarPage()
     ),
     Container(
-      child: CalendarPage()
+      child: StatsPage()
     ),
     Container(
-      color: Colors.blue,
+      child: AnswerPage()
     ),
     Container(
       color: Colors.purple,
@@ -70,15 +70,13 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title.toUpperCase()),
-      ),
       body: TabBarView(
         controller: _tabController,
         children: _tabList,
       ),
       bottomNavigationBar: BottomNavigationBar(
-
+        unselectedItemColor: Colors.redAccent,
+        selectedItemColor: Colors.blue,
         currentIndex: _currentIndex,
         onTap: (currentIndex){
           setState(() {
