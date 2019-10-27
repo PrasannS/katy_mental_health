@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:katy_mental_health/Pages/answer_page.dart';
+import 'package:katy_mental_health/Pages/calendar_page.dart';
+import 'package:katy_mental_health/Pages/stats_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -31,10 +33,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
   List<Widget> _tabList = [
     Container(
-      color: Colors.red,
+      child:StatsPage()
     ),
     Container(
-      color: Colors.green,
+      child: CalendarPage()
     ),
     Container(
       color: Colors.blue,

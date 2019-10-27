@@ -6,7 +6,6 @@ import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
-
 class CalendarPage extends StatefulWidget {
   CalendarPage({Key key, this.title}) : super(key: key);
 
@@ -59,9 +58,8 @@ class _CalendarPageState extends State<CalendarPage> {
       height: 420.0,
       selectedDateTime: _currentDate2,
       customGridViewPhysics: NeverScrollableScrollPhysics(),
-      markedDateCustomShapeBorder: CircleBorder(
-          side: BorderSide(color: Colors.yellow)
-      ),
+      markedDateCustomShapeBorder:
+          CircleBorder(side: BorderSide(color: Colors.yellow)),
       markedDateCustomTextStyle: TextStyle(
         fontSize: 18,
         color: Colors.blue,
@@ -119,12 +117,12 @@ class _CalendarPageState extends State<CalendarPage> {
                   children: <Widget>[
                     Expanded(
                         child: Text(
-                          _currentMonth,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24.0,
-                          ),
-                        )),
+                      _currentMonth,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24.0,
+                      ),
+                    )),
                     FlatButton(
                       child: Text('PREV'),
                       onPressed: () {
