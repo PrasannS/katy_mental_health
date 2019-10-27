@@ -21,20 +21,24 @@ class _AnswerPageState extends State<AnswerPage> {
   void initState() {
     super.initState();
   }
+
   void _updateLabels(int init, int end, int laps) {
     setState(() {
       inBedTime = init;
       outBedTime = end;
       days = laps;
-      level = end;
+      level = level >= 255? 255 : end;
     });
   }
 
-  LinearGradient getGradient(int a){
+  LinearGradient getGradient(int a) {
     return new LinearGradient(
         begin: Alignment.topRight,
         end: Alignment.bottomLeft,
-        colors: [Color.fromRGBO(255-a, 0, 50,1.0), Color.fromRGBO(0, a, 50, 1.0)]);
+        colors: [
+          Color.fromRGBO(255 - a, 0, 50, 1.0),
+          Color.fromRGBO(0, a, 50, 1.0)
+        ]);
   }
 
   @override
@@ -43,9 +47,8 @@ class _AnswerPageState extends State<AnswerPage> {
         body: SafeArea(
             child: Container(
                 decoration: BoxDecoration(
-                    gradient:getGradient(level),
-                    color: Color.fromARGB(100, level, 20, 20)
-                ),
+                    gradient: getGradient(level),
+                    color: Color.fromARGB(100, level, 20, 20)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -58,13 +61,13 @@ class _AnswerPageState extends State<AnswerPage> {
                       10,
                       height: 380.0,
                       width: 380.0,
-                      primarySectors: 6,
-                      secondarySectors: 24,
+                      primarySectors: 0,
+                      secondarySectors: 0,
                       baseColor: Color.fromRGBO(255, 255, 255, 0.1),
                       selectionColor: baseColor,
                       handlerColor: Colors.white,
                       sliderStrokeWidth: 50,
-                      handlerOutterRadius: 12.0,
+                      handlerOutterRadius: 14.0,
                       onSelectionChange: _updateLabels,
                       showRoundedCapInSelection: false,
                       showHandlerOutter: true,
@@ -75,14 +78,15 @@ class _AnswerPageState extends State<AnswerPage> {
                             children: [
                               SizedBox(height: 20),
                               Text('Emoji',
-                                  style: TextStyle(fontSize: 24.0, color: Colors.white)),
+                                  style: TextStyle(
+                                      fontSize: 24.0, color: Colors.white)),
                             ],
                           )),
                       shouldCountLaps: false,
                     ),
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-
-                    ]),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: []),
                     FlatButton(
                       child: Text('N E X T'),
                       color: baseColor,
@@ -92,9 +96,6 @@ class _AnswerPageState extends State<AnswerPage> {
                       ),
                     ),
                   ],
-                )
-            )));
-
+                ))));
   }
-
 }
