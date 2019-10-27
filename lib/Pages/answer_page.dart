@@ -94,6 +94,7 @@ List<String> questionsOfTheDay = [
     setState(() {
       selectedOpt=a;
       print(selectedOpt);
+      currentQuestion++;
     });
   }
 
