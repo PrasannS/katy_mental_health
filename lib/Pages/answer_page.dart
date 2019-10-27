@@ -84,6 +84,9 @@ List<String> questionsOfTheDay = [
       if(currentQuestion!=6) {
         currentQuestion++;
       }
+      else{
+        submit();
+      }
     });
   }
 
@@ -105,17 +108,23 @@ List<String> questionsOfTheDay = [
     return new LinearGradient(
         begin: Alignment.topRight,
         end: Alignment.bottomLeft,
-        colors: [Color.fromRGBO(255-ends[currentQuestion], 0, 50,1.0), Color.fromRGBO(0, ends[currentQuestion], 50, 1.0)]);
+        colors: [Color.fromRGBO(255-ends[currentQuestion], 0, 50,1.0), Color.fromRGBO(0, ends[currentQuestion], 50,1.0)]);
   }
 
   void submit() async{
     e.answer=QDController.text;
     e.activity=selectedOpt;
-    e.questionId=qODID;
+    e.question_id=qODID;
     e.mood=ends[1];
     e.sleep=ends[0];
     e.water=ends[2];
+    e.note=noteController.text;
     databaseHelper.insertEntry(e);
+    Future<List<Entry>>d = databaseHelper.getEntryList();
+    d.then((entryList){
+      print(entryList[0].toString());
+    });
+
   }
   @override
   Widget build(BuildContext context) {

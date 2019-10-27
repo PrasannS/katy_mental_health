@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:katy_mental_health/Pages/answer_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -9,10 +10,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        canvasColor: Colors.green,
+        primarySwatch: Colors.blue
       ),
-      home: MyHomePage(title: 'Testing Tab Bar'),
+      home: AnswerPage(),
     );
   }
 }

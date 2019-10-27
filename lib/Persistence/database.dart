@@ -11,10 +11,6 @@ class DatabaseHelper {
 
   String entryTable = 'entry_table';
   String colId = 'id';
-  String colTitle = 'title';
-  String colDescription = 'description';
-  String colPriority = 'priority';
-  String colDate = 'date';
 
   DatabaseHelper._createInstance(); // Named constructor to create instance of DatabaseHelper
 
@@ -40,7 +36,7 @@ class DatabaseHelper {
     String path = directory.path + 'appdb.db';
 
     // Open/create the database at a given path
-    var entrysDatabase = await openDatabase(path, version: 1, onCreate: _createDb);
+    var entrysDatabase = await openDatabase(path, version: 2, onCreate: _createDb);
     return entrysDatabase;
   }
 
@@ -55,7 +51,7 @@ class DatabaseHelper {
   void _createDb(Database db, int newVersion) async {
 
     await db.execute('CREATE TABLE entry_table(id INTEGER PRIMARY KEY AUTOINCREMENT, sleep INTEGER, '
-        'sleep INTEGER, mood INTEGER, water INTEGER, question_id INTEGER, answer TEXT, note TEXT, activity TEXT)');
+        'mood INTEGER, water INTEGER, question_id INTEGER, answer TEXT, note TEXT, activity TEXT)');
 
     await db.execute('CREATE TABLE question_table(id INTEGER PRIMARY KEY AUTOINCREMENT, answer TEXT)');
   }
@@ -65,7 +61,7 @@ class DatabaseHelper {
     Database db = await this.database;
 
 //		var result = await db.rawQuery('SELECT * FROM $entryTable order by $colPriority ASC');
-    var result = await db.query(entryTable, orderBy: '$colPriority ASC');
+    var result = await db.query(entryTable, orderBy: '$colId ASC');
     return result;
   }
 
@@ -73,6 +69,7 @@ class DatabaseHelper {
   Future<int> insertEntry(Entry entry) async {
     Database db = await this.database;
     var result = await db.insert(entryTable, entry.toMap());
+    print(result);
     return result;
   }
 
