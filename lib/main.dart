@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue
       ),
-      home: AnswerPage(),
+      home: MyHomePage(title: "Home Page",),
     );
   }
 }

@@ -70,6 +70,7 @@ List<String> questionsOfTheDay = [
     Random r = new Random();
     qODID = r.nextInt(questionsOfTheDay.length-1);
   }
+
   void _updateLabels(int init, int end, int laps) {
     setState(() {
       inBedTime = init;
