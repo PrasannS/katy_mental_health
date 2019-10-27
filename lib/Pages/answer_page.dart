@@ -1,3 +1,6 @@
+import 'dart:math';
+import 'dart:ui' as prefix0;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -11,10 +14,38 @@ class AnswerPage extends StatefulWidget {
 class _AnswerPageState extends State<AnswerPage> {
   final baseColor = Color.fromRGBO(255, 255, 255, 0.3);
 
-  List<String> questions = ["","How Much Sleep did you get?", "What is your mood?","How much water have you drank today?",
+  List<String> questions = ["How Much Sleep did you get?", "What is your mood?","How much water have you drank today?",
     "Question of the Day:","What was your most impactful activity today?", "Any Notes for Today?", "Submit?"];
 
   List<String> moods = ["Bad","Meh","Good",];
+
+List<String> questionsOfTheDay = [
+   "One thing you are grateful for?",
+   "Something that made you smile today: ",
+   "One thing that made you laugh: ",
+   "One person you are thankful for:  ",
+   "Five things you would like to do more:  ",
+   "Share a childhood memory.",
+   "Name three things you do well. ",
+   "Write about someone you admire.",
+   "What is your favorite hobby?",
+   "What is a fact about you that you don’t often share?",
+   "What is one thing you dream of doing?",
+   "If you could go anywhere in the world, where would it be? ",
+   "Favorite moment this week?  ",
+   "What is your favorite song right now?",
+   "Name a quote to live by. ",
+   "How do you relax?  ",
+   "What do you feel most strongly about?",
+   "Who is a special person in your life right now?  ",
+   "What is something you are proud of?  ",
+   "What do you love about yourself?  ",
+   "What are three of your absolute favorite activities?"
+  ];
+
+
+
+  final myController = TextEditingController();
   int initTime;
   int inBedTime;
   int outBedTime =0;
@@ -22,14 +53,13 @@ class _AnswerPageState extends State<AnswerPage> {
   int level = 255;
   int currentQuestion = 0;
   int endTime;
-
-
-
-
+  int qODID = 0;
 
   @override
   void initState() {
     super.initState();
+    Random r = new Random();
+    qODID = r.nextInt(questionsOfTheDay.length-1);
   }
   void _updateLabels(int init, int end, int laps) {
     setState(() {
@@ -42,7 +72,7 @@ class _AnswerPageState extends State<AnswerPage> {
 
   void nextQuestion(){
     setState(() {
-      if(currentQuestion!=2) {
+      if(currentQuestion!=4) {
         currentQuestion++;
       }
     });
@@ -64,6 +94,8 @@ class _AnswerPageState extends State<AnswerPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    //START OF ALL OF THE QUESTION PAGE LOGIC
 
     List<Widget> questionWidgets = [
       new SingleCircularSlider(
@@ -147,6 +179,28 @@ class _AnswerPageState extends State<AnswerPage> {
             )),
         shouldCountLaps: false,
       ),
+      new SizedBox(
+        height: 200,
+        width: 380,
+        child: ListView(
+          children: <Widget>[
+            Text(
+              "${questionsOfTheDay[qODID]}"
+            ),
+            TextField(
+              controller: myController,
+            ),
+          ],
+        )
+      ),
+      new SizedBox(
+        height: 200,
+        width: 380,
+        child: TextField(
+          controller: myController,
+        ),
+      )
+
 
     ];
 
@@ -186,7 +240,6 @@ class _AnswerPageState extends State<AnswerPage> {
                         onPressed:  nextQuestion,
                       ),
                     ]),
-
                   ],
                 )
             )));
