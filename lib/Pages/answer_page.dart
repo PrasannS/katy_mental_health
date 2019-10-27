@@ -1,10 +1,11 @@
 import 'dart:math';
-import 'dart:ui' as prefix0;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_circular_slider/flutter_circular_slider.dart';
+import 'package:katy_mental_health/Models/entry.dart';
+import 'package:katy_mental_health/Persistence/database.dart';
 
 class AnswerPage extends StatefulWidget {
   @override
@@ -13,6 +14,8 @@ class AnswerPage extends StatefulWidget {
 
 class _AnswerPageState extends State<AnswerPage> {
   final baseColor = Color.fromRGBO(255, 255, 255, 0.3);
+
+  DatabaseHelper databaseHelper = DatabaseHelper();
 
   List<String> questions = ["How Much Sleep did you get?", "What is your mood?","How much water have you drank today?",
     "Question of the Day:","What was your most impactful activity today?", "Any Notes for Today?", "Submit?"];
@@ -45,15 +48,21 @@ List<String> questionsOfTheDay = [
 
 
 
-  final myController = TextEditingController();
+
+  final QDController = TextEditingController();
+  final noteController = TextEditingController();
+
   int initTime;
   int inBedTime;
-  int outBedTime =0;
   int days = 0;
   int level = 255;
   int currentQuestion = 0;
   int endTime;
   int qODID = 0;
+  int selectedOpt = 0;
+  Entry e = new Entry();
+
+  List<int> ends = [0,0,0,254,254,254,254,254,254,254];
 
   @override
   void initState() {
@@ -64,7 +73,7 @@ List<String> questionsOfTheDay = [
   void _updateLabels(int init, int end, int laps) {
     setState(() {
       inBedTime = init;
-      outBedTime = end;
+      ends[currentQuestion] = end;
       days = laps;
       level = end >= 255 ? 255 : end;
     });
@@ -72,9 +81,16 @@ List<String> questionsOfTheDay = [
 
   void nextQuestion(){
     setState(() {
-      if(currentQuestion!=4) {
+      if(currentQuestion!=6) {
         currentQuestion++;
       }
+    });
+  }
+
+  void selected(int a ){
+    setState(() {
+      selectedOpt=a;
+      print(selectedOpt);
     });
   }
 
@@ -89,18 +105,116 @@ List<String> questionsOfTheDay = [
     return new LinearGradient(
         begin: Alignment.topRight,
         end: Alignment.bottomLeft,
-        colors: [Color.fromRGBO(255-a, 0, 50,1.0), Color.fromRGBO(0, a, 50, 1.0)]);
+        colors: [Color.fromRGBO(255-ends[currentQuestion], 0, 50,1.0), Color.fromRGBO(0, ends[currentQuestion], 50, 1.0)]);
   }
 
+  void submit() async{
+    e.answer=QDController.text;
+    e.activity=selectedOpt;
+    e.questionId=qODID;
+    e.mood=ends[1];
+    e.sleep=ends[0];
+    e.water=ends[2];
+    databaseHelper.insertEntry(e);
+  }
   @override
   Widget build(BuildContext context) {
 
     //START OF ALL OF THE QUESTION PAGE LOGIC
 
+    List<Widget> options = [
+      FlatButton(
+        child: Text('Work'),
+        color: baseColor,
+        textColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(40.0),
+        ),
+        onPressed: ()=>{
+          selected(1)
+        },
+      ),
+      FlatButton(
+        child: Text('Education'),
+        color: baseColor,
+        textColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(40.0),
+        ),
+        onPressed: ()=>{
+          selected(2)
+        },
+      ),
+      FlatButton(
+        child: Text('Relax'),
+        color: baseColor,
+        textColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(40.0),
+        ),
+        onPressed: ()=>{
+          selected(3)
+        },
+      ),
+      FlatButton(
+        child: Text('Family'),
+        color: baseColor,
+        textColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(40.0),
+        ),
+        onPressed: ()=>{
+          selected(4)
+        },
+      ),
+      FlatButton(
+        child: Text('Food'),
+        color: baseColor,
+        textColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(40.0),
+        ),
+        onPressed: ()=>{
+          selected(5)
+        },
+      ),
+      FlatButton(
+        child: Text('Friends'),
+        color: baseColor,
+        textColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(40.0),
+        ),
+        onPressed: ()=>{
+          selected(5)
+        },
+      ),
+      FlatButton(
+        child: Text('ExtraCurricular'),
+        color: baseColor,
+        textColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(40.0),
+        ),
+        onPressed: ()=>{selected(6)},
+      ),
+      FlatButton(
+        child: Text('Other'),
+        color: baseColor,
+        textColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(40.0),
+        ),
+        onPressed: ()=>{
+          selected(7)
+        },
+      ),
+    ];
+
     List<Widget> questionWidgets = [
       new SingleCircularSlider(
         255,
-        10,
+        20,
         height: 380.0,
         width: 380.0,
         primarySectors: 0,
@@ -119,7 +233,7 @@ List<String> questionsOfTheDay = [
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(height: 20),
-                Text('${((outBedTime*24)/255).round()} Hours',
+                Text('${((ends[currentQuestion]*24)/255).round()} Hours',
                     style: TextStyle(fontSize: 24.0, color: Colors.white)),
               ],
             )),
@@ -127,7 +241,7 @@ List<String> questionsOfTheDay = [
       ),
       new SingleCircularSlider(
         255,
-        10,
+        ends[currentQuestion],
         height: 380.0,
         width: 380.0,
         primarySectors: 0,
@@ -146,7 +260,7 @@ List<String> questionsOfTheDay = [
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(height: 20),
-                Text('${moods[((outBedTime*2.99)/255).floor()]}',
+                Text('${moods[((ends[currentQuestion]*2.99)/255).floor()]}',
                     style: TextStyle(fontSize: 24.0, color: Colors.white)),
               ],
             )),
@@ -154,7 +268,7 @@ List<String> questionsOfTheDay = [
       ),
       new SingleCircularSlider(
         255,
-        10,
+        ends[currentQuestion],
         height: 380.0,
         width: 380.0,
         primarySectors: 0,
@@ -173,7 +287,7 @@ List<String> questionsOfTheDay = [
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(height: 20),
-                Text('${((outBedTime*8)/255).round()} Glasses',
+                Text('${((ends[currentQuestion]*8)/255).round()} Glasses',
                     style: TextStyle(fontSize: 24.0, color: Colors.white)),
               ],
             )),
@@ -188,21 +302,34 @@ List<String> questionsOfTheDay = [
               "${questionsOfTheDay[qODID]}"
             ),
             TextField(
-              controller: myController,
+              controller: QDController,
             ),
           ],
         )
       ),
       new SizedBox(
+          height: 380,
+          width: 380,
+          child: ListView(
+            children: options,
+          )
+      ),
+      new SizedBox(
         height: 200,
         width: 380,
         child: TextField(
-          controller: myController,
+          controller: noteController,
         ),
-      )
+      ),
+      new SizedBox(
+        height: 200,
+        width: 380,
+      ),
 
 
     ];
+
+
 
 
     return Scaffold(
@@ -222,7 +349,7 @@ List<String> questionsOfTheDay = [
                     questionWidgets[currentQuestion],
                     Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                       FlatButton(
-                        child: Text('BACK $days'),
+                        child: Text('BACK'),
                         color: baseColor,
                         textColor: Colors.white,
                         shape: RoundedRectangleBorder(
