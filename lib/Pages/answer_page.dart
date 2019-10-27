@@ -26,7 +26,7 @@ class _AnswerPageState extends State<AnswerPage> {
       inBedTime = init;
       outBedTime = end;
       days = laps;
-      level = end;
+      level = end >= 255 ? 255 : end;
     });
   }
 
@@ -39,6 +39,34 @@ class _AnswerPageState extends State<AnswerPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    SingleCircularSlider water = new SingleCircularSlider(
+      255,
+      10,
+      height: 380.0,
+      width: 380.0,
+      primarySectors: 0,
+      secondarySectors: 0,
+      baseColor: Color.fromRGBO(255, 255, 255, 0.1),
+      selectionColor: baseColor,
+      handlerColor: Colors.white,
+      sliderStrokeWidth: 50,
+      handlerOutterRadius: 12.0,
+      onSelectionChange: _updateLabels,
+      showRoundedCapInSelection: false,
+      showHandlerOutter: true,
+      child: Padding(
+          padding: const EdgeInsets.all(42.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 20),
+              Text('Spin Me!',
+                  style: TextStyle(fontSize: 24.0, color: Colors.white)),
+            ],
+          )),
+      shouldCountLaps: true,
+    );
     return Scaffold(
         body: SafeArea(
             child: Container(
@@ -50,41 +78,15 @@ class _AnswerPageState extends State<AnswerPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      'How long did you stay in bed?',
+                      'HAPPY BIRTHDAY PAREE!',
                       style: TextStyle(color: Colors.white),
                     ),
-                    SingleCircularSlider(
-                      255,
-                      10,
-                      height: 380.0,
-                      width: 380.0,
-                      primarySectors: 6,
-                      secondarySectors: 24,
-                      baseColor: Color.fromRGBO(255, 255, 255, 0.1),
-                      selectionColor: baseColor,
-                      handlerColor: Colors.white,
-                      sliderStrokeWidth: 50,
-                      handlerOutterRadius: 12.0,
-                      onSelectionChange: _updateLabels,
-                      showRoundedCapInSelection: false,
-                      showHandlerOutter: true,
-                      child: Padding(
-                          padding: const EdgeInsets.all(42.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(height: 20),
-                              Text('Emoji',
-                                  style: TextStyle(fontSize: 24.0, color: Colors.white)),
-                            ],
-                          )),
-                      shouldCountLaps: false,
-                    ),
+                    water,
                     Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
 
                     ]),
                     FlatButton(
-                      child: Text('N E X T'),
+                      child: Text('RECORD $days'),
                       color: baseColor,
                       textColor: Colors.white,
                       shape: RoundedRectangleBorder(
