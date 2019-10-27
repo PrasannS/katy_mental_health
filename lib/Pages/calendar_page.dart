@@ -39,8 +39,12 @@ class _CalendarPageState extends State<CalendarPage> {
     super.initState();
   }
 
+  final List<String> dateInformations = <String>["Water","Mood","Sleep","Note"];
+
   @override
   Widget build(BuildContext context) {
+
+    List<String> Questions = new List();
     /// Example Calendar Carousel without header and custom prev & next button
     _calendarCarouselNoHeader = CalendarCarousel<Event>(
       todayBorderColor: Colors.green,
@@ -99,7 +103,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text("Question"),
+          title: new Text("Monthly Mood"),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -141,18 +145,42 @@ class _CalendarPageState extends State<CalendarPage> {
                       onPressed: () {
                         setState(() {
                           _currentDate2 = _currentDate2.add(Duration(days: 30));
-                          _currentMonth =
-                              DateFormat.yMMM().format(_currentDate2);
+                          _currentMonth = DateFormat.yMMM().format(_currentDate2);
                         });
                       },
                     )
                   ],
                 ),
               ),
+              //container that contains the calender
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 16.0),
                 child: _calendarCarouselNoHeader,
               ), //
+              Container(
+                height: 500,
+                width: double.infinity,
+                child: new ListView(
+                  children: <Widget>[
+                    Container(
+                      height: 50,
+                      color: Colors.redAccent,
+                      child: const Center(child: Text('Water?')),
+                    ),
+                    Container(
+                      height: 50,
+                      color: Colors.amber[500],
+                      child: const Center(child: Text('Sleep Hours')),
+                    ),
+                    Container(
+                      height: 50,
+                      color: Colors.amber[100],
+                      child: const Center(child: Text('Mood?')),
+                    ),
+
+                  ],
+                ),
+              )
             ],
           ),
         ));
