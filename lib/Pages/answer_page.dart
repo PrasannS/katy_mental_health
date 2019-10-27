@@ -78,7 +78,7 @@ class _AnswerPageState extends State<AnswerPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      'HAPPY BIRTHDAY PAREE!',
+                      'QUESTION',
                       style: TextStyle(color: Colors.white),
                     ),
                     water,

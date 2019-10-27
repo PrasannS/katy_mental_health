@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:katy_mental_health/Pages/answer_page.dart';
 import 'package:katy_mental_health/Pages/calendar_page.dart';
 
-import 'Pages/home_page.dart';
+import 'Pages/more_page.dart';
 
 void main() => runApp(MyApp());
 

@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  HomePage({Key key, this.title}) : super(key: key);
+class MorePage extends StatefulWidget {
+  MorePage({Key key, this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -16,10 +16,10 @@ class HomePage extends StatefulWidget {
   final String title;
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _MorePageState createState() => _MorePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _MorePageState extends State<MorePage> {
   int _counter = 0;
 
   void _incrementCounter() {
@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the HomePage object that was created by
+        // Here we take the value from the MorePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
