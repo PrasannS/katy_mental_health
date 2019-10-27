@@ -146,86 +146,68 @@ List<LineChartBarData> getActualLineData() {
 
 @override
 Widget genPieGraph() {
-  return Material(
-    type: MaterialType.transparency,
-    child: new Container(
-        decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(
-              Radius.circular(18),
-            ),
-            color: const Color(0xff232d37)),
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 20
-            ),
-            Text(
-              "My Moods",
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white, fontSize: 30),
-            ),
-            Row(
-              children: <Widget>[
-                const SizedBox(
-                  height: 4,
-                ),
-                const SizedBox(
-                  height: 18,
-                ),
-                Expanded(
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: FlChart(
-                      chart: PieChart(
-                        PieChartData(
-                            borderData: FlBorderData(
-                              show: false,
-                            ),
-                            sectionsSpace: 0,
-                            centerSpaceRadius: 40,
-                            sections: getActualPieData()),
+  return AspectRatio(
+    aspectRatio: 1.3,
+    child: Card(
+      color: Color(0xff232d37),
+      child: Row(
+        children: <Widget>[
+          const SizedBox(
+            height: 18,
+          ),
+          Expanded(
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: FlChart(
+                chart: PieChart(
+                  PieChartData(
+                      borderData: FlBorderData(
+                        show: false,
                       ),
-                    ),
-                  ),
+                      sectionsSpace: 0,
+                      centerSpaceRadius: 40,
+                      sections: getActualPieData()),
                 ),
-                Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const <Widget>[
-                    Indicator(
-                      color: Color(0xff0293ee),
-                      text: 'Good',
-                      isSquare: true,
-                    ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    Indicator(
-                      color: Color(0xfff8b250),
-                      text: 'Meh',
-                      isSquare: true,
-                    ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    Indicator(
-                      color: Color(0xff845bef),
-                      text: 'Bad',
-                      isSquare: true,
-                    ),
-                    SizedBox(
-                      height: 18,
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  width: 28,
-                ),
-              ],
+              ),
             ),
-          ],
-        )),
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const <Widget>[
+              Indicator(
+                color: Color(0xff0293ee),
+                text: 'Good',
+                isSquare: true,
+              ),
+              SizedBox(
+                height: 4,
+              ),
+              Indicator(
+                color: Color(0xfff8b250),
+                text: 'Meh',
+                isSquare: true,
+              ),
+              SizedBox(
+                height: 4,
+              ),
+              Indicator(
+                color: Color(0xff845bef),
+                text: 'Bad',
+                isSquare: true,
+              ),
+              SizedBox(
+                height: 18,
+              ),
+            ],
+          ),
+          const SizedBox(
+            width: 28,
+          ),
+        ],
+      ),
+    ),
   );
 }
 

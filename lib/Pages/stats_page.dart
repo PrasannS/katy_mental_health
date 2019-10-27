@@ -34,19 +34,36 @@ class _StatsPageState extends State<StatsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: <Widget>[
-        SizedBox(
-          height: 50,
-          child:Text('Title')
-        ),
-        genLineGraph(),
-        SizedBox(
-          height: 20,
-        ),
-        genPieGraph(),
-      ],
+    return Material(
+      type: MaterialType.transparency,
+      child: ListView(
+        children: <Widget>[
+          Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Water and Sleeptime',
+                style: TextStyle(color: Colors.white, fontSize: 30),
+                textAlign: TextAlign.center,
+              )),
+          genLineGraph(),
+          Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'My Moods',
+                style: TextStyle(color: Colors.white, fontSize: 30),
+                textAlign: TextAlign.center,
+              )),
+          genPieGraph(),
+          Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'New Graph',
+                style: TextStyle(color: Colors.white, fontSize: 30),
+                textAlign: TextAlign.center,
+              )),
+          genLineGraph(),
+        ],
+      ),
     );
   }
-
 }
