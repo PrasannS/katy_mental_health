@@ -1,10 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'indicator.dart';
 import 'dart:async';
 
-Widget genLineGraph() {
+Widget genLineGraph(List<List<int>> bigList) {
   return AspectRatio(
     aspectRatio: 1.70,
     child: Container(
@@ -17,14 +19,16 @@ Widget genLineGraph() {
         padding:
             const EdgeInsets.only(right: 18.0, left: 12.0, top: 24, bottom: 12),
         child: FlChart(
-          chart: LineChart(lineData()),
+          chart: LineChart(
+            lineData(bigList),
+          ),
         ),
       ),
     ),
   );
 }
 
-LineChartData lineData() {
+LineChartData lineData(List<List<int>> bigList) {
   return LineChartData(
     gridData: FlGridData(
       show: true,
@@ -52,22 +56,12 @@ LineChartData lineData() {
             fontWeight: FontWeight.bold,
             fontSize: 16),
         getTitles: (value) {
-          switch (value.toInt()) {
-            case 0:
-              return 'JAN';
-            case 2:
-              return 'MAR';
-            case 4:
-              return 'APR';
-            case 6:
-              return 'JUN';
-            case 8:
-              return 'SEP';
-            case 10:
-              return 'NOV';
-            case 20:
-              return 'TEST';
-          }
+          if (value == bigList[0].length ~/ 4)
+            return (bigList[0].length ~/ 4).toString();
+          else if (value == bigList[0].length ~/ 2)
+            return (bigList[0].length ~/ 2).toString();
+          else if (value == bigList[0].length * 3 ~/ 4)
+            return (bigList[0].length * 3 ~/ 4).toString();
           return '';
         },
         margin: 8,
@@ -81,12 +75,18 @@ LineChartData lineData() {
         ),
         getTitles: (value) {
           switch (value.toInt()) {
-            case 1:
-              return '10k';
-            case 3:
-              return '30k';
-            case 5:
-              return '50k';
+            case 0:
+              return '0 hr';
+            case 43:
+              return '4 hr';
+            case 85:
+              return '8 hr';
+            case 128:
+              return '12 hr';
+            case 171:
+              return '16 hr';
+            case 213:
+              return '20 hr';
           }
           return '';
         },
@@ -98,21 +98,22 @@ LineChartData lineData() {
         show: true,
         border: Border.all(color: const Color(0xff37434d), width: 1)),
     minX: 0,
-    maxX: 11,
+    maxX: bigList[0].length - 1.0,
     minY: 0,
-    maxY: 6,
-    lineBarsData: getActualLineData(),
+    maxY: 255,
+    lineBarsData: getActualLineData(bigList),
   );
 }
 
-List<LineChartBarData> getActualLineData() {
-  return [
-    LineChartBarData(
-      spots: [
-        FlSpot(0, 3),
-        FlSpot(6, 1),
-        FlSpot(10, 4),
-      ],
+List<LineChartBarData> getActualLineData(List<List<int>> bigList) {
+  List<List<FlSpot>> spotList = new List<List<FlSpot>>();
+  for (List<int> list in bigList) {
+    spotList.add(createFlSpots(list));
+  }
+  List<LineChartBarData> barDataList = new List<LineChartBarData>();
+  for (List<FlSpot> list in spotList) {
+    barDataList.add(new LineChartBarData(
+      spots: list,
       isCurved: true,
       colors: [Color(0xff23b6e6)],
       barWidth: 5,
@@ -123,25 +124,22 @@ List<LineChartBarData> getActualLineData() {
       belowBarData: BarAreaData(
         show: false,
       ),
-    ),
-    LineChartBarData(
-      spots: [
-        FlSpot(0, 5),
-        FlSpot(5, 2),
-        FlSpot(10, 4),
-      ],
-      isCurved: true,
-      colors: [Color(0xff02d39a)],
-      barWidth: 5,
-      isStrokeCapRound: true,
-      dotData: const FlDotData(
-        show: false,
-      ),
-      belowBarData: BarAreaData(
-        show: false,
-      ),
-    ),
-  ];
+    ));
+  }
+  return barDataList;
+}
+
+List<FlSpot> createFlSpots(List<int> list) {
+  print(list.length);
+  List<FlSpot> ret = new List<FlSpot>();
+  if (list == null || list.length == 0) {
+    ret.add(new FlSpot(0, 0));
+    return ret;
+  }
+  for (int i = 0; i < list.length; i++) {
+    ret.add(new FlSpot(i + 0.0, list[i] + 0.0));
+  }
+  return ret;
 }
 
 @override
