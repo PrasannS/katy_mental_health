@@ -4,7 +4,9 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
     show CalendarCarousel;
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:intl/intl.dart' show DateFormat;
+import 'package:katy_mental_health/Models/entry.dart';
 import 'package:katy_mental_health/Persistence/database.dart';
+import 'package:katy_mental_health/Utils/constants.dart';
 
 class CalendarPage extends StatefulWidget {
   CalendarPage({Key key, this.title}) : super(key: key);
@@ -32,7 +34,139 @@ class _CalendarPageState extends State<CalendarPage> {
 //  List<DateTime> _markedDate = [DateTime(2018, 9, 20), DateTime(2018, 10, 11)];
 
   CalendarCarousel _calendarCarousel, _calendarCarouselNoHeader;
+  Widget bottom = new Container(
+  height: 300,
+  child: RaisedButton(
+  child: Text('HI'),
+  ),
+  );
 
+  void setBottom(DateTime dateTime){
+    bottom =  new Container(
+      height: 300,
+      child: RaisedButton(
+        child: Text('HI'),
+      ),
+    );
+    Future<List<Entry>>d = databaseHelper.getEntryList();
+    d.then((entryList){
+      for(Entry e in entryList){
+        if(DateTime.fromMillisecondsSinceEpoch(e.datetime).difference(dateTime).inDays==0){
+          bottom = new Container(
+            height: 300,
+            child: ListView(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Container(
+                      child: Column(
+                        children: <Widget>[
+                          Icon(
+                            Icons.airline_seat_flat,
+                            semanticLabel: "${e.sleep}",
+                          ),
+                          Text(
+                              '${e.sleep}'
+                          )
+                        ],
+                      ),
+                      height: 50,
+                      width: 120,
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                              colors: [Color.fromRGBO(255-200, 0, 50,.10), Color.fromRGBO(0, 200, 50,.10)])
+                      ),
+                    ),
+                    Container(
+                      child: Column(
+                        children: <Widget>[
+                          Icon(
+                            Icons.child_care,
+                            semanticLabel: "Hello",
+                          ),
+                          Text(
+                              '${e.mood}'
+                          )
+                        ],
+                      ),
+                      height: 50,
+                      width: 120,
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                              colors: [Color.fromRGBO(255-200, 0, 50,.10), Color.fromRGBO(0, 200, 50,.10)])
+                      ),
+
+                    ),
+                    Container(
+
+                      child: Column(
+                        children: <Widget>[
+                          Icon(
+                            Icons.invert_colors,
+                            semanticLabel: "Hello",
+                          ),
+                          Text(
+                              '${e.water}'
+                          )
+                        ],
+                      ),
+                      height: 50,
+                      width: 120,
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                              colors: [Color.fromRGBO(255-200, 0, 50,.10), Color.fromRGBO(0, 200, 50,.10)])
+                      ),
+                    ),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      child: Text('${Constants.questionsOfTheDay[e.question_id]}'),
+                      height: 50,
+                      width: 370,
+                    ),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      child: Text('${e.answer}'),
+                      height: 50,
+                      width: 370,
+                    ),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      child: Text('${e.note}'),
+                      height: 50,
+                      width: 370,
+                    // ignore: missing_return
+                    ),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                )
+              ],
+            ),
+          );
+        }
+      }
+    });
+  }
   @override
   void initState() {
     /// Add more events to _markedDateMap EventList
@@ -90,10 +224,12 @@ class _CalendarPageState extends State<CalendarPage> {
         fontSize: 16,
       ),
       onCalendarChanged: (DateTime date) {
-        this.setState(() => _currentMonth = DateFormat.yMMM().format(date));
+        print(date.toString());
+        setBottom(date);
       },
       onDayLongPressed: (DateTime date) {
-        print('long pressed date $date');
+        setBottom(date);
+        print("Long Press");
       },
     );
 
@@ -151,120 +287,17 @@ class _CalendarPageState extends State<CalendarPage> {
                   height: 300,
                   child: _calendarCarouselNoHeader,
                 ),
-                Container(
-                  height: 300,
-                  child: ListView(
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            child: Column(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.airline_seat_flat,
-                                  semanticLabel: "Hello",
-                                ),
-                                Text(
-                                  'Hello'
-                                )
-                              ],
-                            ),
-                            height: 50,
-                            width: 120,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                  begin: Alignment.topRight,
-                                  end: Alignment.bottomLeft,
-                                  colors: [Color.fromRGBO(255-200, 0, 50,.10), Color.fromRGBO(0, 200, 50,.10)])
-                            ),
-                          ),
-                          Container(
-                            child: Column(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.child_care,
-                                  semanticLabel: "Hello",
-                                ),
-                                Text(
-                                    'Hello'
-                                )
-                              ],
-                            ),
-                            height: 50,
-                            width: 120,
-                            decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                    begin: Alignment.topRight,
-                                    end: Alignment.bottomLeft,
-                                    colors: [Color.fromRGBO(255-200, 0, 50,.10), Color.fromRGBO(0, 200, 50,.10)])
-                            ),
-
-                          ),
-                          Container(
-
-                            child: Column(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.invert_colors,
-                                  semanticLabel: "Hello",
-                                ),
-                                Text(
-                                    'Hello'
-                                )
-                              ],
-                            ),
-                            height: 50,
-                            width: 120,
-                            decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                    begin: Alignment.topRight,
-                                    end: Alignment.bottomLeft,
-                                    colors: [Color.fromRGBO(255-200, 0, 50,.10), Color.fromRGBO(0, 200, 50,.10)])
-                            ),
-                          ),
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            child: Text('HELLO'),
-                            height: 50,
-                            width: 400,
-                          ),
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            child: Text('DEFAULT'),
-                            height: 50,
-                            width: 400,
-                          ),
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            child: Text('HELLO'),
-                            height: 50,
-                            width: 400,
-                          ),
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      )
-                    ],
-                  ),
-                )
+                bottom
                 //
               ],
             ),
           )
         ));
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 }

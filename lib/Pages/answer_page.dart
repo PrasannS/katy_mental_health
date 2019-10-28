@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_circular_slider/flutter_circular_slider.dart';
 import 'package:katy_mental_health/Models/entry.dart';
 import 'package:katy_mental_health/Persistence/database.dart';
+import 'package:katy_mental_health/Utils/constants.dart';
 
 class AnswerPage extends StatefulWidget {
   @override
@@ -16,35 +17,6 @@ class _AnswerPageState extends State<AnswerPage> {
   final baseColor = Color.fromRGBO(255, 255, 255, 0.3);
 
   DatabaseHelper databaseHelper = DatabaseHelper();
-
-  List<String> questions = ["How Much Sleep did you get?", "What is your mood?","How much water have you drank today?",
-    "Question of the Day:","What was your most impactful activity today?", "Any Notes for Today?", "Submit?"];
-
-  List<String> moods = ["Bad","Meh","Good",];
-
-List<String> questionsOfTheDay = [
-   "One thing you are grateful for?",
-   "Something that made you smile today: ",
-   "One thing that made you laugh: ",
-   "One person you are thankful for:  ",
-   "Five things you would like to do more:  ",
-   "Share a childhood memory.",
-   "Name three things you do well. ",
-   "Write about someone you admire.",
-   "What is your favorite hobby?",
-   "What is a fact about you that you don’t often share?",
-   "What is one thing you dream of doing?",
-   "If you could go anywhere in the world, where would it be? ",
-   "Favorite moment this week?  ",
-   "What is your favorite song right now?",
-   "Name a quote to live by. ",
-   "How do you relax?  ",
-   "What do you feel most strongly about?",
-   "Who is a special person in your life right now?  ",
-   "What is something you are proud of?  ",
-   "What do you love about yourself?  ",
-   "What are three of your absolute favorite activities?"
-  ];
 
 
 
@@ -68,7 +40,7 @@ List<String> questionsOfTheDay = [
   void initState() {
     super.initState();
     Random r = new Random();
-    qODID = r.nextInt(questionsOfTheDay.length-1);
+    qODID = r.nextInt(Constants.questionsOfTheDay.length-1);
   }
 
   void _updateLabels(int init, int end, int laps) {
@@ -273,7 +245,7 @@ List<String> questionsOfTheDay = [
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(height: 20),
-                Text('${moods[((ends[currentQuestion]*2.99)/255).floor()]}',
+                Text('${Constants.moods[((ends[currentQuestion]*2.99)/255).floor()]}',
                     style: TextStyle(fontSize: 24.0, color: Colors.white)),
               ],
             )),
@@ -312,7 +284,7 @@ List<String> questionsOfTheDay = [
         child: ListView(
           children: <Widget>[
             Text(
-              "${questionsOfTheDay[qODID]}"
+              "${Constants.questionsOfTheDay[qODID]}"
             ),
             TextField(
               controller: QDController,
@@ -356,7 +328,7 @@ List<String> questionsOfTheDay = [
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      '${questions[currentQuestion]}',
+                      '${Constants.questions[currentQuestion]}',
                       style: TextStyle(color: Colors.white),
                     ),
                     questionWidgets[currentQuestion],
@@ -383,6 +355,12 @@ List<String> questionsOfTheDay = [
                   ],
                 )
             )));
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
 }
