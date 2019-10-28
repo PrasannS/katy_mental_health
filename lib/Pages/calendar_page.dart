@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
     show CalendarCarousel;
 import 'package:flutter_calendar_carousel/classes/event.dart';
-import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:intl/intl.dart' show DateFormat;
-
+import 'package:katy_mental_health/Persistence/database.dart';
 
 class CalendarPage extends StatefulWidget {
   CalendarPage({Key key, this.title}) : super(key: key);
@@ -29,6 +28,7 @@ class _CalendarPageState extends State<CalendarPage> {
   DateTime _currentDate = DateTime(2019, 2, 3);
   DateTime _currentDate2 = DateTime(2019, 2, 3);
   String _currentMonth = '';
+  DatabaseHelper databaseHelper = DatabaseHelper();
 //  List<DateTime> _markedDate = [DateTime(2018, 9, 20), DateTime(2018, 10, 11)];
 
   CalendarCarousel _calendarCarousel, _calendarCarouselNoHeader;
@@ -39,18 +39,15 @@ class _CalendarPageState extends State<CalendarPage> {
     super.initState();
   }
 
-  final List<String> dateInformations = <String>["Water","Mood","Sleep","Note"];
-
   @override
   Widget build(BuildContext context) {
-
-    List<String> Questions = new List();
     /// Example Calendar Carousel without header and custom prev & next button
     _calendarCarouselNoHeader = CalendarCarousel<Event>(
       todayBorderColor: Colors.green,
       onDayPressed: (DateTime date, List<Event> events) {
         this.setState(() => _currentDate2 = date);
         events.forEach((event) => print(event.title));
+
       },
       daysHaveCircularBorder: null,
       showOnlyCurrentMonthDate: false,
@@ -63,9 +60,8 @@ class _CalendarPageState extends State<CalendarPage> {
       height: 420.0,
       selectedDateTime: _currentDate2,
       customGridViewPhysics: NeverScrollableScrollPhysics(),
-      markedDateCustomShapeBorder: CircleBorder(
-          side: BorderSide(color: Colors.yellow)
-      ),
+      markedDateCustomShapeBorder:
+          CircleBorder(side: BorderSide(color: Colors.yellow)),
       markedDateCustomTextStyle: TextStyle(
         fontSize: 18,
         color: Colors.blue,
@@ -102,87 +98,173 @@ class _CalendarPageState extends State<CalendarPage> {
     );
 
     return new Scaffold(
-        appBar: new AppBar(
-          title: new Text("Monthly Mood"),
-        ),
         body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              //custom icon
-              //m icon without header
-              Container(
-                margin: EdgeInsets.only(
-                  top: 30.0,
-                  bottom: 16.0,
-                  left: 16.0,
-                  right: 16.0,
+          child:SizedBox(
+            height: 800,
+            width: double.infinity,
+            child: ListView(
+              children: <Widget>[
+                //custom icon
+                //m icon without header
+                Container(
+                  margin: EdgeInsets.only(
+                    top: 30.0,
+                    bottom: 16.0,
+                    left: 16.0,
+                    right: 16.0,
+                  ),
+                  child: new Row(
+                    children: <Widget>[
+                      Expanded(
+                          child: Text(
+                            _currentMonth,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24.0,
+                            ),
+                          )),
+                      FlatButton(
+                        child: Text('PREV'),
+                        onPressed: () {
+                          setState(() {
+                            _currentDate2 =
+                                _currentDate2.subtract(Duration(days: 30));
+                            _currentMonth =
+                                DateFormat.yMMM().format(_currentDate2);
+                          });
+                        },
+                      ),
+                      FlatButton(
+                        child: Text('NEXT'),
+                        onPressed: () {
+                          setState(() {
+                            _currentDate2 = _currentDate2.add(Duration(days: 30));
+                            _currentMonth = DateFormat.yMMM().format(_currentDate2);
+                          });
+                        },
+                      )
+                    ],
+                  ),
                 ),
-                child: new Row(
-                  children: <Widget>[
-                    Expanded(
-                        child: Text(
-                          _currentMonth,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24.0,
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 16.0),
+                  height: 300,
+                  child: _calendarCarouselNoHeader,
+                ),
+                Container(
+                  height: 300,
+                  child: ListView(
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            child: Column(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.airline_seat_flat,
+                                  semanticLabel: "Hello",
+                                ),
+                                Text(
+                                  'Hello'
+                                )
+                              ],
+                            ),
+                            height: 50,
+                            width: 120,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                  begin: Alignment.topRight,
+                                  end: Alignment.bottomLeft,
+                                  colors: [Color.fromRGBO(255-200, 0, 50,.10), Color.fromRGBO(0, 200, 50,.10)])
+                            ),
                           ),
-                        )),
-                    FlatButton(
-                      child: Text('PREV'),
-                      onPressed: () {
-                        setState(() {
-                          _currentDate2 =
-                              _currentDate2.subtract(Duration(days: 30));
-                          _currentMonth =
-                              DateFormat.yMMM().format(_currentDate2);
-                        });
-                      },
-                    ),
-                    FlatButton(
-                      child: Text('NEXT'),
-                      onPressed: () {
-                        setState(() {
-                          _currentDate2 = _currentDate2.add(Duration(days: 30));
-                          _currentMonth = DateFormat.yMMM().format(_currentDate2);
-                        });
-                      },
-                    )
-                  ],
-                ),
-              ),
-              //container that contains the calender
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 16.0),
-                child: _calendarCarouselNoHeader,
-              ), //
-              Container(
-                height: 500,
-                width: double.infinity,
-                child: new ListView(
-                  children: <Widget>[
-                    Container(
-                      height: 50,
-                      color: Colors.redAccent,
-                      child: const Center(child: Text('Water?')),
-                    ),
-                    Container(
-                      height: 50,
-                      color: Colors.amber[500],
-                      child: const Center(child: Text('Sleep Hours')),
-                    ),
-                    Container(
-                      height: 50,
-                      color: Colors.amber[100],
-                      child: const Center(child: Text('Mood?')),
-                    ),
+                          Container(
+                            child: Column(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.child_care,
+                                  semanticLabel: "Hello",
+                                ),
+                                Text(
+                                    'Hello'
+                                )
+                              ],
+                            ),
+                            height: 50,
+                            width: 120,
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                    begin: Alignment.topRight,
+                                    end: Alignment.bottomLeft,
+                                    colors: [Color.fromRGBO(255-200, 0, 50,.10), Color.fromRGBO(0, 200, 50,.10)])
+                            ),
 
-                  ],
-                ),
-              )
-            ],
-          ),
+                          ),
+                          Container(
+
+                            child: Column(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.invert_colors,
+                                  semanticLabel: "Hello",
+                                ),
+                                Text(
+                                    'Hello'
+                                )
+                              ],
+                            ),
+                            height: 50,
+                            width: 120,
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                    begin: Alignment.topRight,
+                                    end: Alignment.bottomLeft,
+                                    colors: [Color.fromRGBO(255-200, 0, 50,.10), Color.fromRGBO(0, 200, 50,.10)])
+                            ),
+                          ),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            child: Text('HELLO'),
+                            height: 50,
+                            width: 400,
+                          ),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            child: Text('DEFAULT'),
+                            height: 50,
+                            width: 400,
+                          ),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            child: Text('HELLO'),
+                            height: 50,
+                            width: 400,
+                          ),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      )
+                    ],
+                  ),
+                )
+                //
+              ],
+            ),
+          )
         ));
   }
 }
