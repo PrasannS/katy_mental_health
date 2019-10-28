@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'dart:core';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -76,17 +76,11 @@ LineChartData lineData(List<List<int>> bigList) {
         getTitles: (value) {
           switch (value.toInt()) {
             case 0:
-              return '0 hr';
-            case 43:
-              return '4 hr';
+              return '0';
             case 85:
-              return '8 hr';
-            case 128:
-              return '12 hr';
+              return '1/3';
             case 171:
-              return '16 hr';
-            case 213:
-              return '20 hr';
+              return '2/3';
           }
           return '';
         },
@@ -130,7 +124,6 @@ List<LineChartBarData> getActualLineData(List<List<int>> bigList) {
 }
 
 List<FlSpot> createFlSpots(List<int> list) {
-  print(list.length);
   List<FlSpot> ret = new List<FlSpot>();
   if (list == null || list.length == 0) {
     ret.add(new FlSpot(0, 0));
@@ -143,11 +136,15 @@ List<FlSpot> createFlSpots(List<int> list) {
 }
 
 @override
-Widget genPieGraph() {
+Widget genPieGraph(List<int> dataList) {
   return AspectRatio(
     aspectRatio: 1.3,
-    child: Card(
-      color: Color(0xff232d37),
+    child: Container(
+      decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(
+            Radius.circular(18),
+          ),
+          color: const Color(0xff232d37)),
       child: Row(
         children: <Widget>[
           const SizedBox(
@@ -164,7 +161,7 @@ Widget genPieGraph() {
                       ),
                       sectionsSpace: 0,
                       centerSpaceRadius: 40,
-                      sections: getActualPieData()),
+                      sections: getActualPieData(dataList)),
                 ),
               ),
             ),
@@ -209,16 +206,28 @@ Widget genPieGraph() {
   );
 }
 
-List<PieChartSectionData> getActualPieData() {
-  return List.generate(3, (i) {
+List<PieChartSectionData> getActualPieData(List<int> dataList) {
+  List<int> countData = new List<int>();
+  countData.add(0);
+  countData.add(0);
+  countData.add(0);
+  for (int i = 0; i < dataList.length; i++) {
+    if (dataList[i] > 171)
+      countData[0]++;
+    else if (dataList[i] > 86)
+      countData[1]++;
+    else
+      countData[2]++;
+  }
+  return List.generate(countData.length, (i) {
     final double fontSize = 16;
     final double radius = 50;
     switch (i) {
       case 0:
         return PieChartSectionData(
           color: const Color(0xff0293ee),
-          value: 60,
-          title: '40%',
+          value: countData[0] + 0.0,
+          title: ((countData[0] / dataList.length * 1000).round() / 10).toString() + "%",
           radius: radius,
           titleStyle: TextStyle(
               fontSize: fontSize,
@@ -228,8 +237,8 @@ List<PieChartSectionData> getActualPieData() {
       case 1:
         return PieChartSectionData(
           color: const Color(0xfff8b250),
-          value: 30,
-          title: '30%',
+          value: countData[1] + 0.0,
+          title: ((countData[1] / dataList.length * 1000).round() / 10).toString() + "%",
           radius: radius,
           titleStyle: TextStyle(
               fontSize: fontSize,
@@ -239,8 +248,8 @@ List<PieChartSectionData> getActualPieData() {
       case 2:
         return PieChartSectionData(
           color: const Color(0xff845bef),
-          value: 15,
-          title: '15%',
+          value: countData[2] + 0.0,
+          title: ((countData[2] / dataList.length * 1000).round() / 10).toString() + "%",
           radius: radius,
           titleStyle: TextStyle(
               fontSize: fontSize,

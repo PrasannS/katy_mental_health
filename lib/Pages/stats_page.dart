@@ -76,8 +76,8 @@ class _StatsPageState extends State<StatsPage> {
           Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
-                'Mood vs Sleeptime',
-                style: TextStyle(color: Colors.white, fontSize: 30),
+                'Mood and Sleeptime',
+                style: TextStyle(color: Colors.black, fontSize: 30),
                 textAlign: TextAlign.center,
               )),
           genLineGraph([mood, sleep]),
@@ -85,15 +85,15 @@ class _StatsPageState extends State<StatsPage> {
               padding: EdgeInsets.all(8.0),
               child: Text(
                 'My Moods',
-                style: TextStyle(color: Colors.white, fontSize: 30),
+                style: TextStyle(color: Colors.black, fontSize: 30),
                 textAlign: TextAlign.center,
               )),
-          genPieGraph(),
+          genPieGraph(mood),
           Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
-                'New Graph',
-                style: TextStyle(color: Colors.white, fontSize: 30),
+                'Water, Sleep, and Mood',
+                style: TextStyle(color: Colors.black, fontSize: 30),
                 textAlign: TextAlign.center,
               )),
           genLineGraph([water, sleep, mood]),
