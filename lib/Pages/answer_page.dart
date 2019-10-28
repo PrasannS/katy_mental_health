@@ -5,12 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_circular_slider/flutter_circular_slider.dart';
 import 'package:katy_mental_health/Models/entry.dart';
+import 'package:katy_mental_health/Pages/calendar_page.dart';
+import 'package:katy_mental_health/Pages/stats_page.dart';
 import 'package:katy_mental_health/Persistence/database.dart';
 import 'package:katy_mental_health/Utils/constants.dart';
+import 'package:katy_mental_health/main.dart';
 
 class AnswerPage extends StatefulWidget {
   @override
   _AnswerPageState createState() => _AnswerPageState();
+  final int time;
+
+  AnswerPage({Key key, @required this.time}) : super(key: key);
+
 }
 
 class _AnswerPageState extends State<AnswerPage> {
@@ -41,6 +48,7 @@ class _AnswerPageState extends State<AnswerPage> {
     super.initState();
     Random r = new Random();
     qODID = r.nextInt(Constants.questionsOfTheDay.length-1);
+    print(widget.time);
   }
 
   void _updateLabels(int init, int end, int laps) {
@@ -93,7 +101,10 @@ class _AnswerPageState extends State<AnswerPage> {
     e.sleep=ends[0];
     e.water=ends[2];
     e.note=noteController.text;
+    if(widget.time==0)
     e.datetime= new DateTime.now().millisecondsSinceEpoch;
+    else
+      e.datetime=widget.time;
     databaseHelper.insertEntry(e);
     print(e.toString());
     Future<List<Entry>>d = databaseHelper.getEntryList();
@@ -349,7 +360,17 @@ class _AnswerPageState extends State<AnswerPage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50.0),
                         ),
-                        onPressed:  nextQuestion,
+                        onPressed:  ()=>{
+                          setState(() {
+                            if(currentQuestion!=6) {
+                              currentQuestion++;
+                            }
+                            else{
+                              submit();
+                              Navigator.pop(context);
+                            }
+                          })
+                        },
                       ),
                     ]),
                   ],

@@ -137,6 +137,7 @@ List<FlSpot> createFlSpots(List<int> list) {
 
 @override
 Widget genPieGraph(List<int> dataList) {
+  if(dataList.length>0)
   return AspectRatio(
     aspectRatio: 1.3,
     child: Container(
@@ -204,6 +205,10 @@ Widget genPieGraph(List<int> dataList) {
       ),
     ),
   );
+  else
+  return  SizedBox(
+    width: 28,
+  );
 }
 
 List<PieChartSectionData> getActualPieData(List<int> dataList) {
@@ -219,6 +224,7 @@ List<PieChartSectionData> getActualPieData(List<int> dataList) {
     else
       countData[2]++;
   }
+  if(dataList.length>0)
   return List.generate(countData.length, (i) {
     final double fontSize = 16;
     final double radius = 50;
@@ -260,4 +266,5 @@ List<PieChartSectionData> getActualPieData(List<int> dataList) {
         return null;
     }
   });
+  return null;
 }

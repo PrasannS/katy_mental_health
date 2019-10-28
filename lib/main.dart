@@ -34,13 +34,13 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
   List<Widget> _tabList = [
     Container(
-      child:CalendarPage()
+      child:new CalendarPage()
     ),
     Container(
-      child: StatsPage()
+      child:new StatsPage()
     ),
     Container(
-        child: AnswerPage()
+        color: Colors.orange,
     ),
     Container(
       color: Colors.purple,
