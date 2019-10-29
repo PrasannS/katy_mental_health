@@ -28,6 +28,11 @@ dependencies:
   flutter_circular_slider : ^2.5.0
   sqflite: ^1.1.7+1
   path_provider: ^1.4.0
+  cloud_firestore: ^0.12.9
+  firebase_core: ^0.4.0+8
+  firebase_auth: ^0.14.0+5
+  provider: ^3.0.0+1
+  get_it: ^1.0.3+2
 
 dev_dependencies:
   flutter_test:

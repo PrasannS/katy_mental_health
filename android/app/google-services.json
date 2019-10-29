@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "841851725805",
+    "firebase_url": "https://katymentalhealth.firebaseio.com",
+    "project_id": "katymentalhealth",
+    "storage_bucket": "katymentalhealth.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:841851725805:android:5b23e413aae305917a69e4",
+        "android_client_info": {
+          "package_name": "dev.prasannsinghal.katy_mental_health"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "841851725805-dhbtg59el6f0ea36vol6el8eeov7gf6t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjzASKG1WK-PjTzhkKlXenBvdUMx6oYIk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "841851725805-dhbtg59el6f0ea36vol6el8eeov7gf6t.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "841851725805-1raua2jh9evmflftebu899jkl3vc3nnc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "dev.prasannsinghal.katyMentalHealth"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
