@@ -152,6 +152,13 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
+  LinearGradient getGradient(int a){
+    return new LinearGradient(
+        begin: Alignment.topRight,
+        end: Alignment.bottomLeft,
+        colors: [Color.fromRGBO(255-a, 0, 50,.5), Color.fromRGBO(0,a, 50,0.5)]);
+  }
+
   void _onDaySelected(DateTime day, List events) {
     setState(() {
       selectedDate = day;
@@ -162,6 +169,9 @@ class _CalendarPageState extends State<CalendarPage> {
           DateTime today = DateTime.fromMillisecondsSinceEpoch(e.datetime);
           if(day.year == today.year && day.month == today.month && day.day == today.day){
             bottom= Container(
+              decoration: BoxDecoration(
+                gradient: getGradient(e.mood),
+              ),
               height: 400,
               child: ListView(
                 children: <Widget>[
