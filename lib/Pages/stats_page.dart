@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:katy_mental_health/Models/entry.dart';
 import 'package:katy_mental_health/Persistence/database.dart';
 import 'graph_types.dart';
@@ -41,24 +38,26 @@ class _StatsPageState extends State<StatsPage> {
   ];
 
   void updateGraphs(List<Entry> entryList) {
-    setState(() {
-      sleep = new List<int>();
-      mood = new List<int>();
-      water = new List<int>();
-      questionId = new List<int>();
-      activity = new List<int>();
-      answer = new List<String>();
-      note = new List<String>();
-      for (Entry entry in entryList) {
-        sleep.add(entry.sleep);
-        mood.add(entry.mood);
-        water.add(entry.water);
-        questionId.add(entry.question_id);
-        activity.add(entry.activity);
-        answer.add(entry.answer);
-        note.add(entry.note);
-      }
-    });
+    if(mounted) {
+      setState(() {
+        sleep = new List<int>();
+        mood = new List<int>();
+        water = new List<int>();
+        questionId = new List<int>();
+        activity = new List<int>();
+        answer = new List<String>();
+        note = new List<String>();
+        for (Entry entry in entryList) {
+          sleep.add(entry.sleep);
+          mood.add(entry.mood);
+          water.add(entry.water);
+          questionId.add(entry.question_id);
+          activity.add(entry.activity);
+          answer.add(entry.answer);
+          note.add(entry.note);
+        }
+      });
+    }
   }
 
   bool showAvg = false;
@@ -76,8 +75,8 @@ class _StatsPageState extends State<StatsPage> {
           Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
-                'Mood vs Sleeptime',
-                style: TextStyle(color: Colors.white, fontSize: 30),
+                'Mood and Sleeptime',
+                style: TextStyle(color: Colors.black, fontSize: 30),
                 textAlign: TextAlign.center,
               )),
           genLineGraph([mood, sleep]),
@@ -85,15 +84,15 @@ class _StatsPageState extends State<StatsPage> {
               padding: EdgeInsets.all(8.0),
               child: Text(
                 'My Moods',
-                style: TextStyle(color: Colors.white, fontSize: 30),
+                style: TextStyle(color: Colors.black, fontSize: 30),
                 textAlign: TextAlign.center,
               )),
-          genPieGraph(),
+          genPieGraph(mood),
           Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
-                'New Graph',
-                style: TextStyle(color: Colors.white, fontSize: 30),
+                'Water, Sleep, and Mood',
+                style: TextStyle(color: Colors.black, fontSize: 30),
                 textAlign: TextAlign.center,
               )),
           genLineGraph([water, sleep, mood]),
