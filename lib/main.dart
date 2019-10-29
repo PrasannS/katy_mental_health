@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:katy_mental_health/Pages/answer_page.dart';
 import 'package:katy_mental_health/Pages/calendar_page.dart';
+import 'package:katy_mental_health/Pages/chat_page.dart';
 import 'package:katy_mental_health/Pages/community_page.dart';
 import 'package:katy_mental_health/Pages/stats_page.dart';
 
@@ -40,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       child:new StatsPage()
     ),
     Container(
-        color: Colors.orange,
+        child: new Chat(),
     ),
     Container(
       color: Colors.purple,
