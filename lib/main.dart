@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:katy_mental_health/Pages/answer_page.dart';
+import 'package:katy_mental_health/Pages/breathing_page.dart';
 import 'package:katy_mental_health/Pages/calendar_page.dart';
 import 'package:katy_mental_health/Pages/root_page.dart';
 import 'package:katy_mental_health/Pages/community_page.dart';
@@ -60,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         child: new CommunityPage(user:widget.userid),
       ),
       Container(
-        color: Colors.purple,
+        child: new BreathingPage(),
       )
     ];
     super.initState();

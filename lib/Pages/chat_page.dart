@@ -44,7 +44,7 @@ class _ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Tensor Chat"),
+        title: Text("Teacher/Adult Chat"),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.close),
