@@ -1,13 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:katy_mental_health/Pages/root_page.dart';
 import 'package:katy_mental_health/Utils/auth.dart';
 
 
+//TODO
 class Chat extends StatefulWidget {
   static const String id = "CHAT";
-  final FirebaseUser user;
+  final String user;
 
   const Chat({Key key, this.user}) : super(key: key);
   @override
@@ -22,9 +24,11 @@ class _ChatState extends State<Chat> {
   ScrollController scrollController = ScrollController();
 
   Future<void> callback() async {
+    print(widget.user);
     if (messageController.text.length > 0) {
       await _firestore.collection('messages').add({
         'text': messageController.text,
+        'from': widget.user,
         'date': DateTime.now().toIso8601String().toString(),
       });
       messageController.clear();
@@ -40,7 +44,7 @@ class _ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Chat"),
+        title: Text("Tensor Chat"),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.close),
@@ -73,6 +77,7 @@ class _ChatState extends State<Chat> {
                       .map((doc) => Message(
                     from: doc.data['from'],
                     text: doc.data['text'],
+                    me: widget.user == doc.data['from'],
                   ))
                       .toList();
 
@@ -139,8 +144,14 @@ class Message extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Column(
+        crossAxisAlignment:
+        me ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
+          Text(
+            from,
+          ),
           Material(
+            color: me ? Colors.teal : Colors.red,
             borderRadius: BorderRadius.circular(10.0),
             elevation: 6.0,
             child: Container(

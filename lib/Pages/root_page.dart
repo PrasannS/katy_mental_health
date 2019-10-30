@@ -22,6 +22,7 @@ class RootPage extends StatefulWidget {
 class _RootPageState extends State<RootPage> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
   String _userId = "";
+  String email = "";
 
   @override
   void initState() {
@@ -41,6 +42,7 @@ class _RootPageState extends State<RootPage> {
     widget.auth.getCurrentUser().then((user) {
       setState(() {
         _userId = user.uid.toString();
+        email = user.email;
       });
     });
     setState(() {
@@ -78,7 +80,8 @@ class _RootPageState extends State<RootPage> {
         break;
       case AuthStatus.LOGGED_IN:
         if (_userId.length > 0 && _userId != null) {
-          return new MyHomePage();
+          print(_userId);
+          return new MyHomePage(userid: email,);
         } else
           return buildWaitingScreen();
         break;
