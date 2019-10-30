@@ -27,10 +27,10 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> {
 
   DatabaseHelper databaseHelper = DatabaseHelper();
-  Widget bottom ;
   DateTime selectedDate;
   CalendarController _calendarController;
   final baseColor = Color.fromRGBO(255, 255, 255, 0.3);
+  List<Widget>entries = new List<Widget>();
 
   int currentmood = 190;
   @override
@@ -46,8 +46,6 @@ class _CalendarPageState extends State<CalendarPage> {
   void initState() {
     super.initState();
     _calendarController = CalendarController();
-    bottom = SizedBox(height: 30,);
-    selectedDate = DateTime.now();
   }
 
 
@@ -71,7 +69,9 @@ class _CalendarPageState extends State<CalendarPage> {
                   height: 350,
                   child: _buildTableCalendar(),
                 ),
-                bottom,
+                Column(
+                  children: entries,
+                ),
                 FlatButton(
                   color: Colors.transparent,
                   onPressed: () {
@@ -175,7 +175,8 @@ class _CalendarPageState extends State<CalendarPage> {
   void openEntry(Entry e){
     setState(() {
       currentmood = e.mood;
-      bottom= Container(
+      entries = new List<Widget>();
+      entries.add(new Container(
         height: 400,
         child: ListView(
           children: <Widget>[
@@ -200,15 +201,15 @@ class _CalendarPageState extends State<CalendarPage> {
             getTextWidget(e.note),
           ],
         ),
-      );
+      ));
     });
   }
+
 
   void _onDaySelected(DateTime day, List events) {
     setState(() {
       selectedDate = day;
-      List<Widget>entries = new List<Widget>();
-      bottom = SizedBox(height: 30,);
+      entries=new List<Widget>();
       Future<List<Entry>>d = databaseHelper.getEntryList();
       d.then((entryList){
         for(Entry e in entryList){
@@ -230,9 +231,6 @@ class _CalendarPageState extends State<CalendarPage> {
             currentmood=150;
           }
         }
-        bottom = new Column(
-          children: entries,
-        );
       });
     });
   }

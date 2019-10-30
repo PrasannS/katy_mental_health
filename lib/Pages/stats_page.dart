@@ -105,7 +105,6 @@ class _StatsPageState extends State<StatsPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 }
