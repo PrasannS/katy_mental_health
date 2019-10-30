@@ -29,4 +29,16 @@ class Constants{
     "What do you love about yourself?  ",
     "What are three of your absolute favorite activities?"
   ];
+
+  static List<String> questionOptions = [
+    "Work",
+    "Education",
+    "Relax",
+    "Family",
+    "Food",
+    "Friends",
+    "Extra-Curiccullar",
+    "Other"
+  ];
+
 }

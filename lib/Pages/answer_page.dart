@@ -109,103 +109,36 @@ class _AnswerPageState extends State<AnswerPage> {
     print(e.toString());
     Future<List<Entry>>d = databaseHelper.getEntryList();
     d.then((entryList){
-      print(entryList[1].toString());
+      print(entryList[entryList.length-1].toString());
     });
+
+  }
+
+
+  List<Widget> getOptions(){
+
+    List<Widget> widgets = new List<Widget>();
+    int i = 0;
+    for(String s in Constants.questionOptions){
+      i++;
+      widgets.add(
+        new FlatButton(
+          child: Text('$s'),
+          color: baseColor,
+          textColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(40.0),
+          ),
+          onPressed: ()=>{
+            selected(i)
+          },
+        ));
+    }
+    return widgets;
 
   }
   @override
   Widget build(BuildContext context) {
-
-    //START OF ALL OF THE QUESTION PAGE LOGIC
-
-    List<Widget> options = [
-      FlatButton(
-        child: Text('Work'),
-        color: baseColor,
-        textColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(40.0),
-        ),
-        onPressed: ()=>{
-          selected(1)
-        },
-      ),
-      FlatButton(
-        child: Text('Education'),
-        color: baseColor,
-        textColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(40.0),
-        ),
-        onPressed: ()=>{
-          selected(2)
-        },
-      ),
-      FlatButton(
-        child: Text('Relax'),
-        color: baseColor,
-        textColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(40.0),
-        ),
-        onPressed: ()=>{
-          selected(3)
-        },
-      ),
-      FlatButton(
-        child: Text('Family'),
-        color: baseColor,
-        textColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(40.0),
-        ),
-        onPressed: ()=>{
-          selected(4)
-        },
-      ),
-      FlatButton(
-        child: Text('Food'),
-        color: baseColor,
-        textColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(40.0),
-        ),
-        onPressed: ()=>{
-          selected(5)
-        },
-      ),
-      FlatButton(
-        child: Text('Friends'),
-        color: baseColor,
-        textColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(40.0),
-        ),
-        onPressed: ()=>{
-          selected(5)
-        },
-      ),
-      FlatButton(
-        child: Text('ExtraCurricular'),
-        color: baseColor,
-        textColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(40.0),
-        ),
-        onPressed: ()=>{selected(6)},
-      ),
-      FlatButton(
-        child: Text('Other'),
-        color: baseColor,
-        textColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(40.0),
-        ),
-        onPressed: ()=>{
-          selected(7)
-        },
-      ),
-    ];
 
     List<Widget> questionWidgets = [
       new SingleCircularSlider(
@@ -307,7 +240,7 @@ class _AnswerPageState extends State<AnswerPage> {
           height: 380,
           width: 380,
           child: ListView(
-            children: options,
+            children: getOptions(),
           )
       ),
       new SizedBox(

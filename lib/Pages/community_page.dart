@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'chat_page.dart';
 
 class CommunityPage extends StatefulWidget {
-  CommunityPage({Key key, this.title}) : super(key: key);
+  CommunityPage({Key key, this.title, this.user}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -14,6 +15,7 @@ class CommunityPage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+  final String user;
 
   @override
   _CommunityPageState createState() => _CommunityPageState();
@@ -42,11 +44,6 @@ class _CommunityPageState extends State<CommunityPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the CommunityPage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
@@ -67,20 +64,22 @@ class _CommunityPageState extends State<CommunityPage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
+            new RaisedButton(
+              child: Text('Global Chat'),
+              color: Color.fromRGBO(255, 255, 255, .5),
+              textColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40.0),
+              ),
+              onPressed: ()=>{
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Chat(user:widget.user)),
+                )
+              },
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
