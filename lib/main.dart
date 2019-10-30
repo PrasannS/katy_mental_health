@@ -3,6 +3,9 @@ import 'package:katy_mental_health/Pages/answer_page.dart';
 import 'package:katy_mental_health/Pages/calendar_page.dart';
 import 'package:katy_mental_health/Pages/community_page.dart';
 import 'package:katy_mental_health/Pages/stats_page.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+
 
 void main() => runApp(MyApp());
 
