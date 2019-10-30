@@ -30,10 +30,11 @@ class _StatsPageState extends State<StatsPage> {
       water = new List<int>(),
       questionId = new List<int>(),
       activity = new List<int>();
-  List<String> answer = new List<String>(), note = new List<String>();
+  List<String> answer = new List<String>(),
+      note = new List<String>();
 
   void updateGraphs(List<Entry> entryList) {
-    if(mounted) {
+    if (mounted) {
       setState(() {
         sleep = new List<int>();
         mood = new List<int>();
@@ -51,6 +52,7 @@ class _StatsPageState extends State<StatsPage> {
           answer.add(entry.answer);
           note.add(entry.note);
         }
+        print(activity.length);
       });
     }
   }
@@ -64,40 +66,41 @@ class _StatsPageState extends State<StatsPage> {
       updateGraphs(entryList);
     });
     return MaterialApp(
-      home:
-      Scaffold(
-        backgroundColor: Colors.lightBlue[200],
-        body: ListView(
-          children: <Widget>[
-            Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'Mood and Sleeptime',
-                  style: TextStyle(color: Colors.black, fontSize: 30),
-                  textAlign: TextAlign.center,
-                )),
-            genLineGraph([mood, sleep]),
-            Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'My Moods',
-                  style: TextStyle(color: Colors.black, fontSize: 30),
-                  textAlign: TextAlign.center,
-                )),
-            genPieGraph(mood),
-            Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'Water, Sleep, and Mood',
-                  style: TextStyle(color: Colors.black, fontSize: 30),
-                  textAlign: TextAlign.center,
-                )),
-            genLineGraph([water, sleep, mood]),
-          ],
-        ),
-      )
-
-    );
+        home: Scaffold(
+      backgroundColor: Colors.lightBlue[200],
+      body: ListView(
+        children: <Widget>[
+          Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Mood and Sleeptime',
+                style: TextStyle(color: Colors.black, fontSize: 30),
+                textAlign: TextAlign.center,
+              )),
+          genLineGraph([mood, sleep]),
+          Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'My Moods',
+                style: TextStyle(color: Colors.black, fontSize: 30),
+                textAlign: TextAlign.center,
+              )),
+          genPieGraph(mood),
+          Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Water, Sleep, and Mood',
+                style: TextStyle(color: Colors.black, fontSize: 30),
+                textAlign: TextAlign.center,
+              )),
+          genLineGraph([water, sleep, mood]),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+          ),
+          BarChartSample1(),
+        ],
+      ),
+    ));
   }
 
   @override
