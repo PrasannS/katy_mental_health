@@ -14,7 +14,7 @@ Widget genLineGraph(List<List<int>> bigList) {
           borderRadius: const BorderRadius.all(
             Radius.circular(18),
           ),
-          color: Colors.blue[300],),
+          color: Colors.transparent,),
       child: Padding(
         padding:
             const EdgeInsets.only(right: 18.0, left: 12.0, top: 24, bottom: 12),
@@ -149,7 +149,7 @@ Widget genPieGraph(List<int> dataList) {
           borderRadius: const BorderRadius.all(
             Radius.circular(18),
           ),
-          color: Colors.blue[300],),
+          color: Colors.transparent,),
       child: Row(
         children: <Widget>[
           const SizedBox(
