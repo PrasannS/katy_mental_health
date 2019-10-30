@@ -90,7 +90,7 @@ class _AnswerPageState extends State<AnswerPage> {
     return new LinearGradient(
         begin: Alignment.topRight,
         end: Alignment.bottomLeft,
-        colors: [Color.fromRGBO(255-ends[currentQuestion], 0, 50,1.0), Color.fromRGBO(0, ends[currentQuestion], 50,1.0)]);
+        colors: [Color.fromRGBO(50, 0, 255-ends[currentQuestion],1.0), Color.fromRGBO(0, ends[currentQuestion], 50,1.0)]);
   }
 
   void submit() async{
