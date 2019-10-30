@@ -46,6 +46,7 @@ class _CalendarPageState extends State<CalendarPage> {
   void initState() {
     super.initState();
     _calendarController = CalendarController();
+    selectedDate = DateTime.now();
   }
 
 
