@@ -64,25 +64,22 @@ class _CommunityPageState extends State<CommunityPage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
+            new RaisedButton(
+              child: Text('Global Chat'),
+              color: Color.fromRGBO(255, 255, 255, .5),
+              textColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40.0),
+              ),
+              onPressed: ()=>{
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Chat(user:widget.user)),
+                )
+              },
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: ()=>{
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Chat(user:widget.user)),
-          )
-        },
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

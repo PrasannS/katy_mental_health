@@ -81,9 +81,14 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         controller: _tabController,
         children: _tabList,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
-        onPressed: () { },
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AnswerPage(time: DateTime.now().millisecondsSinceEpoch)),
+          );
+        },
         tooltip: 'Increment',
         child: Icon(Icons.add),
         elevation: 2.0,

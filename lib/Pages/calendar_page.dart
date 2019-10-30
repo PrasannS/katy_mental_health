@@ -30,7 +30,9 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget bottom ;
   DateTime selectedDate;
   CalendarController _calendarController;
+  final baseColor = Color.fromRGBO(255, 255, 255, 0.3);
 
+  int currentmood = 190;
   @override
   void dispose() {
     // TODO: implement dispose
@@ -53,9 +55,12 @@ class _CalendarPageState extends State<CalendarPage> {
     /// Example Calendar Carousel without header and custom prev & next button
     return new Scaffold(
         body: SingleChildScrollView(
-          child:SizedBox(
+          child:Container(
             height: 800,
             width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: getGradient(currentmood),
+            ),
             child: ListView(
               children: <Widget>[
                 //custom icon
@@ -67,13 +72,12 @@ class _CalendarPageState extends State<CalendarPage> {
                 ),
                 bottom,
                 FlatButton(
-                  color: Colors.white24,
+                  color: Colors.transparent,
                   onPressed: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => AnswerPage(time:selectedDate.millisecondsSinceEpoch)),
                     );
-                    print("hi");
                     _onDaySelected(selectedDate, null);
                   },
                   textColor: Colors.white,
@@ -168,10 +172,9 @@ class _CalendarPageState extends State<CalendarPage> {
         for(Entry e in entryList){
           DateTime today = DateTime.fromMillisecondsSinceEpoch(e.datetime);
           if(day.year == today.year && day.month == today.month && day.day == today.day){
+            currentmood = e.mood;
+
             bottom= Container(
-              decoration: BoxDecoration(
-                gradient: getGradient(e.mood),
-              ),
               height: 400,
               child: ListView(
                 children: <Widget>[
@@ -183,8 +186,13 @@ class _CalendarPageState extends State<CalendarPage> {
                     ],
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   ),
-                  SizedBox(
-                    height: 30,
+                  new RaisedButton(
+                    child: Text('${Constants.questionOptions[e.activity-1]}'),
+                    color: Color.fromRGBO(255, 255, 255, .5),
+                    textColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(40.0),
+                    ),
                   ),
                   getTextWidget(Constants.questionsOfTheDay[e.question_id]),
                   getTextWidget(e.answer),
@@ -193,6 +201,9 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
             );
             break;
+          }
+          else{
+            currentmood=150;
           }
         }
       });
