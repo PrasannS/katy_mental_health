@@ -32,11 +32,6 @@ class _StatsPageState extends State<StatsPage> {
       activity = new List<int>();
   List<String> answer = new List<String>(), note = new List<String>();
 
-  List<Color> gradientColors = [
-    const Color(0xff23b6e6),
-    const Color(0xff02d39a),
-  ];
-
   void updateGraphs(List<Entry> entryList) {
     if(mounted) {
       setState(() {
