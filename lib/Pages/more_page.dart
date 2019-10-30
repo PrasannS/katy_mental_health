@@ -15,58 +15,94 @@ class _MorePageState extends State<MorePage> {
   @override
   Widget build(BuildContext context) {
       return new Scaffold(
-          body: new ListView(
-            children: <Widget>[
-              Container(
-                child: ListTile(
-                  leading: Icon(Icons.book),
-                  title: Text("Resources"),
-                  subtitle: Text("Helpful sources"),
-                  onTap: () {
-                    debugPrint("Resources");
-                  },
+          body: Container(
+              decoration: BoxDecoration(
+                // Box decoration takes a gradient
+                gradient: LinearGradient(
+                  colors: <Color>[
+                    Color(0xFF0D47A1),
+                    Color(0xFF1976D2),
+                    Color(0xFF42A5F5),
+                  ],
                 ),
               ),
+              child: ListView(
+                children: <Widget>[
+                  Card(
+                    child: ListTile(
+                      leading: Icon(Icons.book),
+                      title: Text("Resources"),
+                      trailing: Icon(Icons.keyboard_arrow_right),
+                      onTap: () {
+                        debugPrint("Resources");
+                      },
+                    ),
+                  ),
 
-              Container(
-                child: ListTile(
-                leading: Icon(Icons.alarm),
-                title: Text("Watch Ads"),
-                onTap: () {
-                  debugPrint("Ads");
-                },
+
+
+                  Card(
+                    child: ListTile(
+                      leading: Icon(Icons.tv),
+                      title: Text("Watch Ads"),
+                      trailing: Icon(Icons.keyboard_arrow_right),
+                      onTap: () {
+                        debugPrint("Ads");
+                      },
+                    ),
+                  ),
+
+                  Card(
+                    child: ListTile(
+                      leading: Icon(Icons.lightbulb_outline),
+                      title: Text("Suggestions"),
+                      trailing: Icon(Icons.keyboard_arrow_right),
+                      onTap: () {
+                        debugPrint("Suggestions");
+                      },
+                    ),
+                  ),
+
+                  Card(
+                    child: ListTile(
+                      leading: Icon(Icons.wb_sunny),
+                      title: Text("Breathing"),
+                      trailing: Icon(Icons.keyboard_arrow_right),
+                      onTap: () {
+                        debugPrint("Breathing");
+                      },
+                    ),
+                  ),
+
+                  ListTile(
+                    //spacer
+                  ),
+
+                  Card(
+                    child: ListTile(
+                      leading: Icon(Icons.notifications),
+                      title: Text("Notifications"),
+                      trailing: Icon(Icons.keyboard_arrow_right),
+                      onTap: () {
+                        debugPrint("Notifications");
+                      },
+                    ),
+                  ),
+
+                  Card(
+                    child: ListTile(
+                      leading: Icon(Icons.settings),
+                      title: Text("Settings"),
+                      trailing: Icon(Icons.keyboard_arrow_right),
+                      onTap: () {
+                        debugPrint("Settings");
+                      },
+                    ),
+                  ),
+
+
+                ],
               )
-              ),
-
-
-
-              ListTile(
-                leading: Icon(Icons.lightbulb_outline),
-                title: Text("Suggestions"),
-                onTap: () {
-                  debugPrint("Suggestions");
-                },
-              ),
-
-              ListTile(
-                leading: Icon(Icons.wb_sunny),
-                title: Text("Breathing"),
-                onTap: () {
-                  debugPrint("Breathing");
-                },
-              ),
-              ListTile(
-                //spacer
-              ),
-
-              ListTile(
-                leading: Icon(Icons.settings),
-                title: Text("Settings"),
-                onTap: () {
-                  debugPrint("Settings");
-                },
-              ),
-            ],
           )
       );
   }
