@@ -81,6 +81,13 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         controller: _tabController,
         children: _tabList,
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () { },
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+        elevation: 2.0,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         unselectedItemColor: Colors.redAccent,
         selectedItemColor: Colors.blue,
@@ -111,6 +118,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           )
         ],
       ),
+
     );
   }
 }
