@@ -52,7 +52,6 @@ class _StatsPageState extends State<StatsPage> {
           answer.add(entry.answer);
           note.add(entry.note);
         }
-        print(activity.length);
       });
     }
   }
@@ -97,7 +96,10 @@ class _StatsPageState extends State<StatsPage> {
           Padding(
             padding: EdgeInsets.all(8.0),
           ),
-          BarChartSample1(),
+          BarChartSample1(data: activity),
+          SizedBox(
+
+          )
         ],
       ),
     ));

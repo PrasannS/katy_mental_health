@@ -316,7 +316,6 @@ class BarChartSample1State extends State<BarChartSample1> {
   @override
   void initState() {
     super.initState();
-
     barTouchedResultStreamController = StreamController();
     barTouchedResultStreamController.stream
         .distinct()
@@ -448,7 +447,7 @@ class BarChartSample1State extends State<BarChartSample1> {
                 case 0:
                   return 'Work';
                 case 1:
-                  return 'Education';
+                  return 'Edu';
                 case 2:
                   return 'Relax';
                 case 3:
@@ -458,7 +457,7 @@ class BarChartSample1State extends State<BarChartSample1> {
                 case 5:
                   return 'Friends';
                 case 6:
-                  return 'Extra-Curricular';
+                  return 'EXC';
                 default:
                   return 'Other';
               }
@@ -476,11 +475,18 @@ class BarChartSample1State extends State<BarChartSample1> {
 
   List<BarChartGroupData> showingGroups() {
     List<BarChartGroupData> groups = new List<BarChartGroupData>();
+    List<double> counter = [0,0,0,0,0,0,0,0];
     if (data != null)
       {
         for (int i = 0; i < data.length; i++) {
-          groups.add(makeGroupData(i, data[i] + 0.0, isTouched: i == touchedIndex));
+          if (data[i] == 0)
+            continue;
+          counter[data[i] - 1]++;
         }
+      }
+    for (int i = 0; i < counter.length; i++)
+      {
+        groups.add(makeGroupData(i, counter[i], isTouched: i == touchedIndex));
       }
     return groups;
   }
@@ -505,81 +511,5 @@ class BarChartSample1State extends State<BarChartSample1> {
         ),
       ),
     ]);
-  }
-
-  BarChartData randomData() {
-    return BarChartData(
-      barTouchData: const BarTouchData(
-        enabled: false,
-      ),
-      titlesData: FlTitlesData(
-        show: true,
-        bottomTitles: SideTitles(
-            showTitles: true,
-            textStyle: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
-            margin: 16,
-            getTitles: (double value) {
-              switch (value.toInt()) {
-                case 0:
-                  return 'M';
-                case 1:
-                  return 'T';
-                case 2:
-                  return 'W';
-                case 3:
-                  return 'T';
-                case 4:
-                  return 'F';
-                case 5:
-                  return 'S';
-                case 6:
-                  return 'S';
-                default:
-                  return '';
-              }
-            }),
-        leftTitles: const SideTitles(
-          showTitles: false,
-        ),
-      ),
-      borderData: FlBorderData(
-        show: false,
-      ),
-      barGroups: List.generate(7, (i) {
-        switch (i) {
-          case 0:
-            return makeGroupData(0, Random().nextInt(15).toDouble() + 6,
-                barColor: widget.availableColors[
-                    Random().nextInt(widget.availableColors.length)]);
-          case 1:
-            return makeGroupData(1, Random().nextInt(15).toDouble() + 6,
-                barColor: widget.availableColors[
-                    Random().nextInt(widget.availableColors.length)]);
-          case 2:
-            return makeGroupData(2, Random().nextInt(15).toDouble() + 6,
-                barColor: widget.availableColors[
-                    Random().nextInt(widget.availableColors.length)]);
-          case 3:
-            return makeGroupData(3, Random().nextInt(15).toDouble() + 6,
-                barColor: widget.availableColors[
-                    Random().nextInt(widget.availableColors.length)]);
-          case 4:
-            return makeGroupData(4, Random().nextInt(15).toDouble() + 6,
-                barColor: widget.availableColors[
-                    Random().nextInt(widget.availableColors.length)]);
-          case 5:
-            return makeGroupData(5, Random().nextInt(15).toDouble() + 6,
-                barColor: widget.availableColors[
-                    Random().nextInt(widget.availableColors.length)]);
-          case 6:
-            return makeGroupData(6, Random().nextInt(15).toDouble() + 6,
-                barColor: widget.availableColors[
-                    Random().nextInt(widget.availableColors.length)]);
-          default:
-            return null;
-        }
-      }),
-    );
   }
 }
