@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:katy_mental_health/Pages/answer_page.dart';
 import 'package:katy_mental_health/Pages/breathing_page.dart';
 import 'package:katy_mental_health/Pages/calendar_page.dart';
+import 'package:katy_mental_health/Pages/more_page.dart';
 import 'package:katy_mental_health/Pages/root_page.dart';
 import 'package:katy_mental_health/Pages/community_page.dart';
 import 'package:katy_mental_health/Pages/stats_page.dart';
@@ -61,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         child: new CommunityPage(user:widget.userid),
       ),
       Container(
-        child: new BreathingPage(),
+        child: new MorePage(),
       )
     ];
     super.initState();
