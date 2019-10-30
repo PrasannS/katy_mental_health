@@ -33,15 +33,18 @@ LineChartData lineData(List<List<int>> bigList) {
     gridData: FlGridData(
       show: true,
       drawVerticalGrid: true,
+      drawHorizontalGrid: true,
       getDrawingHorizontalGridLine: (value) {
-        return const FlLine(
-          color: Color(0xff37434d),
+        Color color = value % 10 == 0 ? Color(0xff37434d) : Colors.transparent;
+        return FlLine(
+          color: color,
           strokeWidth: 0.5,
         );
       },
       getDrawingVerticalGridLine: (value) {
-        return const FlLine(
-          color: Color(0xff37434d),
+        Color color = value % 5 == 0 ? Color(0xff37434d) : Colors.transparent;
+        return FlLine(
+          color: color,
           strokeWidth: 0.5,
         );
       },
