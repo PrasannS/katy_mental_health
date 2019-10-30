@@ -47,6 +47,7 @@ class _CalendarPageState extends State<CalendarPage> {
     super.initState();
     _calendarController = CalendarController();
     bottom = SizedBox(height: 30,);
+    selectedDate = DateTime.now();
   }
 
 
@@ -107,17 +108,25 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget _buildTableCalendar() {
     return TableCalendar(
       calendarController: _calendarController,
+      daysOfWeekStyle: DaysOfWeekStyle(
+        weekendStyle: TextStyle(
+          color: Colors.blueAccent[400]
+        )
+      ),
       startingDayOfWeek: StartingDayOfWeek.monday,
       calendarStyle: CalendarStyle(
-        selectedColor: Colors.deepOrange[400],
-        todayColor: Colors.deepOrange[200],
-        markersColor: Colors.brown[700],
+        selectedColor: Colors.blueAccent[400],
+        todayColor: Colors.blue[200],
+        markersColor: Colors.blueAccent[700],
         outsideDaysVisible: false,
+        weekendStyle: TextStyle(
+          color: Colors.blueAccent[400]
+        )
       ),
       headerStyle: HeaderStyle(
         formatButtonTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
         formatButtonDecoration: BoxDecoration(
-          color: Colors.deepOrange[400],
+          color: Colors.blueAccent[400],
           borderRadius: BorderRadius.circular(16.0),
         ),
       ),
@@ -163,49 +172,67 @@ class _CalendarPageState extends State<CalendarPage> {
         colors: [Color.fromRGBO(255-a, 0, 50,.5), Color.fromRGBO(0,a, 50,0.5)]);
   }
 
+  void openEntry(Entry e){
+    setState(() {
+      currentmood = e.mood;
+      bottom= Container(
+        height: 400,
+        child: ListView(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                getIconWithValue(Icons.airline_seat_flat, e.sleep),
+                getIconWithValue(Icons.child_care, e.mood),
+                getIconWithValue(Icons.invert_colors, e.water),
+              ],
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            ),
+            new RaisedButton(
+              child: Text('${Constants.questionOptions[e.activity-1]}'),
+              color: Color.fromRGBO(255, 255, 255, .5),
+              textColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40.0),
+              ),
+            ),
+            getTextWidget(Constants.questionsOfTheDay[e.question_id]),
+            getTextWidget(e.answer),
+            getTextWidget(e.note),
+          ],
+        ),
+      );
+    });
+  }
+
   void _onDaySelected(DateTime day, List events) {
     setState(() {
       selectedDate = day;
+      List<Widget>entries = new List<Widget>();
       bottom = SizedBox(height: 30,);
       Future<List<Entry>>d = databaseHelper.getEntryList();
       d.then((entryList){
         for(Entry e in entryList){
           DateTime today = DateTime.fromMillisecondsSinceEpoch(e.datetime);
           if(day.year == today.year && day.month == today.month && day.day == today.day){
-            currentmood = e.mood;
-
-            bottom= Container(
-              height: 400,
-              child: ListView(
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      getIconWithValue(Icons.airline_seat_flat, e.sleep),
-                      getIconWithValue(Icons.child_care, e.mood),
-                      getIconWithValue(Icons.invert_colors, e.water),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  ),
-                  new RaisedButton(
-                    child: Text('${Constants.questionOptions[e.activity-1]}'),
-                    color: Color.fromRGBO(255, 255, 255, .5),
-                    textColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40.0),
-                    ),
-                  ),
-                  getTextWidget(Constants.questionsOfTheDay[e.question_id]),
-                  getTextWidget(e.answer),
-                  getTextWidget(e.note),
-                ],
+            entries.add(new RaisedButton(
+              child: Text('${Constants.questionOptions[e.activity-1]}'),
+              color: Color.fromRGBO(255-e.mood, e.mood, 50, .5),
+              textColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40.0),
               ),
-            );
-            break;
+              onPressed: ()=>{
+                openEntry(e)
+              },
+            ));
           }
           else{
             currentmood=150;
           }
         }
+        bottom = new Column(
+          children: entries,
+        );
       });
     });
   }
