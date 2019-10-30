@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:katy_mental_health/Pages/answer_page.dart';
 import 'package:katy_mental_health/Pages/breathing_page.dart';
 import 'package:katy_mental_health/Pages/calendar_page.dart';
-import 'package:katy_mental_health/Pages/chat_page.dart';
+import 'package:katy_mental_health/Pages/root_page.dart';
 import 'package:katy_mental_health/Pages/community_page.dart';
 import 'package:katy_mental_health/Pages/stats_page.dart';
+import 'package:katy_mental_health/Utils/auth.dart';
 
 void main() => runApp(MyApp());
 
@@ -17,14 +18,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue
       ),
-      home: MyHomePage(title: "Home Page",),
+      home: RootPage(auth: new Auth(),),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key key, this.title,this.userid}) : super(key: key);
   final String title;
+  final String userid;
+
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -34,20 +37,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
   int _currentIndex = 0;
 
-  List<Widget> _tabList = [
-    Container(
-      child:new CalendarPage()
-    ),
-    Container(
-      child:new StatsPage()
-    ),
-    Container(
-        child: new Chat(),
-    ),
-    Container(
-      child: new BreathingPage(),
-    )
-  ];
 
   //int _bottomNavBarIndex = 0;
   TabController _tabController;
@@ -56,10 +45,25 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       _currentIndex = _tabController.index;
     });
   }
+  List<Widget> _tabList;
   @override
   void initState() {
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(_tabControllerListener);
+    _tabList = [
+      Container(
+          child:new CalendarPage()
+      ),
+      Container(
+          child:new StatsPage()
+      ),
+      Container(
+        child: new CommunityPage(user:widget.userid),
+      ),
+      Container(
+        child: new BreathingPage(),
+      )
+    ];
     super.initState();
   }
 

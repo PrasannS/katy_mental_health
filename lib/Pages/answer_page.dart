@@ -109,7 +109,7 @@ class _AnswerPageState extends State<AnswerPage> {
     print(e.toString());
     Future<List<Entry>>d = databaseHelper.getEntryList();
     d.then((entryList){
-      print(entryList[1].toString());
+      print(entryList[entryList.length-1].toString());
     });
 
   }
