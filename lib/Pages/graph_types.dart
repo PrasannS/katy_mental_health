@@ -14,7 +14,7 @@ Widget genLineGraph(List<List<int>> bigList) {
           borderRadius: const BorderRadius.all(
             Radius.circular(18),
           ),
-          color: const Color(0xff232d37)),
+          color: Colors.blue[300],),
       child: Padding(
         padding:
             const EdgeInsets.only(right: 18.0, left: 12.0, top: 24, bottom: 12),
@@ -35,14 +35,14 @@ LineChartData lineData(List<List<int>> bigList) {
       drawVerticalGrid: true,
       drawHorizontalGrid: true,
       getDrawingHorizontalGridLine: (value) {
-        Color color = value % 10 == 0 ? Color(0xff37434d) : Colors.transparent;
+        Color color = value % 30 == 0 ? Colors.blue[700] : Colors.transparent;
         return FlLine(
           color: color,
           strokeWidth: 0.5,
         );
       },
       getDrawingVerticalGridLine: (value) {
-        Color color = value % 5 == 0 ? Color(0xff37434d) : Colors.transparent;
+        Color color = value % 5 == 0 ? Colors.blue[700] : Colors.transparent;
         return FlLine(
           color: color,
           strokeWidth: 0.5,
@@ -55,7 +55,7 @@ LineChartData lineData(List<List<int>> bigList) {
         showTitles: true,
         reservedSize: 22,
         textStyle: TextStyle(
-            color: const Color(0xff68737d),
+            color: Colors.blue[700],
             fontWeight: FontWeight.bold,
             fontSize: 16),
         getTitles: (value) {
@@ -72,7 +72,7 @@ LineChartData lineData(List<List<int>> bigList) {
       leftTitles: SideTitles(
         showTitles: true,
         textStyle: TextStyle(
-          color: const Color(0xff67727d),
+          color: Colors.blue[700],
           fontWeight: FontWeight.bold,
           fontSize: 15,
         ),
@@ -92,8 +92,8 @@ LineChartData lineData(List<List<int>> bigList) {
       ),
     ),
     borderData: FlBorderData(
-        show: true,
-        border: Border.all(color: const Color(0xff37434d), width: 1)),
+        show: false,
+        border: Border.all(color: Colors.blue[700], width: 1),),
     minX: 0,
     maxX: bigList[0].length - 1.0,
     minY: 0,
@@ -103,16 +103,17 @@ LineChartData lineData(List<List<int>> bigList) {
 }
 
 List<LineChartBarData> getActualLineData(List<List<int>> bigList) {
+  List<Color> colors = [Colors.yellow[400], Colors.orange[300], Colors.orange[600]];
   List<List<FlSpot>> spotList = new List<List<FlSpot>>();
   for (List<int> list in bigList) {
     spotList.add(createFlSpots(list));
   }
   List<LineChartBarData> barDataList = new List<LineChartBarData>();
-  for (List<FlSpot> list in spotList) {
+  for (int i = 0; i < spotList.length; i++) {
     barDataList.add(new LineChartBarData(
-      spots: list,
+      spots: spotList[i],
       isCurved: true,
-      colors: [Color(0xff23b6e6)],
+      colors: [colors[i % colors.length]],
       barWidth: 5,
       isStrokeCapRound: true,
       dotData: const FlDotData(
@@ -148,7 +149,7 @@ Widget genPieGraph(List<int> dataList) {
           borderRadius: const BorderRadius.all(
             Radius.circular(18),
           ),
-          color: const Color(0xff232d37)),
+          color: Colors.blue[300],),
       child: Row(
         children: <Widget>[
           const SizedBox(
