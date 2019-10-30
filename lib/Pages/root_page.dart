@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:katy_mental_health/Pages/login_page.dart';
 import 'package:katy_mental_health/Utils/auth.dart';
-import 'package:katy_mental_health/Pages/chat_page.dart';
 import 'package:katy_mental_health/main.dart';
 
 enum AuthStatus {
@@ -31,6 +30,7 @@ class _RootPageState extends State<RootPage> {
       setState(() {
         if (user != null) {
           _userId = user?.uid;
+          email = user.email;
         }
         authStatus =
         user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
@@ -80,7 +80,7 @@ class _RootPageState extends State<RootPage> {
         break;
       case AuthStatus.LOGGED_IN:
         if (_userId.length > 0 && _userId != null) {
-          print(_userId);
+          print(email);
           return new MyHomePage(userid: email,);
         } else
           return buildWaitingScreen();
