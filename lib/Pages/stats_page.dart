@@ -72,7 +72,7 @@ class _StatsPageState extends State<StatsPage> {
             gradient: new LinearGradient(
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,
-                colors: [Color.fromRGBO(255-150, 0, 50,.5), Color.fromRGBO(0,150, 50,0.5)])
+                colors: [new Color(0xff04a5c1), new Color(0xfff9f981)])
           ),
           child:ListView(
             children: <Widget>[

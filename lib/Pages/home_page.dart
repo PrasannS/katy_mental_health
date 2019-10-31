@@ -97,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           ),
           BottomNavigationBarItem(
               title: Text("Community"),
-              icon: Icon(Icons.settings)
+              icon: Icon(Icons.person)
           ),
           BottomNavigationBarItem(
               title: Text("More"),

@@ -35,6 +35,7 @@ class HomePage extends StatelessWidget {
     return DefaultTabController(
       length: 4,
       child: Scaffold(
+        backgroundColor: Colors.green,
         appBar: AppBar(
           title: Text('Tabs'),
           bottom: TabBar(
