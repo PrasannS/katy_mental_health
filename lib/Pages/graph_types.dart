@@ -6,7 +6,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'indicator.dart';
 import 'dart:async';
 
-Widget genLineGraph(List<List<int>> bigList, List<String> names) {
+Widget genLineGraph(List<int> dates, List<List<int>> bigList, List<String> names) {
   return Container(
     decoration: BoxDecoration(
       borderRadius: const BorderRadius.all(
@@ -20,10 +20,10 @@ Widget genLineGraph(List<List<int>> bigList, List<String> names) {
           aspectRatio: 1.70,
           child: Padding(
             padding: const EdgeInsets.only(
-                right: 18.0, left: 12.0, top: 24, bottom: 12),
+                right: 24.0, left: 10.0, top: 24, bottom: 12),
             child: FlChart(
               chart: LineChart(
-                lineData(bigList),
+                lineData(dates, bigList),
               ),
             ),
           ),
@@ -58,7 +58,7 @@ List<Widget> genWidgetList(List<String> names) {
   return ret;
 }
 
-LineChartData lineData(List<List<int>> bigList) {
+LineChartData lineData(List<int> dates, List<List<int>> bigList) {
   return LineChartData(
     gridData: FlGridData(
       show: true,
@@ -88,11 +88,11 @@ LineChartData lineData(List<List<int>> bigList) {
             color: Colors.blue[700], fontWeight: FontWeight.bold, fontSize: 16),
         getTitles: (value) {
           if (value == bigList[0].length ~/ 4)
-            return (bigList[0].length ~/ 4).toString();
+            return DateTime.fromMillisecondsSinceEpoch(dates[value ~/ 1]).month.toString() + "/" + DateTime.fromMillisecondsSinceEpoch(dates[value ~/ 1]).day.toString();
           else if (value == bigList[0].length ~/ 2)
-            return (bigList[0].length ~/ 2).toString();
+            return DateTime.fromMillisecondsSinceEpoch(dates[value ~/ 1]).month.toString() + "/" + DateTime.fromMillisecondsSinceEpoch(dates[value ~/ 1]).day.toString();
           else if (value == bigList[0].length * 3 ~/ 4)
-            return (bigList[0].length * 3 ~/ 4).toString();
+            return DateTime.fromMillisecondsSinceEpoch(dates[value ~/ 1]).month.toString() + "/" + DateTime.fromMillisecondsSinceEpoch(dates[value ~/ 1]).day.toString();
           return '';
         },
         margin: 8,
@@ -478,8 +478,10 @@ class BarChartSample1State extends State<BarChartSample1> {
                   return 'Friends';
                 case 6:
                   return 'EXC';
-                default:
+                case 7:
                   return 'Other';
+                default:
+                  return '';
               }
             }),
         leftTitles: const SideTitles(
@@ -498,10 +500,12 @@ class BarChartSample1State extends State<BarChartSample1> {
     List<double> counter = [0, 0, 0, 0, 0, 0, 0, 0];
     if (data != null) {
       for (int i = 0; i < data.length; i++) {
-        if (data[i] == 0) continue;
-        counter[data[i] - 1]++;
+        if (data[i] < 0 || data[i] > 7) continue;
+        counter[data[i]]++;
       }
     }
+    print(data);
+    print(counter);
     for (int i = 0; i < counter.length; i++) {
       groups.add(makeGroupData(i, counter[i], isTouched: i == touchedIndex));
     }
@@ -517,7 +521,7 @@ class BarChartSample1State extends State<BarChartSample1> {
   }) {
     return BarChartGroupData(x: x, barRods: [
       BarChartRodData(
-        y: isTouched ? y + 1 : y,
+        y: isTouched && y != -1? y + 1 : y,
         color: isTouched ? Colors.yellow : barColor,
         width: width,
         isRound: true,

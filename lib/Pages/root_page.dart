@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:katy_mental_health/Pages/login_page.dart';
 import 'package:katy_mental_health/Utils/auth.dart';
-import 'package:katy_mental_health/main.dart';
+import 'package:katy_mental_health/Pages/home_page.dart';
 
 enum AuthStatus {
   NOT_DETERMINED,

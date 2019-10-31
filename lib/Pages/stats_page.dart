@@ -30,10 +30,11 @@ class _StatsPageState extends State<StatsPage> {
       water = new List<int>(),
       questionId = new List<int>(),
       activity = new List<int>();
-  List<String> answer = new List<String>(),
-      note = new List<String>();
+  List<int> date = new List<int>();
+  List<String> answer = new List<String>(), note = new List<String>();
 
   void updateGraphs(List<Entry> entryList) {
+    entryList.sort((a, b) => a.datetime.compareTo(b.datetime));
     if (mounted) {
       setState(() {
         sleep = new List<int>();
@@ -41,6 +42,7 @@ class _StatsPageState extends State<StatsPage> {
         water = new List<int>();
         questionId = new List<int>();
         activity = new List<int>();
+        date = new List<int>();
         answer = new List<String>();
         note = new List<String>();
         for (Entry entry in entryList) {
@@ -49,6 +51,7 @@ class _StatsPageState extends State<StatsPage> {
           water.add(entry.water);
           questionId.add(entry.question_id);
           activity.add(entry.activity);
+          date.add(entry.datetime);
           answer.add(entry.answer);
           note.add(entry.note);
         }
@@ -67,45 +70,51 @@ class _StatsPageState extends State<StatsPage> {
     return MaterialApp(
         home: Scaffold(
       backgroundColor: Colors.lightBlue[200],
-      body: ListView(
-        children: <Widget>[
-          Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Mood and Sleeptime',
-                style: TextStyle(color: Colors.black, fontSize: 30),
-                textAlign: TextAlign.center,
-              )),
-          genLineGraph([mood, sleep], ["mood", "sleep"]),
-          Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'My Moods',
-                style: TextStyle(color: Colors.black, fontSize: 30),
-                textAlign: TextAlign.center,
-              )),
-          genPieGraph(mood),
-          Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Water',
-                style: TextStyle(color: Colors.black, fontSize: 30),
-                textAlign: TextAlign.center,
-              )),
-          genLineGraph([water], ["water"]),
-          Padding(
-            padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Impactful Activities',
-                style: TextStyle(color: Colors.black, fontSize: 30),
-                textAlign: TextAlign.center,
-              )
-          ),
-          BarChartSample1(data: activity),
-          SizedBox(
-            height: 50,
-          )
-        ],
+      body: Container(
+        decoration: BoxDecoration(
+            gradient: new LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [Colors.lightBlue, Colors.cyan])),
+        child: ListView(
+          children: <Widget>[
+            Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Mood and Sleeptime',
+                  style: TextStyle(color: Colors.black, fontSize: 30),
+                  textAlign: TextAlign.center,
+                )),
+            genLineGraph(date, [mood, sleep], ["mood", "sleep"]),
+            Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'My Moods',
+                  style: TextStyle(color: Colors.black, fontSize: 30),
+                  textAlign: TextAlign.center,
+                )),
+            genPieGraph(mood),
+            Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Water',
+                  style: TextStyle(color: Colors.black, fontSize: 30),
+                  textAlign: TextAlign.center,
+                )),
+            genLineGraph(date, [mood, water], ["mood", "water"]),
+            Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Impactful Activities',
+                  style: TextStyle(color: Colors.black, fontSize: 30),
+                  textAlign: TextAlign.center,
+                )),
+            BarChartSample1(data: activity),
+            SizedBox(
+              height: 50,
+            )
+          ],
+        ),
       ),
     ));
   }

@@ -168,7 +168,10 @@ class _CalendarPageState extends State<CalendarPage> {
     return new LinearGradient(
         begin: Alignment.topRight,
         end: Alignment.bottomLeft,
-        colors: [Color.fromRGBO(255-a, 0, 50,.5), Color.fromRGBO(0,a, 50,0.5)]);
+
+        //colors: [Color.fromRGBO(255-a, 0, 50,.5), Color.fromRGBO(0,a, 50,0.5)]);
+        colors: [new Color(0xff04a5c1), new Color(0xfff9f981)]);
+
   }
 
   void openEntry(Entry e){
@@ -232,6 +235,46 @@ class _CalendarPageState extends State<CalendarPage> {
         }
       });
     });
+  }
+
+  int getAvgMood(DateTime day) {
+
+      selectedDate = day;
+      entries=new List<Widget>();
+      int total=0;
+      int i = 0;
+      Future<List<Entry>>d = databaseHelper.getEntryList();
+      d.then((entryList) {
+        for (Entry e in entryList) {
+          DateTime today = DateTime.fromMillisecondsSinceEpoch(e.datetime);
+          if (day.year == today.year && day.month == today.month &&
+              day.day == today.day) {
+            i++;
+            total += e.mood;
+            entries.add(new RaisedButton(
+              child: Text('${Constants.questionOptions[e.activity - 1]}'),
+              color: Color.fromRGBO(255 - e.mood, e.mood, 50, .5),
+              textColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40.0),
+              ),
+              onPressed: () =>
+              {
+                openEntry(e)
+              },
+            ));
+          }
+          else {
+            currentmood = 150;
+          }
+        }
+      });
+      if(i>0)
+      return (total/i).round();
+      else{
+        return -1;
+      }
+
   }
 
 }
