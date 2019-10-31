@@ -44,51 +44,66 @@ class _CommunityPageState extends State<CommunityPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      body: Center(
+      body:Container(
+        decoration: BoxDecoration(
+          // Box decoration takes a gradient
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: <Color>[
+              new Color(0xff04a5c1),
+              new Color(0xfff9f981)
+            ],
+          ),
+        ),
+
+        child: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: ListView(
-          children: <Widget>[
-            Card(
-              child: ListTile(
-                leading: Icon(Icons.blur_circular),
-                title: Text("Global Chat"),
-                trailing: Icon(Icons.keyboard_arrow_right),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Chat(user:widget.user)),
-                  );
-                },
+          child: ListView(
+            children: <Widget>[
+              Card(
+                child: ListTile(
+                  leading: Icon(Icons.blur_circular),
+                  title: Text("Global Chat"),
+                  trailing: Icon(Icons.keyboard_arrow_right),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Chat(user:widget.user)),
+                    );
+                  },
+                ),
               ),
-            ),
-            Card(
-              child: ListTile(
-                leading: Icon(Icons.add),
-                title: Text("Add Random Chat"),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Chat(user:widget.user)),
-                  );
-                },
+              Card(
+                child: ListTile(
+                  leading: Icon(Icons.add),
+                  title: Text("Add Random Chat"),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Chat(user:widget.user)),
+                    );
+                  },
+                ),
               ),
-            ),
 
-            ListTile(
-              //spacer
-            ),
-            Container(
-              height: 500,
-              child: ListView(
-                children: chats,
+              ListTile(
+                //spacer
               ),
-            ),
+              Container(
+                height: 500,
+                child: ListView(
+                  children: chats,
+                ),
+              ),
 
 
-          ],
-        )
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+            ],
+          )
+
+      ), //
+      )// This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 

@@ -172,7 +172,7 @@ class _CalendarPageState extends State<CalendarPage> {
         end: Alignment.bottomLeft,
 
         //colors: [Color.fromRGBO(255-a, 0, 50,.5), Color.fromRGBO(0,a, 50,0.5)]);
-        colors: [new Color(0xff04a5c1), new Color(0xfff9f981)]);
+        colors: [new Color(0xffab64F6), new Color(0xff61dbf7)]);
 
   }
 
@@ -192,14 +192,15 @@ class _CalendarPageState extends State<CalendarPage> {
               ],
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             ),
-            new RaisedButton(
-              child: Text('${Constants.questionOptions[e.activity-1]}'),
-              color: Color.fromRGBO(255, 255, 255, .5),
-              textColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40.0),
+        new RaisedButton(
+                child: Text('${Constants.questionOptions[e.activity-1]}'),
+                color: Color.fromRGBO(255, 255, 255, .5),
+                textColor: Colors.white,
+                //shape: RoundedRectangleBorder(
+                  //borderRadius: BorderRadius.circular(40.0),
+                //),
               ),
-            ),
+
             getTextWidget(Constants.questionsOfTheDay[e.question_id]),
             getTextWidget(e.answer),
             getTextWidget(e.note),
@@ -219,16 +220,24 @@ class _CalendarPageState extends State<CalendarPage> {
         for(Entry e in entryList){
           DateTime today = DateTime.fromMillisecondsSinceEpoch(e.datetime);
           if(day.year == today.year && day.month == today.month && day.day == today.day){
-            entries.add(new RaisedButton(
-              child: Text('${Constants.questionOptions[e.activity-1]}'),
+            
+            entries.add(ListTile(
+              leading: Icon(Icons.tv),
+              title: Text('${Constants.questionOptions[e.activity-1]}'),
+              trailing: Icon(Icons.keyboard_arrow_right),
+              onTap: () {
+                openEntry(e);
+              },
+                /*
+              Title: Text('${Constants.questionOptions[e.activity-1]}'),
               color: Color.fromRGBO(255-e.mood, e.mood, 50, .5),
               textColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(40.0),
               ),
               onPressed: ()=>{
-                openEntry(e)
-              },
+
+              },*/
             ));
           }
           else{
