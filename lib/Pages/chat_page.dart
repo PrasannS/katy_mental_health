@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:katy_mental_health/Pages/root_page.dart';
-import 'package:katy_mental_health/Utils/auth.dart';
 
 
 //TODO
@@ -74,13 +71,16 @@ class _ChatState extends State<Chat> {
 
                   List<DocumentSnapshot> docs = snapshot.data.documents;
 
-                  List<Widget> messages = docs
-                      .map((doc) => Message(
-                    from: doc.data['from'],
-                    text: doc.data['text'],
-                    me: widget.user == doc.data['from'],
-                  ))
-                      .toList();
+                  List<Widget> messages = new List<Widget>();
+                  for (DocumentSnapshot d in docs){
+                    if(d.data['to']=='global')
+                    messages.add(new Message(
+                      from: d.data['from'],
+                      text: d.data['text'],
+                      me: widget.user == d.data['from'],
+                    ));
+                  }
+
 
                   return ListView(
                     controller: scrollController,
