@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:katy_mental_health/Utils/auth.dart';
+
 
 class LoginPage extends StatefulWidget {
   LoginPage({this.auth, this.loginCallback});
@@ -13,6 +15,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = new GlobalKey<FormState>();
+  final Firestore _firestore = Firestore.instance;
 
   String _email;
   String _password;
@@ -45,6 +48,10 @@ class _LoginPageState extends State<LoginPage> {
           print('Signed in: $userId');
         } else {
           userId = await widget.auth.signUp(_email, _password);
+          await _firestore.collection('users').add({
+            'name': _email,
+            'id': userId,
+          });
           //widget.auth.sendEmailVerification();
           //_showVerifyEmailSentDialog();
           print('Signed up user: $userId');
@@ -178,7 +185,6 @@ class _LoginPageState extends State<LoginPage> {
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
           radius: 48.0,
-          child: Image.asset('assets/flutter-icon.png'),
         ),
       ),
     );
