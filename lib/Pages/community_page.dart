@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'chat_page.dart';
@@ -23,17 +24,18 @@ class CommunityPage extends StatefulWidget {
 
 class _CommunityPageState extends State<CommunityPage> {
 
-  void addChat() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-    });
-  }
 
-  List<Widget> chats = new List<Widget>();
+
+  final Firestore _firestore = Firestore.instance;
+
+  ScrollController scrollController = ScrollController();
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,51 +49,64 @@ class _CommunityPageState extends State<CommunityPage> {
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: ListView(
-          children: <Widget>[
-            Card(
-              child: ListTile(
-                leading: Icon(Icons.blur_circular),
-                title: Text("Global Chat"),
-                trailing: Icon(Icons.keyboard_arrow_right),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Chat(user:widget.user)),
-                  );
-                },
-              ),
-            ),
-            Card(
-              child: ListTile(
-                leading: Icon(Icons.add),
-                title: Text("Add Random Chat"),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Chat(user:widget.user)),
-                  );
-                },
-              ),
-            ),
-
-            ListTile(
-              //spacer
-            ),
-            Container(
-              height: 500,
-              child: ListView(
-                children: chats,
-              ),
-            ),
-
-
-          ],
+        child: new Column(
+          children:getChats()
         )
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
+  List<Widget> getChats() {
+    List<Widget> chats = new List<Widget>();
+    chats.add(
+      Card(
+        child: ListTile(
+          leading: Icon(Icons.blur_circular),
+          title: Text("Global Chat"),
+          trailing: Icon(Icons.keyboard_arrow_right),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Chat(user:widget.user)),
+            );
+          },
+        ),
+      ),);
+    chats.add(
+      Card(
+        child: ListTile(
+          leading: Icon(Icons.add),
+          title: Text("Add Chats"),
+          onTap: () {
+            print(chats.toString());
+          },
+        ),
+      ),
+    );
+      _firestore
+          .collection("users")
+          .getDocuments()
+          .then((QuerySnapshot snapshot) {
+        for(DocumentSnapshot d in snapshot.documents){
+
+            chats.add(
+              Card(
+                child: ListTile(
+                  leading: Icon(Icons.add),
+                  title: Text("${d.data['name']}"),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Chat(user:widget.user)),
+                    );
+                  },
+                ),
+              ),
+            );
+        }
+      });
+      return chats;
+  }
   @override
   void dispose() {
     // TODO: implement dispose
