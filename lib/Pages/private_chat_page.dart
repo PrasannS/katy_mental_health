@@ -29,7 +29,7 @@ class _PrivateChatState extends State<PrivateChat> {
         'text': messageController.text,
         'from': widget.user,
         'date': DateTime.now().toIso8601String().toString(),
-        'to': "global",
+        'to': "private",
         'chatid':widget.toId
       });
       messageController.clear();
