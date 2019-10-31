@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:katy_mental_health/Pages/private_chat_page.dart';
 import 'chat_page.dart';
+import 'package:uuid/uuid.dart';
 
 class CommunityPage extends StatefulWidget {
   CommunityPage({Key key, this.title, this.user}) : super(key: key);
@@ -59,9 +61,22 @@ class _CommunityPageState extends State<CommunityPage> {
     );
   }
 
+  Future addChat(BuildContext context) async {
+    String email = await _asyncInputDialog(context);
+    Uuid uid = new Uuid();
+    String s = uid.v1();
+    await _firestore.collection('chats').add({
+      'user1':widget.user,
+      'user2':email,
+      'chatid':s
+    });
+    getChats();
+  }
+
 
 
   void getChats() {
+    chats.clear();
     chats.add(
       Card(
         child: ListTile(
@@ -82,7 +97,7 @@ class _CommunityPageState extends State<CommunityPage> {
           leading: Icon(Icons.add),
           title: Text("Add Chats"),
           onTap: () {
-            print(chats.toString());
+            addChat(context);
           },
         ),
       ),
@@ -107,7 +122,7 @@ class _CommunityPageState extends State<CommunityPage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Chat(user:widget.user)),
+                      MaterialPageRoute(builder: (context) => PrivateChat(user:widget.user, to:d.data[s], toId: d.data['chatid'],)),
                     );
                   },
                 ),
@@ -123,7 +138,7 @@ class _CommunityPageState extends State<CommunityPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Chat(user:widget.user)),
+                        MaterialPageRoute(builder: (context) => PrivateChat(user:widget.user, to:d.data[s], toId: d.data['chatid'],)),
                       );
                     },
                   ),
@@ -137,6 +152,41 @@ class _CommunityPageState extends State<CommunityPage> {
       }
     });
   }
+
+  Future<String> _asyncInputDialog(BuildContext context) async {
+    String teamName = '';
+    return showDialog<String>(
+      context: context,
+      barrierDismissible: false, // dialog is dismissible with a tap on the barrier
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Enter current team'),
+          content: new Row(
+            children: <Widget>[
+              new Expanded(
+                  child: new TextField(
+                    autofocus: true,
+                    decoration: new InputDecoration(
+                        labelText: 'Team Name', hintText: 'eg. Juventus F.C.'),
+                    onChanged: (value) {
+                      teamName = value;
+                    },
+                  ))
+            ],
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop(teamName);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
