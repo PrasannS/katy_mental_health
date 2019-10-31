@@ -8,6 +8,8 @@ import 'package:katy_mental_health/Pages/community_page.dart';
 import 'package:katy_mental_health/Pages/stats_page.dart';
 import 'package:katy_mental_health/Utils/auth.dart';
 import 'package:intl/message_lookup_by_library.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() => runApp(MyApp());
 
@@ -35,7 +37,12 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+
 class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
+
+  final Firestore db = Firestore.instance;
+  final FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
+
 
   int _currentIndex = 0;
 
@@ -50,6 +57,29 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   List<Widget> _tabList;
   @override
   void initState() {
+    super.initState();
+    //firebase notification code
+    _firebaseMessaging.configure(
+
+      //final snackBar = SnackBar(
+
+      //);
+      onMessage: (Map<String, dynamic> message) {
+        print('on message $message');
+      },
+      onResume: (Map<String, dynamic> message) {
+        print('on resume $message');
+      },
+      onLaunch: (Map<String, dynamic> message) {
+        print('on launch $message');
+      },
+    );
+    _firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(sound: true, badge: true, alert: true));
+    //user individual token
+    _firebaseMessaging.getToken().then((token){
+      print("TOken : "+token);
+    });
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(_tabControllerListener);
     _tabList = [
@@ -66,7 +96,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         child: new MorePage(),
       )
     ];
-    super.initState();
   }
 
   @override
