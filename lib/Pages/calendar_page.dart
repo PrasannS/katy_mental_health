@@ -56,7 +56,7 @@ class _CalendarPageState extends State<CalendarPage> {
     return new Scaffold(
         body: SingleChildScrollView(
           child:Container(
-            height: 800,
+            height: 900,
             width: double.infinity,
             decoration: BoxDecoration(
               gradient: getGradient(currentmood),
@@ -67,7 +67,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 //m icon without header
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 16.0),
-                  height: 350,
+                  height: 400,
                   child: _buildTableCalendar(),
                 ),
                 Column(
