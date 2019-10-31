@@ -66,7 +66,6 @@ class _CalendarPageState extends State<CalendarPage> {
                 //m icon without header
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 16.0),
-                  height: 400,
                   child: _buildTableCalendar(),
                 ),
                 Column(

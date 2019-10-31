@@ -51,28 +51,40 @@ class _BreathingAnimationState extends State<breathingButton>
   }
 
   Widget build(BuildContext context) {
-    return Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+    return Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      Padding(
+        padding: EdgeInsets.fromLTRB(4, 40, 0, 0),
+        child: Row(
+          children: <Widget>[
+            FlatButton(
+              child: Icon(Icons.arrow_back),
+              onPressed: () => {Navigator.pop(context)},
+            )
+          ],
+        ),
+      ),
       BreathingAnimation(
         controller: controller,
       ),
       AnimatedBuilder(
           animation: controller,
-          builder: (BuildContext context,
-              Widget child) {
+          builder: (BuildContext context, Widget child) {
             return Text(
               timerString,
               style: TextStyle(
                   fontSize: 112.0,
-                  color: controller.isAnimating ? Colors.indigo : Colors.transparent),
+                  color: controller.isAnimating
+                      ? Colors.indigo
+                      : Colors.transparent),
             );
           }),
     ]);
   }
 
   String get timerString {
-    Duration duration = controller.duration * controller.value + Duration(seconds: 1);
-    if (duration.inSeconds == 8)
-      return '';
+    Duration duration =
+        controller.duration * controller.value + Duration(seconds: 1);
+    if (duration.inSeconds == 8) return '';
     return '${duration.inSeconds}';
   }
 }

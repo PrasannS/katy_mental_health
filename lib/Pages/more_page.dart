@@ -70,7 +70,7 @@ class _MorePageState extends State<MorePage> {
                       title: Text("Breathing"),
                       trailing: Icon(Icons.keyboard_arrow_right),
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute<Null>(builder: (BuildContext context){
+                        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
                           return new BreathingPage();
                         }));
                       },
