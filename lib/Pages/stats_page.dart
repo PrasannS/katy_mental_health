@@ -63,36 +63,48 @@ class _StatsPageState extends State<StatsPage> {
     d.then((entryList) {
       updateGraphs(entryList);
     });
-    return Material(
-      type: MaterialType.transparency,
-      child: ListView(
-        children: <Widget>[
-          Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Mood and Sleeptime',
-                style: TextStyle(color: Colors.black, fontSize: 30),
-                textAlign: TextAlign.center,
-              )),
-          genLineGraph([mood, sleep]),
-          Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'My Moods',
-                style: TextStyle(color: Colors.black, fontSize: 30),
-                textAlign: TextAlign.center,
-              )),
-          genPieGraph(mood),
-          Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Water, Sleep, and Mood',
-                style: TextStyle(color: Colors.black, fontSize: 30),
-                textAlign: TextAlign.center,
-              )),
-          genLineGraph([water, sleep, mood]),
-        ],
-      ),
+    return MaterialApp(
+      home:
+      Scaffold(
+        body:
+        Container(
+          decoration: BoxDecoration(
+            gradient: new LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [Color.fromRGBO(255-150, 0, 50,.5), Color.fromRGBO(0,150, 50,0.5)])
+          ),
+          child:ListView(
+            children: <Widget>[
+              Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    'Mood and Sleeptime',
+                    style: TextStyle(color: Colors.black, fontSize: 30),
+                    textAlign: TextAlign.center,
+                  )),
+              genLineGraph([mood, sleep]),
+              Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    'My Moods',
+                    style: TextStyle(color: Colors.black, fontSize: 30),
+                    textAlign: TextAlign.center,
+                  )),
+              genPieGraph(mood),
+              Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    'Water, Sleep, and Mood',
+                    style: TextStyle(color: Colors.black, fontSize: 30),
+                    textAlign: TextAlign.center,
+                  )),
+              genLineGraph([water, sleep, mood]),
+            ],
+          ),
+        )
+      )
+
     );
   }
 

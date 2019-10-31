@@ -5,11 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_circular_slider/flutter_circular_slider.dart';
 import 'package:katy_mental_health/Models/entry.dart';
-import 'package:katy_mental_health/Pages/calendar_page.dart';
-import 'package:katy_mental_health/Pages/stats_page.dart';
 import 'package:katy_mental_health/Persistence/database.dart';
 import 'package:katy_mental_health/Utils/constants.dart';
-import 'package:katy_mental_health/main.dart';
 
 class AnswerPage extends StatefulWidget {
   @override
@@ -90,7 +87,7 @@ class _AnswerPageState extends State<AnswerPage> {
     return new LinearGradient(
         begin: Alignment.topRight,
         end: Alignment.bottomLeft,
-        colors: [Color.fromRGBO(255-ends[currentQuestion], 0, 50,1.0), Color.fromRGBO(0, ends[currentQuestion], 50,1.0)]);
+        colors: [Color.fromRGBO(50, 0, 255-ends[currentQuestion],1.0), Color.fromRGBO(0, ends[currentQuestion], 50,1.0)]);
   }
 
   void submit() async{
@@ -120,7 +117,6 @@ class _AnswerPageState extends State<AnswerPage> {
     List<Widget> widgets = new List<Widget>();
     int i = 0;
     for(String s in Constants.questionOptions){
-      i++;
       widgets.add(
         new FlatButton(
           child: Text('$s'),
@@ -130,10 +126,11 @@ class _AnswerPageState extends State<AnswerPage> {
             borderRadius: BorderRadius.circular(40.0),
           ),
           onPressed: ()=>{
-            selected(i)
+            selected(Constants.questionOptions.indexOf(s))
           },
         ));
     }
+    print(widgets);
     return widgets;
 
   }
