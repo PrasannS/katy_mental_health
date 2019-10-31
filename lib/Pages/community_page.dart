@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'chat_page.dart';
@@ -22,17 +23,18 @@ class CommunityPage extends StatefulWidget {
 }
 
 class _CommunityPageState extends State<CommunityPage> {
-  int _counter = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+
+
+  final Firestore _firestore = Firestore.instance;
+
+  ScrollController scrollController = ScrollController();
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
@@ -47,43 +49,64 @@ class _CommunityPageState extends State<CommunityPage> {
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new RaisedButton(
-              child: Text('Global Chat'),
-              color: Color.fromRGBO(255, 255, 255, .5),
-              textColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40.0),
-              ),
-              onPressed: ()=>{
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Chat(user:widget.user)),
-                )
-              },
-            ),
-          ],
-        ),
+        child: new Column(
+          children:getChats()
+        )
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
+  List<Widget> getChats() {
+    List<Widget> chats = new List<Widget>();
+    chats.add(
+      Card(
+        child: ListTile(
+          leading: Icon(Icons.blur_circular),
+          title: Text("Global Chat"),
+          trailing: Icon(Icons.keyboard_arrow_right),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Chat(user:widget.user)),
+            );
+          },
+        ),
+      ),);
+    chats.add(
+      Card(
+        child: ListTile(
+          leading: Icon(Icons.add),
+          title: Text("Add Chats"),
+          onTap: () {
+            print(chats.toString());
+          },
+        ),
+      ),
+    );
+      _firestore
+          .collection("users")
+          .getDocuments()
+          .then((QuerySnapshot snapshot) {
+        for(DocumentSnapshot d in snapshot.documents){
+
+            chats.add(
+              Card(
+                child: ListTile(
+                  leading: Icon(Icons.add),
+                  title: Text("${d.data['name']}"),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Chat(user:widget.user)),
+                    );
+                  },
+                ),
+              ),
+            );
+        }
+      });
+      return chats;
+  }
   @override
   void dispose() {
     // TODO: implement dispose

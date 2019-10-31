@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:link/link.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MorePage extends StatefulWidget {
   MorePage({Key key, this.title}) : super(key: key);
@@ -12,6 +14,15 @@ class MorePage extends StatefulWidget {
 
 class _MorePageState extends State<MorePage> {
 
+  _launchURL() async {
+    const url = 'https://socialworklicensemap.com/mental-health-resources-list/';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
       return new Scaffold(
@@ -19,41 +30,38 @@ class _MorePageState extends State<MorePage> {
               decoration: BoxDecoration(
                 // Box decoration takes a gradient
                 gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
                   colors: <Color>[
-                    Color(0xFF0D47A1),
-                    Color(0xFF1976D2),
-                    Color(0xFF42A5F5),
+                    new Color(0xff04a5c1),
+                    new Color(0xfff9f981)
                   ],
                 ),
               ),
               child: ListView(
                 children: <Widget>[
-                  Card(
-                    child: ListTile(
+                  ListTile(
                       leading: Icon(Icons.book),
                       title: Text("Resources"),
                       trailing: Icon(Icons.keyboard_arrow_right),
-                      onTap: () {
-                        debugPrint("Resources");
+                      onTap: (){
+                        _launchURL();
                       },
                     ),
-                  ),
 
 
-
-                  Card(
-                    child: ListTile(
+                  ListTile(
                       leading: Icon(Icons.tv),
                       title: Text("Watch Ads"),
                       trailing: Icon(Icons.keyboard_arrow_right),
                       onTap: () {
                         debugPrint("Ads");
+
                       },
                     ),
-                  ),
 
-                  Card(
-                    child: ListTile(
+
+                  ListTile(
                       leading: Icon(Icons.lightbulb_outline),
                       title: Text("Suggestions"),
                       trailing: Icon(Icons.keyboard_arrow_right),
@@ -61,10 +69,9 @@ class _MorePageState extends State<MorePage> {
                         debugPrint("Suggestions");
                       },
                     ),
-                  ),
 
-                  Card(
-                    child: ListTile(
+
+                  ListTile(
                       leading: Icon(Icons.wb_sunny),
                       title: Text("Breathing"),
                       trailing: Icon(Icons.keyboard_arrow_right),
@@ -72,14 +79,13 @@ class _MorePageState extends State<MorePage> {
                         debugPrint("Breathing");
                       },
                     ),
-                  ),
+
 
                   ListTile(
                     //spacer
                   ),
 
-                  Card(
-                    child: ListTile(
+                  ListTile(
                       leading: Icon(Icons.notifications),
                       title: Text("Notifications"),
                       trailing: Icon(Icons.keyboard_arrow_right),
@@ -87,10 +93,9 @@ class _MorePageState extends State<MorePage> {
                         debugPrint("Notifications");
                       },
                     ),
-                  ),
 
-                  Card(
-                    child: ListTile(
+
+                  ListTile(
                       leading: Icon(Icons.settings),
                       title: Text("Settings"),
                       trailing: Icon(Icons.keyboard_arrow_right),
@@ -98,7 +103,7 @@ class _MorePageState extends State<MorePage> {
                         debugPrint("Settings");
                       },
                     ),
-                  ),
+
 
 
                 ],

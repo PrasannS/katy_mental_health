@@ -7,9 +7,7 @@ import 'package:katy_mental_health/Pages/root_page.dart';
 import 'package:katy_mental_health/Pages/community_page.dart';
 import 'package:katy_mental_health/Pages/stats_page.dart';
 import 'package:katy_mental_health/Utils/auth.dart';
-import 'package:intl/message_lookup_by_library.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:quiver/time.dart';
 
 void main() => runApp(MyApp());
 
@@ -23,138 +21,6 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue
       ),
       home: RootPage(auth: new Auth(),),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title,this.userid}) : super(key: key);
-  final String title;
-  final String userid;
-
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-
-class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
-
-  final Firestore db = Firestore.instance;
-  final FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
-
-
-  int _currentIndex = 0;
-
-
-  //int _bottomNavBarIndex = 0;
-  TabController _tabController;
-  void _tabControllerListener(){
-    setState(() {
-      _currentIndex = _tabController.index;
-    });
-  }
-  List<Widget> _tabList;
-  @override
-  void initState() {
-    super.initState();
-    //firebase notification code
-    _firebaseMessaging.configure(
-
-      //final snackBar = SnackBar(
-
-      //);
-      onMessage: (Map<String, dynamic> message) {
-        print('on message $message');
-      },
-      onResume: (Map<String, dynamic> message) {
-        print('on resume $message');
-      },
-      onLaunch: (Map<String, dynamic> message) {
-        print('on launch $message');
-      },
-    );
-    _firebaseMessaging.requestNotificationPermissions(
-        const IosNotificationSettings(sound: true, badge: true, alert: true));
-    //user individual token
-    _firebaseMessaging.getToken().then((token){
-      print("TOken : "+token);
-    });
-    _tabController = TabController(length: 4, vsync: this);
-    _tabController.addListener(_tabControllerListener);
-    _tabList = [
-      Container(
-          child:new CalendarPage()
-      ),
-      Container(
-          child:new StatsPage()
-      ),
-      Container(
-        child: new CommunityPage(user:widget.userid),
-      ),
-      Container(
-        child: new MorePage(),
-      )
-    ];
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    _tabController.removeListener(_tabControllerListener);
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: TabBarView(
-        controller: _tabController,
-        children: _tabList,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AnswerPage(time: DateTime.now().millisecondsSinceEpoch)),
-          );
-        },
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-        elevation: 2.0,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        unselectedItemColor: Colors.redAccent,
-        selectedItemColor: Colors.blue,
-        currentIndex: _currentIndex,
-        onTap: (currentIndex){
-          setState(() {
-            _currentIndex = currentIndex;
-          });
-
-          _tabController.animateTo(_currentIndex);
-        },
-        items: [
-          BottomNavigationBarItem(
-              title: Text("Calendar"),
-              icon: Icon(Icons.home)
-          ),
-          BottomNavigationBarItem(
-              title: Text("Stats"),
-              icon: Icon(Icons.folder)
-          ),
-          BottomNavigationBarItem(
-              title: Text("Community"),
-              icon: Icon(Icons.settings)
-          ),
-          BottomNavigationBarItem(
-            title: Text("More"),
-            icon: Icon(Icons.access_alarm)
-          )
-        ],
-      ),
-
     );
   }
 }
