@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:katy_mental_health/Pages/private_chat_page.dart';
 import 'chat_page.dart';
+import 'package:uuid/uuid.dart';
 
 class CommunityPage extends StatefulWidget {
   CommunityPage({Key key, this.title, this.user}) : super(key: key);
@@ -28,12 +30,15 @@ class _CommunityPageState extends State<CommunityPage> {
 
   final Firestore _firestore = Firestore.instance;
 
+  List<Widget> chats= new List<Widget>();
+
   ScrollController scrollController = ScrollController();
 
 
   @override
   void initState() {
     // TODO: implement initState
+    getChats();
     super.initState();
   }
 
@@ -50,14 +55,28 @@ class _CommunityPageState extends State<CommunityPage> {
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: new Column(
-          children:getChats()
+          children:chats,
         )
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
-  List<Widget> getChats() {
-    List<Widget> chats = new List<Widget>();
+  Future addChat(BuildContext context) async {
+    String email = await _asyncInputDialog(context);
+    Uuid uid = new Uuid();
+    String s = uid.v1();
+    await _firestore.collection('chats').add({
+      'user1':widget.user,
+      'user2':email,
+      'chatid':s
+    });
+    getChats();
+  }
+
+
+
+  void getChats() {
+    chats.clear();
     chats.add(
       Card(
         child: ListTile(
@@ -78,35 +97,96 @@ class _CommunityPageState extends State<CommunityPage> {
           leading: Icon(Icons.add),
           title: Text("Add Chats"),
           onTap: () {
-            print(chats.toString());
+            addChat(context);
           },
         ),
       ),
     );
-      _firestore
-          .collection("users")
-          .getDocuments()
-          .then((QuerySnapshot snapshot) {
-        for(DocumentSnapshot d in snapshot.documents){
-
+    chats.add(
+      ListTile(
+        //spacer
+      ),
+    );
+    _firestore
+        .collection("chats")
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      for(DocumentSnapshot d in snapshot.documents){
+        setState(() {
+          if(d.data['user1']==widget.user){
+            String s = d.data['user2'];
             chats.add(
               Card(
                 child: ListTile(
-                  leading: Icon(Icons.add),
-                  title: Text("${d.data['name']}"),
+                  title: Text("$s"),
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Chat(user:widget.user)),
+                      MaterialPageRoute(builder: (context) => PrivateChat(user:widget.user, to:d.data[s], toId: d.data['chatid'],)),
                     );
                   },
                 ),
               ),
             );
-        }
-      });
-      return chats;
+          } else {
+            if(d.data['user2']==widget.user){
+              String s = d.data['user1'];
+              chats.add(
+                Card(
+                  child: ListTile(
+                    title: Text("$s"),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PrivateChat(user:widget.user, to:d.data[s], toId: d.data['chatid'],)),
+                      );
+                    },
+                  ),
+                ),
+              );
+            }
+          }
+
+        });
+
+      }
+    });
   }
+
+  Future<String> _asyncInputDialog(BuildContext context) async {
+    String teamName = '';
+    return showDialog<String>(
+      context: context,
+      barrierDismissible: false, // dialog is dismissible with a tap on the barrier
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Enter current team'),
+          content: new Row(
+            children: <Widget>[
+              new Expanded(
+                  child: new TextField(
+                    autofocus: true,
+                    decoration: new InputDecoration(
+                        labelText: 'Team Name', hintText: 'eg. Juventus F.C.'),
+                    onChanged: (value) {
+                      teamName = value;
+                    },
+                  ))
+            ],
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop(teamName);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
