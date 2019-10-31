@@ -6,27 +6,56 @@ import 'package:fl_chart/fl_chart.dart';
 import 'indicator.dart';
 import 'dart:async';
 
-Widget genLineGraph(List<List<int>> bigList) {
-  return AspectRatio(
-    aspectRatio: 1.70,
-    child: Container(
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(
-          Radius.circular(18),
-        ),
-        color: Colors.blue[300],
+Widget genLineGraph(List<List<int>> bigList, List<String> names) {
+  return Container(
+    decoration: BoxDecoration(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(18),
       ),
-      child: Padding(
-        padding:
-            const EdgeInsets.only(right: 18.0, left: 12.0, top: 24, bottom: 12),
-        child: FlChart(
-          chart: LineChart(
-            lineData(bigList),
+      color: Colors.blue[300],
+    ),
+    child: Column(
+      children: <Widget>[
+        AspectRatio(
+          aspectRatio: 1.70,
+          child: Padding(
+            padding: const EdgeInsets.only(
+                right: 18.0, left: 12.0, top: 24, bottom: 12),
+            child: FlChart(
+              chart: LineChart(
+                lineData(bigList),
+              ),
+            ),
           ),
         ),
-      ),
+        Padding(
+          padding: EdgeInsets.all(8),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: genWidgetList(names),
+          ),
+        ),
+      ],
     ),
   );
+}
+
+List<Widget> genWidgetList(List<String> names) {
+  List<Color> colors = [
+    Colors.yellow[400],
+    Colors.orange[300],
+    Colors.orange[600]
+  ];
+  List<Widget> ret = new List<Widget>();
+  for (int i = 0; i < names.length; i++)
+    ret.add(Indicator(
+      color: colors[i],
+      text: names[i],
+      isSquare: true,
+    ));
+  return ret;
 }
 
 LineChartData lineData(List<List<int>> bigList) {
@@ -304,7 +333,7 @@ class BarChartSample1 extends StatefulWidget {
 
 class BarChartSample1State extends State<BarChartSample1> {
   List<int> data;
-  final Color barBackgroundColor = Colors.blue[300];
+  final Color barBackgroundColor = Colors.grey[400];
   final Duration animDuration = Duration(milliseconds: 250);
 
   StreamController<BarTouchResponse> barTouchedResultStreamController;
@@ -358,15 +387,6 @@ class BarChartSample1State extends State<BarChartSample1> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
-                  Text(
-                    'Impactful Activity',
-                    style: TextStyle(
-                        color: const Color(0xff0f4a3c),
-                        fontSize: 24,),
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.all(8),
@@ -475,19 +495,16 @@ class BarChartSample1State extends State<BarChartSample1> {
 
   List<BarChartGroupData> showingGroups() {
     List<BarChartGroupData> groups = new List<BarChartGroupData>();
-    List<double> counter = [0,0,0,0,0,0,0,0];
-    if (data != null)
-      {
-        for (int i = 0; i < data.length; i++) {
-          if (data[i] == 0)
-            continue;
-          counter[data[i] - 1]++;
-        }
+    List<double> counter = [0, 0, 0, 0, 0, 0, 0, 0];
+    if (data != null) {
+      for (int i = 0; i < data.length; i++) {
+        if (data[i] == 0) continue;
+        counter[data[i] - 1]++;
       }
-    for (int i = 0; i < counter.length; i++)
-      {
-        groups.add(makeGroupData(i, counter[i], isTouched: i == touchedIndex));
-      }
+    }
+    for (int i = 0; i < counter.length; i++) {
+      groups.add(makeGroupData(i, counter[i], isTouched: i == touchedIndex));
+    }
     return groups;
   }
 
@@ -507,7 +524,7 @@ class BarChartSample1State extends State<BarChartSample1> {
         backDrawRodData: BackgroundBarChartRodData(
           show: true,
           y: 20,
-          color: barBackgroundColor,
+          color: Color.fromARGB(50, 33, 28, 8),
         ),
       ),
     ]);

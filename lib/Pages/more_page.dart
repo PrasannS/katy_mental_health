@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:katy_mental_health/Pages/breathing_page.dart';
 
 class MorePage extends StatefulWidget {
   MorePage({Key key, this.title}) : super(key: key);
@@ -69,7 +70,9 @@ class _MorePageState extends State<MorePage> {
                       title: Text("Breathing"),
                       trailing: Icon(Icons.keyboard_arrow_right),
                       onTap: () {
-                        debugPrint("Breathing");
+                        Navigator.of(context).push(MaterialPageRoute<Null>(builder: (BuildContext context){
+                          return new BreathingPage();
+                        }));
                       },
                     ),
                   ),

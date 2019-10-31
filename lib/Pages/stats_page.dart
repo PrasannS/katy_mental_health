@@ -76,7 +76,7 @@ class _StatsPageState extends State<StatsPage> {
                 style: TextStyle(color: Colors.black, fontSize: 30),
                 textAlign: TextAlign.center,
               )),
-          genLineGraph([mood, sleep]),
+          genLineGraph([mood, sleep], ["mood", "sleep"]),
           Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
@@ -88,17 +88,22 @@ class _StatsPageState extends State<StatsPage> {
           Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
-                'Water, Sleep, and Mood',
+                'Water',
                 style: TextStyle(color: Colors.black, fontSize: 30),
                 textAlign: TextAlign.center,
               )),
-          genLineGraph([water, sleep, mood]),
+          genLineGraph([water], ["water"]),
           Padding(
             padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Impactful Activities',
+                style: TextStyle(color: Colors.black, fontSize: 30),
+                textAlign: TextAlign.center,
+              )
           ),
           BarChartSample1(data: activity),
           SizedBox(
-
+            height: 50,
           )
         ],
       ),
