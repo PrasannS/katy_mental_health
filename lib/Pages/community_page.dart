@@ -168,14 +168,14 @@ class _CommunityPageState extends State<CommunityPage> {
       barrierDismissible: false, // dialog is dismissible with a tap on the barrier
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Enter current team'),
+          title: Text('Enter email'),
           content: new Row(
             children: <Widget>[
               new Expanded(
                   child: new TextField(
                     autofocus: true,
                     decoration: new InputDecoration(
-                        labelText: 'Team Name', hintText: 'eg. Juventus F.C.'),
+                        labelText: 'Email', hintText: 'eg. example@gmail.com'),
                     onChanged: (value) {
                       teamName = value;
                     },

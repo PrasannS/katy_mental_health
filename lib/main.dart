@@ -7,6 +7,7 @@ import 'package:katy_mental_health/Pages/root_page.dart';
 import 'package:katy_mental_health/Pages/community_page.dart';
 import 'package:katy_mental_health/Pages/stats_page.dart';
 import 'package:katy_mental_health/Utils/auth.dart';
+import 'package:quiver/time.dart';
 
 void main() => runApp(MyApp());
 
