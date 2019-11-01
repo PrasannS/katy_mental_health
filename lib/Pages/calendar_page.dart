@@ -55,9 +55,12 @@ class _CalendarPageState extends State<CalendarPage> {
     super.initState();
     _calendarController = CalendarController();
     selectedDate = DateTime.now();
-    _firestore.collection('calendars').document(widget.user).collection("entries").getDocuments().then((snapshot){
+    String s = widget.user;
+    print(s);
+    _firestore.collection('calendars').document(s).collection('entries').getDocuments().then((snapshot){
       for (DocumentSnapshot ds in snapshot.documents)
         entryList.add(new Entry.fromMap2(ds.data));
+      print(snapshot.documents.length);
     });
 
   }
