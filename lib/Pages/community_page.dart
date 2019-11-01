@@ -179,12 +179,7 @@ class _CommunityPageState extends State<CommunityPage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => PrivateChat(
-                                user: widget.user,
-                                to: d.data[s],
-                                toId: d.data['chatid'],
-                              )),
+                      MaterialPageRoute(builder: (context) => PrivateChat(user:widget.user, to:s, toId: d.data['chatid'],)),
                     );
                   },
                 ),
@@ -200,12 +195,7 @@ class _CommunityPageState extends State<CommunityPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => PrivateChat(
-                                  user: widget.user,
-                                  to: d.data[s],
-                                  toId: d.data['chatid'],
-                                )),
+                        MaterialPageRoute(builder: (context) => PrivateChat(user:widget.user, to:s, toId: d.data['chatid'],)),
                       );
                     },
                   ),
