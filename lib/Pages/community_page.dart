@@ -30,6 +30,13 @@ class _CommunityPageState extends State<CommunityPage> {
 
   final Firestore _firestore = Firestore.instance;
 
+  void addCalendartoDB(){
+    var v = Firestore.instance.collection('calendars').document(widget.user).collection("entries");
+
+
+  }
+
+
   List<Widget> chats= new List<Widget>();
 
   ScrollController scrollController = ScrollController();
@@ -65,6 +72,7 @@ class _CommunityPageState extends State<CommunityPage> {
     String email = await _asyncInputDialog(context);
     Uuid uid = new Uuid();
     String s = uid.v1();
+    if(email.length>0)
     await _firestore.collection('chats').add({
       'user1':widget.user,
       'user2':email,
