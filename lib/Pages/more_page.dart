@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:katy_mental_health/Pages/breathing_page.dart';
 import 'package:link/link.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -30,12 +31,9 @@ class _MorePageState extends State<MorePage> {
               decoration: BoxDecoration(
                 // Box decoration takes a gradient
                 gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: <Color>[
-                    new Color(0xff04a5c1),
-                    new Color(0xfff9f981)
-                  ],
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [new Color(0xff04a5c1), Colors.grey[200]],
                 ),
               ),
               child: ListView(
@@ -76,7 +74,10 @@ class _MorePageState extends State<MorePage> {
                       title: Text("Breathing"),
                       trailing: Icon(Icons.keyboard_arrow_right),
                       onTap: () {
-                        debugPrint("Breathing");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => BreathingPage()),
+                        );
                       },
                     ),
 

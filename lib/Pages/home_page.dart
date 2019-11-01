@@ -66,6 +66,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.lightBlue,
+        foregroundColor: Colors.grey[200],
         onPressed: () {
           Navigator.push(
             context,

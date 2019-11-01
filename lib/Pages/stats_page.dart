@@ -30,16 +30,19 @@ class _StatsPageState extends State<StatsPage> {
       water = new List<int>(),
       questionId = new List<int>(),
       activity = new List<int>();
+  List<int> date = new List<int>();
   List<String> answer = new List<String>(), note = new List<String>();
 
   void updateGraphs(List<Entry> entryList) {
-    if(mounted) {
+    entryList.sort((a, b) => a.datetime.compareTo(b.datetime));
+    if (mounted) {
       setState(() {
         sleep = new List<int>();
         mood = new List<int>();
         water = new List<int>();
         questionId = new List<int>();
         activity = new List<int>();
+        date = new List<int>();
         answer = new List<String>();
         note = new List<String>();
         for (Entry entry in entryList) {
@@ -48,6 +51,7 @@ class _StatsPageState extends State<StatsPage> {
           water.add(entry.water);
           questionId.add(entry.question_id);
           activity.add(entry.activity);
+          date.add(entry.datetime);
           answer.add(entry.answer);
           note.add(entry.note);
         }
@@ -64,53 +68,58 @@ class _StatsPageState extends State<StatsPage> {
       updateGraphs(entryList);
     });
     return MaterialApp(
-      home:
-      Scaffold(
-        body:
-        Container(
-          decoration: BoxDecoration(
+        home: Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
             gradient: new LinearGradient(
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,
-                colors: [new Color(0xff04a5c1), new Color(0xfff9f981)])
-          ),
-          child:ListView(
-            children: <Widget>[
-              Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    'Mood and Sleeptime',
-                    style: TextStyle(color: Colors.black, fontSize: 30),
-                    textAlign: TextAlign.center,
-                  )),
-              genLineGraph([mood, sleep]),
-              Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    'My Moods',
-                    style: TextStyle(color: Colors.black, fontSize: 30),
-                    textAlign: TextAlign.center,
-                  )),
-              genPieGraph(mood),
-              Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    'Water, Sleep, and Mood',
-                    style: TextStyle(color: Colors.black, fontSize: 30),
-                    textAlign: TextAlign.center,
-                  )),
-              genLineGraph([water, sleep, mood]),
-            ],
-          ),
-        )
-      )
-
-    );
+                colors: [new Color(0xff04a5c1), Colors.grey[300]])),
+        child: ListView(
+          children: <Widget>[
+            Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Mood and Sleeptime',
+                  style: TextStyle(color: Colors.white, fontSize: 30),
+                  textAlign: TextAlign.center,
+                )),
+            genLineGraph(date, [mood, sleep], ["mood", "sleep"]),
+            Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'My Moods',
+                  style: TextStyle(color: Colors.white, fontSize: 30),
+                  textAlign: TextAlign.center,
+                )),
+            genPieGraph(mood),
+            Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Water',
+                  style: TextStyle(color: Colors.white, fontSize: 30),
+                  textAlign: TextAlign.center,
+                )),
+            genLineGraph(date, [mood, water], ["mood", "water"]),
+            Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Impactful Activities',
+                  style: TextStyle(color: Colors.white, fontSize: 30),
+                  textAlign: TextAlign.center,
+                )),
+            BarChartSample1(data: activity),
+            SizedBox(
+              height: 50,
+            )
+          ],
+        ),
+      ),
+    ));
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 }
