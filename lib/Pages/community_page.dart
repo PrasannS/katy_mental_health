@@ -50,6 +50,14 @@ class _CommunityPageState extends State<CommunityPage> {
     });
   }
 
+  void clearCalendar(){
+    _firestore.collection('calendars').document(widget.user).collection("entries").getDocuments().then((snapshot){
+      for (DocumentSnapshot ds in snapshot.documents)
+        ds.reference.delete();
+
+    });
+  }
+
 
   List<Widget> chats= new List<Widget>();
 
@@ -132,6 +140,17 @@ class _CommunityPageState extends State<CommunityPage> {
           title: Text("Add Calendar to DB"),
           onTap: () {
             addCalendartoDB();
+          },
+        ),
+      ),
+    );
+    chats.add(
+      Card(
+        child: ListTile(
+          leading: Icon(Icons.add),
+          title: Text("Make Calendar Private"),
+          onTap: () {
+            clearCalendar();
           },
         ),
       ),
