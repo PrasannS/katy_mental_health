@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:katy_mental_health/Pages/answer_page.dart';
 
@@ -5,7 +6,6 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:katy_mental_health/Models/entry.dart';
 import 'package:katy_mental_health/Persistence/database.dart';
 import 'package:katy_mental_health/Utils/constants.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 class CalendarPage extends StatefulWidget {
   CalendarPage({Key key, this.title}) : super(key: key);
@@ -27,7 +27,6 @@ class CalendarPage extends StatefulWidget {
 
 class _CalendarPageState extends State<CalendarPage> {
 
-  FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
 
   DatabaseHelper databaseHelper = DatabaseHelper();
   DateTime selectedDate;
@@ -50,32 +49,6 @@ class _CalendarPageState extends State<CalendarPage> {
     super.initState();
     _calendarController = CalendarController();
     selectedDate = DateTime.now();
-
-    List<dynamic> messageHistory = new List<dynamic>();
-
-
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) {
-        print('on message $message');
-        messageHistory.add(message);
-        messageHistory.forEach((history) => print(history));
-      },
-      onResume: (Map<String, dynamic> message) {
-        print('on resume $message');
-        messageHistory.add(message);
-        messageHistory.forEach((history) => print(history));
-      },
-      onLaunch: (Map<String, dynamic> message) {
-        print('on launch $message');
-        messageHistory.add(message);
-        messageHistory.forEach((history) => print(history));
-      },
-    );
-    _firebaseMessaging.requestNotificationPermissions(
-        const IosNotificationSettings(sound: true, badge: true, alert: true));
-    _firebaseMessaging.getToken().then((token){
-      print("Token : "+token);
-    });
   }
 
 
