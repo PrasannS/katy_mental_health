@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:katy_mental_health/Models/entry.dart';
 import 'package:katy_mental_health/Pages/private_chat_page.dart';
+import 'package:katy_mental_health/Persistence/database.dart';
 import 'chat_page.dart';
 import 'package:uuid/uuid.dart';
 
@@ -29,11 +31,23 @@ class _CommunityPageState extends State<CommunityPage> {
 
 
   final Firestore _firestore = Firestore.instance;
+  DatabaseHelper databaseHelper = DatabaseHelper();
 
   void addCalendartoDB(){
-    var v = Firestore.instance.collection('calendars').document(widget.user).collection("entries");
+    _firestore.collection('calendars').document(widget.user).collection("entries").getDocuments().then((snapshot){
+      for (DocumentSnapshot ds in snapshot.documents)
+        ds.reference.delete();
 
-
+      CollectionReference v = _firestore.collection('calendars').document(widget.user).collection("entries");
+      Future<List<Entry>>d = databaseHelper.getEntryList();
+      d.then((entryList){
+        print(entryList.toString());
+        print("HERE");
+        for(Entry e in entryList){
+          v.add(e.toMap());
+        }
+      });
+    });
   }
 
 
@@ -76,7 +90,8 @@ class _CommunityPageState extends State<CommunityPage> {
     await _firestore.collection('chats').add({
       'user1':widget.user,
       'user2':email,
-      'chatid':s
+      'chatid':s,
+      'calendarshare':0
     });
     getChats();
   }
@@ -106,6 +121,17 @@ class _CommunityPageState extends State<CommunityPage> {
           title: Text("Add Chats"),
           onTap: () {
             addChat(context);
+          },
+        ),
+      ),
+    );
+    chats.add(
+      Card(
+        child: ListTile(
+          leading: Icon(Icons.add),
+          title: Text("Add Calendar to DB"),
+          onTap: () {
+            addCalendartoDB();
           },
         ),
       ),

@@ -8,7 +8,8 @@ import 'package:katy_mental_health/Persistence/database.dart';
 import 'package:katy_mental_health/Utils/constants.dart';
 
 class CalendarPage extends StatefulWidget {
-  CalendarPage({Key key, this.title}) : super(key: key);
+
+  CalendarPage({Key key, this.title, this.preview, this.user}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -20,6 +21,8 @@ class CalendarPage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+  final bool preview;
+  final String user;
 
   @override
   _CalendarPageState createState() => new _CalendarPageState();
@@ -31,8 +34,11 @@ class _CalendarPageState extends State<CalendarPage> {
   DatabaseHelper databaseHelper = DatabaseHelper();
   DateTime selectedDate;
   CalendarController _calendarController;
+  final Firestore _firestore = Firestore.instance;
   final baseColor = Color.fromRGBO(255, 255, 255, 0.3);
   List<Widget>entries = new List<Widget>();
+  List<Entry>entryList = new List<Entry>();
+
 
   int currentmood = 190;
   @override
@@ -49,6 +55,11 @@ class _CalendarPageState extends State<CalendarPage> {
     super.initState();
     _calendarController = CalendarController();
     selectedDate = DateTime.now();
+    _firestore.collection('calendars').document(widget.user).collection("entries").getDocuments().then((snapshot){
+      for (DocumentSnapshot ds in snapshot.documents)
+        entryList.add(new Entry.fromMap2(ds.data));
+    });
+
   }
 
 
@@ -194,7 +205,7 @@ class _CalendarPageState extends State<CalendarPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             ),
             new RaisedButton(
-              child: Text('${Constants.questionOptions[e.activity-1]}'),
+              child: Text('${Constants.questionOptions[e.activity]}'),
               color: Color.fromRGBO(255, 255, 255, .5),
               textColor: Colors.white,
               shape: RoundedRectangleBorder(
@@ -210,33 +221,70 @@ class _CalendarPageState extends State<CalendarPage> {
     });
   }
 
+  void getEntriesFromFB(){
+    _firestore.collection('calendars').document(widget.user).collection("entries").getDocuments().then((snapshot){
+      List<Entry>elist = new List<Entry>();
+      for (DocumentSnapshot ds in snapshot.documents)
+        elist.add(new Entry.fromMap(ds.data));
+      return elist;
+    });
+  }
 
   void _onDaySelected(DateTime day, List events) {
     setState(() {
       selectedDate = day;
-      entries=new List<Widget>();
-      Future<List<Entry>>d = databaseHelper.getEntryList();
-      d.then((entryList){
-        for(Entry e in entryList){
+      if(!widget.preview) {
+        entries = new List<Widget>();
+        Future<List<Entry>>d = databaseHelper.getEntryList();
+        d.then((entryList) {
+          for (Entry e in entryList) {
+            DateTime today = DateTime.fromMillisecondsSinceEpoch(e.datetime);
+            if (day.year == today.year && day.month == today.month &&
+                day.day == today.day) {
+              entries.add(new RaisedButton(
+                child: Text('${Constants.questionOptions[e.activity]}'),
+                color: Color.fromRGBO(255 - e.mood, e.mood, 50, .5),
+                textColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(40.0),
+                ),
+                onPressed: () =>
+                {
+                  openEntry(e)
+                },
+              ));
+            }
+            else {
+              currentmood = 150;
+            }
+          }
+        });
+      }
+      else{
+        print ("other USER");
+        entries=new List<Widget>();
+        for (Entry e in entryList) {
           DateTime today = DateTime.fromMillisecondsSinceEpoch(e.datetime);
-          if(day.year == today.year && day.month == today.month && day.day == today.day){
+          if (day.year == today.year && day.month == today.month &&
+              day.day == today.day) {
             entries.add(new RaisedButton(
-              child: Text('${Constants.questionOptions[e.activity-1]}'),
-              color: Color.fromRGBO(255-e.mood, e.mood, 50, .5),
+              child: Text('${Constants.questionOptions[e.activity]}'),
+              color: Color.fromRGBO(255 - e.mood, e.mood, 50, .5),
               textColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(40.0),
               ),
-              onPressed: ()=>{
+              onPressed: () =>
+              {
                 openEntry(e)
               },
             ));
           }
-          else{
-            currentmood=150;
+          else {
+            currentmood = 150;
           }
         }
-      });
+      }
     });
   }
 
@@ -255,7 +303,7 @@ class _CalendarPageState extends State<CalendarPage> {
             i++;
             total += e.mood;
             entries.add(new RaisedButton(
-              child: Text('${Constants.questionOptions[e.activity - 1]}'),
+              child: Text('${Constants.questionOptions[e.activity]}'),
               color: Color.fromRGBO(255 - e.mood, e.mood, 50, .5),
               textColor: Colors.white,
               shape: RoundedRectangleBorder(
