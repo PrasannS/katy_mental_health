@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:katy_mental_health/Models/entry.dart';
 import 'package:katy_mental_health/Pages/answer_page.dart';
 import 'package:katy_mental_health/Pages/calendar_page.dart';
 import 'package:katy_mental_health/Pages/more_page.dart';
@@ -33,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     _tabController.addListener(_tabControllerListener);
     _tabList = [
       Container(
-          child:new CalendarPage()
+          child:new CalendarPage(preview: false,user: widget.userid,)
       ),
       Container(
           child:new StatsPage()

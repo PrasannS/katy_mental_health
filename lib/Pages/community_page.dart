@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:katy_mental_health/Models/entry.dart';
 import 'package:katy_mental_health/Pages/private_chat_page.dart';
+import 'package:katy_mental_health/Persistence/database.dart';
 import 'chat_page.dart';
 import 'package:uuid/uuid.dart';
 
@@ -25,11 +27,34 @@ class CommunityPage extends StatefulWidget {
 }
 
 class _CommunityPageState extends State<CommunityPage> {
+
+
+
   final Firestore _firestore = Firestore.instance;
+  DatabaseHelper databaseHelper = DatabaseHelper();
+
+  void addCalendartoDB(){
+    _firestore.collection('calendars').document(widget.user).collection("entries").getDocuments().then((snapshot){
+      for (DocumentSnapshot ds in snapshot.documents)
+        ds.reference.delete();
+
+      CollectionReference v = _firestore.collection('calendars').document(widget.user).collection("entries");
+      Future<List<Entry>>d = databaseHelper.getEntryList();
+      d.then((entryList){
+        print(entryList.toString());
+        print("HERE");
+        for(Entry e in entryList){
+          v.add(e.toMap());
+        }
+      });
+    });
+  }
+
 
   List<Widget> chats = new List<Widget>();
 
   ScrollController scrollController = ScrollController();
+
 
   @override
   void initState() {
@@ -74,11 +99,17 @@ class _CommunityPageState extends State<CommunityPage> {
     String email = await _asyncInputDialog(context);
     Uuid uid = new Uuid();
     String s = uid.v1();
-    await _firestore
-        .collection('chats')
-        .add({'user1': widget.user, 'user2': email, 'chatid': s});
+    if(email.length>0)
+    await _firestore.collection('chats').add({
+      'user1':widget.user,
+      'user2':email,
+      'chatid':s,
+      'calendarshare':0
+    });
     getChats();
   }
+
+
 
   void getChats() {
     chats.clear();
@@ -113,9 +144,22 @@ class _CommunityPageState extends State<CommunityPage> {
       ),
     );
     chats.add(
+      Card(
+        color: Colors.transparent,
+        elevation: 0,
+        child: ListTile(
+          leading: Icon(Icons.add, color: Colors.white,),
+          title: Text("Add Calendar to DB", style: TextStyle(color: Colors.white),),
+          onTap: () {
+            addCalendartoDB();
+          },
+        ),
+      ),
+    );
+    chats.add(
       ListTile(
-          //spacer
-          ),
+        //spacer
+      ),
     );
     _firestore
         .collection("chats")
@@ -169,7 +213,9 @@ class _CommunityPageState extends State<CommunityPage> {
               );
             }
           }
+
         });
+
       }
     });
   }
@@ -182,18 +228,18 @@ class _CommunityPageState extends State<CommunityPage> {
           false, // dialog is dismissible with a tap on the barrier
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Enter current team'),
+          title: Text('Enter email'),
           content: new Row(
             children: <Widget>[
               new Expanded(
                   child: new TextField(
-                autofocus: true,
-                decoration: new InputDecoration(
-                    labelText: 'Team Name', hintText: 'eg. Juventus F.C.'),
-                onChanged: (value) {
-                  teamName = value;
-                },
-              ))
+                    autofocus: true,
+                    decoration: new InputDecoration(
+                        labelText: 'Email', hintText: 'eg. example@gmail.com'),
+                    onChanged: (value) {
+                      teamName = value;
+                    },
+                  ))
             ],
           ),
           actions: <Widget>[

@@ -35,7 +35,7 @@ class _AnswerPageState extends State<AnswerPage> {
   int currentQuestion = 0;
   int endTime;
   int qODID = 0;
-  int selectedOpt = 0;
+  int selectedOpt = 1;
   Entry e = new Entry();
 
   List<int> ends = [0,0,0,254,254,254,254,254,254,254];
