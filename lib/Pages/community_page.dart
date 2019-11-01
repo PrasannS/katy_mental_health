@@ -58,13 +58,27 @@ class _CommunityPageState extends State<CommunityPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      body: Center(
+        body: Container(
+        decoration: BoxDecoration(
+        // Box decoration takes a gradient
+        gradient: LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: <Color>[
+        new Color(0xff04a5c1),
+        new Color(0xfff9f981)
+        ],
+        ),
+        ),
+
+      child: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: new Column(
           children:chats,
         )
       ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 

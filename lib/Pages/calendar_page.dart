@@ -74,6 +74,8 @@ class _CalendarPageState extends State<CalendarPage> {
                 Column(
                   children: entries,
                 ),
+
+                /*
                 FlatButton(
                   color: Colors.transparent,
                   onPressed: () {
@@ -99,12 +101,26 @@ class _CalendarPageState extends State<CalendarPage> {
                     child: const Icon(Icons.add
                     ),
                   ),
-                ),
+                ),*/
                 //
               ],
             ),
           )
-        ));
+        ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AnswerPage(time: selectedDate.millisecondsSinceEpoch)),
+          );
+          _onDaySelected(selectedDate, null);
+        },
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+        elevation: 2.0,
+      ),
+    );
   }
 
   Widget _buildTableCalendar() {
@@ -193,18 +209,29 @@ class _CalendarPageState extends State<CalendarPage> {
               ],
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             ),
+
             new RaisedButton(
-              child: Text('${Constants.questionOptions[e.activity-1]}'),
+              child: Text('${Constants.questionOptions[e.activity]}'),
               color: Color.fromRGBO(255, 255, 255, .5),
               textColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(40.0),
               ),
             ),
+
+
+            new ListTile(
+              //leading: Icon(Icons.wb_sunny),
+              title: Text('${Constants.questionOptions[e.activity]}'),
+              //trailing: Icon(Icons.keyboard_arrow_right),
+              onTap: (){
+              },
+            ),
+
             getTextWidget(Constants.questionsOfTheDay[e.question_id]),
             getTextWidget(e.answer),
             getTextWidget(e.note),
-          ],
+      ],
         ),
       ));
     });
@@ -215,12 +242,26 @@ class _CalendarPageState extends State<CalendarPage> {
     setState(() {
       selectedDate = day;
       entries=new List<Widget>();
+      Icon moodIcon = Icon(Icons.wb_sunny);
       Future<List<Entry>>d = databaseHelper.getEntryList();
       d.then((entryList){
         for(Entry e in entryList){
           DateTime today = DateTime.fromMillisecondsSinceEpoch(e.datetime);
           if(day.year == today.year && day.month == today.month && day.day == today.day){
-            entries.add(new RaisedButton(
+            /*
+            if(getAvgMood(today) < 150){
+              moodIcon = Icon(Icons.wb_cloudy);
+            }*/
+            entries.add(new ListTile(
+              leading: moodIcon,
+              title: Text('${Constants.questionOptions[e.activity]}'),
+              trailing: Icon(Icons.keyboard_arrow_right),
+              onTap: (){
+                openEntry(e);
+              },
+            ));
+                /*
+                new RaisedButton(
               child: Text('${Constants.questionOptions[e.activity-1]}'),
               color: Color.fromRGBO(255-e.mood, e.mood, 50, .5),
               textColor: Colors.white,
@@ -230,7 +271,7 @@ class _CalendarPageState extends State<CalendarPage> {
               onPressed: ()=>{
                 openEntry(e)
               },
-            ));
+            ));*/
           }
           else{
             currentmood=150;

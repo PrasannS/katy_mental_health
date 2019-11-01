@@ -49,7 +49,6 @@ class _MorePageState extends State<MorePage> {
                       },
                     ),
 
-
                   ListTile(
                       leading: Icon(Icons.tv),
                       title: Text("Watch Ads"),
