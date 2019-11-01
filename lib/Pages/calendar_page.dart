@@ -109,7 +109,7 @@ class _CalendarPageState extends State<CalendarPage> {
       calendarController: _calendarController,
       daysOfWeekStyle: DaysOfWeekStyle(
         weekendStyle: TextStyle(
-          color: Colors.blueAccent[400]
+          color: Colors.amber,
         )
       ),
       startingDayOfWeek: StartingDayOfWeek.monday,
@@ -119,7 +119,7 @@ class _CalendarPageState extends State<CalendarPage> {
         markersColor: Colors.blueAccent[700],
         outsideDaysVisible: false,
         weekendStyle: TextStyle(
-          color: Colors.blueAccent[400]
+          color: Colors.amber,
         )
       ),
       headerStyle: HeaderStyle(
@@ -170,7 +170,7 @@ class _CalendarPageState extends State<CalendarPage> {
         end: Alignment.bottomLeft,
 
         //colors: [Color.fromRGBO(255-a, 0, 50,.5), Color.fromRGBO(0,a, 50,0.5)]);
-        colors: [new Color(0xff04a5c1), new Color(0xfff9f981)]);
+        colors: [new Color(0xff04a5c1), Colors.white]);
 
   }
 

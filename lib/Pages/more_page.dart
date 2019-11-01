@@ -31,12 +31,9 @@ class _MorePageState extends State<MorePage> {
               decoration: BoxDecoration(
                 // Box decoration takes a gradient
                 gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: <Color>[
-                    new Color(0xff04a5c1),
-                    new Color(0xfff9f981)
-                  ],
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [new Color(0xff04a5c1), Colors.grey[200]],
                 ),
               ),
               child: ListView(

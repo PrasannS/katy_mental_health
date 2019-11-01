@@ -142,7 +142,7 @@ class BreathingAnimation extends StatelessWidget {
 
   Future _start() async {
     try {
-      for (int i = 0; i < 3; i++) {
+      for (;;) {
         controller.duration = Duration(milliseconds: 4000);
         await controller
             .forward(from: 0.0) // start paper animation over

@@ -12,7 +12,7 @@ Widget genLineGraph(List<int> dates, List<List<int>> bigList, List<String> names
       borderRadius: const BorderRadius.all(
         Radius.circular(18),
       ),
-      color: Colors.blue[300],
+      color: Colors.transparent,
     ),
     child: Column(
       children: <Widget>[
@@ -182,7 +182,7 @@ Widget genPieGraph(List<int> dataList) {
           borderRadius: const BorderRadius.all(
             Radius.circular(18),
           ),
-          color: Colors.blue[300],
+          color: Colors.transparent,
         ),
         child: Row(
           children: <Widget>[
@@ -377,7 +377,8 @@ class BarChartSample1State extends State<BarChartSample1> {
       aspectRatio: 1,
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-        color: Colors.blue[300],
+        color: Colors.transparent,
+        elevation: 0,
         child: Stack(
           children: <Widget>[
             Padding(
@@ -504,8 +505,6 @@ class BarChartSample1State extends State<BarChartSample1> {
         counter[data[i]]++;
       }
     }
-    print(data);
-    print(counter);
     for (int i = 0; i < counter.length; i++) {
       groups.add(makeGroupData(i, counter[i], isTouched: i == touchedIndex));
     }
@@ -521,7 +520,7 @@ class BarChartSample1State extends State<BarChartSample1> {
   }) {
     return BarChartGroupData(x: x, barRods: [
       BarChartRodData(
-        y: isTouched && y != -1? y + 1 : y,
+        y: isTouched && y != 0 ? y + 1 : y,
         color: isTouched ? Colors.yellow : barColor,
         width: width,
         isRound: true,

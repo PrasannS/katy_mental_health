@@ -69,20 +69,19 @@ class _StatsPageState extends State<StatsPage> {
     });
     return MaterialApp(
         home: Scaffold(
-      backgroundColor: Colors.lightBlue[200],
       body: Container(
         decoration: BoxDecoration(
             gradient: new LinearGradient(
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,
-                colors: [Colors.lightBlue, Colors.cyan])),
+                colors: [new Color(0xff04a5c1), Colors.grey[300]])),
         child: ListView(
           children: <Widget>[
             Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
                   'Mood and Sleeptime',
-                  style: TextStyle(color: Colors.black, fontSize: 30),
+                  style: TextStyle(color: Colors.white, fontSize: 30),
                   textAlign: TextAlign.center,
                 )),
             genLineGraph(date, [mood, sleep], ["mood", "sleep"]),
@@ -90,7 +89,7 @@ class _StatsPageState extends State<StatsPage> {
                 padding: EdgeInsets.all(8.0),
                 child: Text(
                   'My Moods',
-                  style: TextStyle(color: Colors.black, fontSize: 30),
+                  style: TextStyle(color: Colors.white, fontSize: 30),
                   textAlign: TextAlign.center,
                 )),
             genPieGraph(mood),
@@ -98,7 +97,7 @@ class _StatsPageState extends State<StatsPage> {
                 padding: EdgeInsets.all(8.0),
                 child: Text(
                   'Water',
-                  style: TextStyle(color: Colors.black, fontSize: 30),
+                  style: TextStyle(color: Colors.white, fontSize: 30),
                   textAlign: TextAlign.center,
                 )),
             genLineGraph(date, [mood, water], ["mood", "water"]),
@@ -106,7 +105,7 @@ class _StatsPageState extends State<StatsPage> {
                 padding: EdgeInsets.all(8.0),
                 child: Text(
                   'Impactful Activities',
-                  style: TextStyle(color: Colors.black, fontSize: 30),
+                  style: TextStyle(color: Colors.white, fontSize: 30),
                   textAlign: TextAlign.center,
                 )),
             BarChartSample1(data: activity),
