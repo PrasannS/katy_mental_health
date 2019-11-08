@@ -69,54 +69,74 @@ class _CalendarPageState extends State<CalendarPage> {
     /// Example Calendar Carousel without header and custom prev & next button
     return new Scaffold(
         body: SingleChildScrollView(
-            child: Container(
-      height: 900,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: getGradient(currentmood),
-      ),
-      child: ListView(
-        children: <Widget>[
-          //custom icon
-          //m icon without header
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 16.0),
-            child: _buildTableCalendar(),
-          ),
-          Column(
-            children: entries,
-          ),
-          FlatButton(
-            color: Colors.transparent,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        AnswerPage(time: selectedDate.millisecondsSinceEpoch)),
-              );
-              _onDaySelected(selectedDate, null);
-            },
-            textColor: Colors.white,
-            padding: const EdgeInsets.all(0.0),
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: <Color>[
-                    Color(0xFF0D47A1),
-                    Color(0xFF1976D2),
-                    Color(0xFF42A5F5),
-                  ],
-                ),
-              ),
-              padding: const EdgeInsets.all(30.0),
-              child: const Icon(Icons.add),
+          child:Container(
+            height: 900,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: getGradient(currentmood),
             ),
-          ),
-          //
-        ],
-      ),
-    )));
+            child: ListView(
+              children: <Widget>[
+                //custom icon
+                //m icon without header
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: _buildTableCalendar(),
+                ),
+                Column(
+                  children: entries,
+                ),
+
+                /*
+                FlatButton(
+                  color: Colors.transparent,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AnswerPage(time:selectedDate.millisecondsSinceEpoch)),
+                    );
+                    _onDaySelected(selectedDate, null);
+                  },
+                  textColor: Colors.white,
+                  padding: const EdgeInsets.all(0.0),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: <Color>[
+                          Color(0xFF0D47A1),
+                          Color(0xFF1976D2),
+                          Color(0xFF42A5F5),
+                        ],
+                      ),
+                    ),
+                    padding: const EdgeInsets.all(30.0),
+                    child: const Icon(Icons.add
+                    ),
+                  ),
+                ),
+                */
+                //
+              ],
+            ),
+          )
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.lightBlue,
+          foregroundColor: Colors.grey[200],
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AnswerPage(time:selectedDate.millisecondsSinceEpoch)),
+            );
+            _onDaySelected(selectedDate, null);
+
+        },
+        child: Icon(Icons.add),
+        elevation: 2.0,
+        )
+
+    );
   }
 
   Widget _buildTableCalendar() {

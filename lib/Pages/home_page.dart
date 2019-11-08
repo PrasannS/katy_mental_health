@@ -64,6 +64,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         controller: _tabController,
         children: _tabList,
       ),
+
+      /*
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.lightBlue,
@@ -78,6 +80,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         child: Icon(Icons.add),
         elevation: 2.0,
       ),
+      */
       bottomNavigationBar: BottomNavigationBar(
         unselectedItemColor: Colors.redAccent,
         selectedItemColor: Colors.blue,
