@@ -87,6 +87,8 @@ class _CalendarPageState extends State<CalendarPage> {
                 Column(
                   children: entries,
                 ),
+
+                /*
                 FlatButton(
                   color: Colors.transparent,
                   onPressed: () {
@@ -113,11 +115,29 @@ class _CalendarPageState extends State<CalendarPage> {
                     ),
                   ),
                 ),
+                */
                 //
               ],
             ),
           )
-        ));
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.lightBlue,
+          foregroundColor: Colors.grey[200],
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AnswerPage(time:selectedDate.millisecondsSinceEpoch)),
+            );
+            _onDaySelected(selectedDate, null);
+
+        },
+        child: Icon(Icons.add),
+        elevation: 2.0,
+        )
+
+    );
   }
 
   Widget _buildTableCalendar() {
