@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:katy_mental_health/Models/entry.dart';
-import 'package:katy_mental_health/Persistence/database.dart';
+import 'package:Speculus/Models/entry.dart';
+import 'package:Speculus/Persistence/database.dart';
 import 'graph_types.dart';
 
 class StatsPage extends StatefulWidget {

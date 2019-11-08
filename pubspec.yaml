@@ -1,5 +1,5 @@
-name: katy_mental_health
-description: A new Flutter application.
+name: Speculus
+description: An app to record your mood and your activities.
 
 
 version: 1.0.0+1
@@ -20,7 +20,7 @@ dependencies:
   path_provider: ^1.4.0
   cloud_firestore: ^0.12.9
   firebase_core: ^0.4.0+8
-  firebase_auth: ^0.14.0+5
+  firebase_auth: ^0.14.0
   provider: ^3.0.0+1
   get_it: ^1.0.3+2
   link: ^1.0.0
@@ -30,7 +30,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.7.3"
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "icon/logo1.png"
 
 
 flutter:

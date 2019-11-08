@@ -4,9 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_circular_slider/flutter_circular_slider.dart';
-import 'package:katy_mental_health/Models/entry.dart';
-import 'package:katy_mental_health/Persistence/database.dart';
-import 'package:katy_mental_health/Utils/constants.dart';
+import 'package:Speculus/Models/entry.dart';
+import 'package:Speculus/Persistence/database.dart';
+import 'package:Speculus/Utils/constants.dart';
 
 class AnswerPage extends StatefulWidget {
   @override

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:katy_mental_health/Models/entry.dart';
-import 'package:katy_mental_health/Pages/answer_page.dart';
-import 'package:katy_mental_health/Pages/calendar_page.dart';
-import 'package:katy_mental_health/Pages/more_page.dart';
-import 'package:katy_mental_health/Pages/community_page.dart';
-import 'package:katy_mental_health/Pages/stats_page.dart';
+import 'package:Speculus/Models/entry.dart';
+import 'package:Speculus/Pages/answer_page.dart';
+import 'package:Speculus/Pages/calendar_page.dart';
+import 'package:Speculus/Pages/more_page.dart';
+import 'package:Speculus/Pages/community_page.dart';
+import 'package:Speculus/Pages/stats_page.dart';
 
 
 class MyHomePage extends StatefulWidget {

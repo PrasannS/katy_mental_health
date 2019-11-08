@@ -174,7 +174,11 @@ List<FlSpot> createFlSpots(List<int> list) {
 
 @override
 Widget genPieGraph(List<int> dataList) {
-  if (dataList.length > 0)
+  if (dataList.length == 0) {
+    dataList.add(0);
+    dataList.add(87);
+    dataList.add(172);
+  }
     return AspectRatio(
       aspectRatio: 1.3,
       child: Container(
@@ -242,10 +246,6 @@ Widget genPieGraph(List<int> dataList) {
           ],
         ),
       ),
-    );
-  else
-    return SizedBox(
-      width: 28,
     );
 }
 
@@ -449,8 +449,12 @@ class BarChartSample1State extends State<BarChartSample1> {
                     activity = 'Other';
                     break;
                 }
+                if (touchedSpot.spot.y != 0)
                 return TooltipItem(
                     activity + '\n' + (touchedSpot.spot.y - 1).toString(),
+                    TextStyle(color: Colors.yellow));
+                return TooltipItem(
+                    activity + '\n' + (0).toString(),
                     TextStyle(color: Colors.yellow));
               }).toList();
             }),

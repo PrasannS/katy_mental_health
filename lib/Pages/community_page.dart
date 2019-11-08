@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:katy_mental_health/Models/entry.dart';
-import 'package:katy_mental_health/Pages/private_chat_page.dart';
-import 'package:katy_mental_health/Persistence/database.dart';
+import 'package:Speculus/Models/entry.dart';
+import 'package:Speculus/Pages/private_chat_page.dart';
+import 'package:Speculus/Persistence/database.dart';
 import 'chat_page.dart';
 import 'package:uuid/uuid.dart';
 

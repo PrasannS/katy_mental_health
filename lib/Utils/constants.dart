@@ -37,7 +37,7 @@ class Constants{
     "Family",
     "Food",
     "Friends",
-    "Extra-Curiccullar",
+    "Extra-Curricular",
     "Other"
   ];
 

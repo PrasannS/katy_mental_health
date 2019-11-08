@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:katy_mental_health/Models/entry.dart';
-import 'package:katy_mental_health/Pages/calendar_page.dart';
-import 'package:katy_mental_health/Persistence/database.dart';
+import 'package:Speculus/Models/entry.dart';
+import 'package:Speculus/Pages/calendar_page.dart';
+import 'package:Speculus/Persistence/database.dart';
 
 
 //TODO
