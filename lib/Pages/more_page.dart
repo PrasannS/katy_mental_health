@@ -15,8 +15,17 @@ class MorePage extends StatefulWidget {
 
 class _MorePageState extends State<MorePage> {
 
-  _launchURL() async {
+  _launchURLRESOURCES() async {
     const url = 'https://socialworklicensemap.com/mental-health-resources-list/';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  _launchURLSUGGESTIONS() async {
+    const url = 'https://forms.gle/EhijUFx9kWpay9MEA';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -43,11 +52,11 @@ class _MorePageState extends State<MorePage> {
                       title: Text("Resources"),
                       trailing: Icon(Icons.keyboard_arrow_right),
                       onTap: (){
-                        _launchURL();
+                        _launchURLRESOURCES();
                       },
                     ),
 
-
+/*
                   ListTile(
                       leading: Icon(Icons.tv),
                       title: Text("Watch Ads"),
@@ -57,7 +66,7 @@ class _MorePageState extends State<MorePage> {
 
                       },
                     ),
-
+*/
 
                   ListTile(
                       leading: Icon(Icons.lightbulb_outline),
@@ -65,6 +74,7 @@ class _MorePageState extends State<MorePage> {
                       trailing: Icon(Icons.keyboard_arrow_right),
                       onTap: () {
                         debugPrint("Suggestions");
+                        _launchURLSUGGESTIONS();
                       },
                     ),
 
@@ -86,6 +96,7 @@ class _MorePageState extends State<MorePage> {
                     //spacer
                   ),
 
+                  /*
                   ListTile(
                       leading: Icon(Icons.notifications),
                       title: Text("Notifications"),
@@ -105,7 +116,7 @@ class _MorePageState extends State<MorePage> {
                       },
                     ),
 
-
+*/
 
                 ],
               )
