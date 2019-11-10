@@ -130,7 +130,6 @@ class _AnswerPageState extends State<AnswerPage> {
           },
         ));
     }
-    print(widgets);
     return widgets;
 
   }

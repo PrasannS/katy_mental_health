@@ -36,7 +36,7 @@ class _CalendarPageState extends State<CalendarPage> {
   final baseColor = Color.fromRGBO(255, 255, 255, 0.3);
   List<Widget> entries = new List<Widget>();
   List<Entry> entryList = new List<Entry>();
-
+  int refreshState = 0;
   int currentmood = 190;
   @override
   void dispose() {
@@ -69,25 +69,25 @@ class _CalendarPageState extends State<CalendarPage> {
     /// Example Calendar Carousel without header and custom prev & next button
     return new Scaffold(
         body: SingleChildScrollView(
-          child:Container(
-            height: 900,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: getGradient(currentmood),
-            ),
-            child: ListView(
-              children: <Widget>[
-                //custom icon
-                //m icon without header
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: _buildTableCalendar(),
-                ),
-                Column(
-                  children: entries,
-                ),
+            child: Container(
+          height: 900,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            gradient: getGradient(currentmood),
+          ),
+          child: ListView(
+            children: <Widget>[
+              //custom icon
+              //m icon without header
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 16.0),
+                child: _buildTableCalendar(),
+              ),
+              Column(
+                children: entries,
+              ),
 
-                /*
+              /*
                 FlatButton(
                   color: Colors.transparent,
                   onPressed: () {
@@ -115,11 +115,10 @@ class _CalendarPageState extends State<CalendarPage> {
                   ),
                 ),
                 */
-                //
-              ],
-            ),
-          )
-        ),
+              //
+            ],
+          ),
+        )),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.lightBlue,
@@ -127,16 +126,17 @@ class _CalendarPageState extends State<CalendarPage> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AnswerPage(time:selectedDate.millisecondsSinceEpoch)),
-            );
-            _onDaySelected(selectedDate, null);
-
-        },
-        child: Icon(Icons.add),
-        elevation: 2.0,
-        )
-
-    );
+              MaterialPageRoute(
+                  builder: (context) =>
+                      AnswerPage(time: selectedDate.millisecondsSinceEpoch)),
+            ).then((value)
+            {
+              _onDaySelected(selectedDate, null);
+            });
+          },
+          child: Icon(Icons.add),
+          elevation: 2.0,
+        ));
   }
 
   Widget _buildTableCalendar() {
@@ -258,6 +258,7 @@ class _CalendarPageState extends State<CalendarPage> {
         entries = new List<Widget>();
         Future<List<Entry>> d = databaseHelper.getEntryList();
         d.then((entryList) {
+          print(entryList[entryList.length - 1]);
           for (Entry e in entryList) {
             DateTime today = DateTime.fromMillisecondsSinceEpoch(e.datetime);
             if (day.year == today.year &&
@@ -275,6 +276,7 @@ class _CalendarPageState extends State<CalendarPage> {
             } else {
               currentmood = 150;
             }
+
           }
         });
       } else {
@@ -301,6 +303,7 @@ class _CalendarPageState extends State<CalendarPage> {
       }
     });
   }
+
 
   int getAvgMood(DateTime day) {
     selectedDate = day;
