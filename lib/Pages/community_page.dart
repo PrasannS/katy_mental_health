@@ -41,8 +41,6 @@ class _CommunityPageState extends State<CommunityPage> {
       CollectionReference v = _firestore.collection('calendars').document(widget.user).collection("entries");
       Future<List<Entry>>d = databaseHelper.getEntryList();
       d.then((entryList){
-        print(entryList.toString());
-        print("HERE");
         for(Entry e in entryList){
           v.add(e.toMap());
         }

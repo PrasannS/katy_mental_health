@@ -55,11 +55,10 @@ class _CalendarPageState extends State<CalendarPage> {
     _calendarController = CalendarController();
     selectedDate = DateTime.now();
     String s = widget.user;
-    print(s);
     _firestore.collection('calendars').document(s).collection('entries').getDocuments().then((snapshot){
       for (DocumentSnapshot ds in snapshot.documents)
         entryList.add(new Entry.fromMap2(ds.data));
-      print(snapshot.documents.length);
+
     });
 
   }
@@ -263,7 +262,6 @@ class _CalendarPageState extends State<CalendarPage> {
         });
       }
       else{
-        print ("other USER");
         entries=new List<Widget>();
         for (Entry e in entryList) {
           DateTime today = DateTime.fromMillisecondsSinceEpoch(e.datetime);
