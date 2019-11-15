@@ -27,57 +27,62 @@ class CommunityPage extends StatefulWidget {
 }
 
 class _CommunityPageState extends State<CommunityPage> {
-
-
-
   final Firestore _firestore = Firestore.instance;
   DatabaseHelper databaseHelper = DatabaseHelper();
 
-  void addCalendartoDB(){
-    _firestore.collection('calendars').document(widget.user).collection("entries").getDocuments().then((snapshot){
-      for (DocumentSnapshot ds in snapshot.documents)
-        ds.reference.delete();
+  void addCalendartoDB() {
+    _firestore
+        .collection('calendars')
+        .document(widget.user)
+        .collection("entries")
+        .getDocuments()
+        .then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.documents) ds.reference.delete();
 
-      CollectionReference v = _firestore.collection('calendars').document(widget.user).collection("entries");
-      Future<List<Entry>>d = databaseHelper.getEntryList();
-      d.then((entryList){
+      CollectionReference v = _firestore
+          .collection('calendars')
+          .document(widget.user)
+          .collection("entries");
+      Future<List<Entry>> d = databaseHelper.getEntryList();
+      d.then((entryList) {
         print(entryList.toString());
         print("HERE");
-        for(Entry e in entryList){
+        for (Entry e in entryList) {
           v.add(e.toMap());
         }
       });
     });
   }
 
-  void clearCalendar(){
-    _firestore.collection('calendars').document(widget.user).collection("entries").getDocuments().then((snapshot){
-      for (DocumentSnapshot ds in snapshot.documents)
-        ds.reference.delete();
-
+  void clearCalendar() {
+    _firestore
+        .collection('calendars')
+        .document(widget.user)
+        .collection("entries")
+        .getDocuments()
+        .then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.documents) ds.reference.delete();
     });
   }
-
 
   List<Widget> chats = new List<Widget>();
 
   ScrollController scrollController = ScrollController();
 
-
   @override
   void initState() {
-    // TODO: implement initState
     getChats();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    chats.insert(
-        0,
-        SizedBox(
-          height: 20,
-        ));
+    if (chats[0].toStringShort() != "SizedBox")
+      chats.insert(
+          0,
+          SizedBox(
+            height: 20,
+          ));
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -107,17 +112,15 @@ class _CommunityPageState extends State<CommunityPage> {
     String email = await _asyncInputDialog(context);
     Uuid uid = new Uuid();
     String s = uid.v1();
-    if(email.length>0)
-    await _firestore.collection('chats').add({
-      'user1':widget.user,
-      'user2':email,
-      'chatid':s,
-      'calendarshare':0
-    });
+    if (email.length > 0)
+      await _firestore.collection('chats').add({
+        'user1': widget.user,
+        'user2': email,
+        'chatid': s,
+        'calendarshare': 0
+      });
     getChats();
   }
-
-
 
   void getChats() {
     chats.clear();
@@ -126,9 +129,18 @@ class _CommunityPageState extends State<CommunityPage> {
         color: Colors.transparent,
         elevation: 0,
         child: ListTile(
-          leading: Icon(Icons.blur_circular, color: Colors.white,),
-          title: Text("Global Chat", style: TextStyle(color: Colors.white),),
-          trailing: Icon(Icons.keyboard_arrow_right, color: Colors.white,),
+          leading: Icon(
+            Icons.blur_circular,
+            color: Colors.white,
+          ),
+          title: Text(
+            "Global Chat",
+            style: TextStyle(color: Colors.white),
+          ),
+          trailing: Icon(
+            Icons.keyboard_arrow_right,
+            color: Colors.white,
+          ),
           onTap: () {
             Navigator.push(
               context,
@@ -143,8 +155,14 @@ class _CommunityPageState extends State<CommunityPage> {
         color: Colors.transparent,
         elevation: 0,
         child: ListTile(
-          leading: Icon(Icons.add, color: Colors.white,),
-          title: Text("Add Chats", style: TextStyle(color: Colors.white),),
+          leading: Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+          title: Text(
+            "Add Chats",
+            style: TextStyle(color: Colors.white),
+          ),
           onTap: () {
             addChat(context);
           },
@@ -156,8 +174,14 @@ class _CommunityPageState extends State<CommunityPage> {
         color: Colors.transparent,
         elevation: 0,
         child: ListTile(
-          leading: Icon(Icons.add, color: Colors.white,),
-          title: Text("Add Calendar to DB", style: TextStyle(color: Colors.white),),
+          leading: Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+          title: Text(
+            "Add Calendar to DB",
+            style: TextStyle(color: Colors.white),
+          ),
           onTap: () {
             addCalendartoDB();
           },
@@ -166,6 +190,8 @@ class _CommunityPageState extends State<CommunityPage> {
     );
     chats.add(
       Card(
+        color: Colors.transparent,
+        elevation: 0,
         child: ListTile(
           leading: Icon(Icons.add),
           title: Text("Make Calendar Private"),
@@ -177,8 +203,8 @@ class _CommunityPageState extends State<CommunityPage> {
     );
     chats.add(
       ListTile(
-        //spacer
-      ),
+          //spacer
+          ),
     );
     _firestore
         .collection("chats")
@@ -194,11 +220,19 @@ class _CommunityPageState extends State<CommunityPage> {
                 elevation: 0,
                 child: ListTile(
                   title: Text("$s", style: TextStyle(color: Colors.white)),
-                  trailing: Icon(Icons.keyboard_arrow_right, color: Colors.white,),
+                  trailing: Icon(
+                    Icons.keyboard_arrow_right,
+                    color: Colors.white,
+                  ),
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => PrivateChat(user:widget.user, to:s, toId: d.data['chatid'],)),
+                      MaterialPageRoute(
+                          builder: (context) => PrivateChat(
+                                user: widget.user,
+                                to: s,
+                                toId: d.data['chatid'],
+                              )),
                     );
                   },
                 ),
@@ -214,7 +248,12 @@ class _CommunityPageState extends State<CommunityPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => PrivateChat(user:widget.user, to:s, toId: d.data['chatid'],)),
+                        MaterialPageRoute(
+                            builder: (context) => PrivateChat(
+                                  user: widget.user,
+                                  to: s,
+                                  toId: d.data['chatid'],
+                                )),
                       );
                     },
                   ),
@@ -222,9 +261,7 @@ class _CommunityPageState extends State<CommunityPage> {
               );
             }
           }
-
         });
-
       }
     });
   }
@@ -242,13 +279,13 @@ class _CommunityPageState extends State<CommunityPage> {
             children: <Widget>[
               new Expanded(
                   child: new TextField(
-                    autofocus: true,
-                    decoration: new InputDecoration(
-                        labelText: 'Email', hintText: 'eg. example@gmail.com'),
-                    onChanged: (value) {
-                      teamName = value;
-                    },
-                  ))
+                autofocus: true,
+                decoration: new InputDecoration(
+                    labelText: 'Email', hintText: 'eg. example@gmail.com'),
+                onChanged: (value) {
+                  teamName = value;
+                },
+              ))
             ],
           ),
           actions: <Widget>[
