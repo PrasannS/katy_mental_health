@@ -7,6 +7,8 @@ import 'package:katy_mental_health/Models/entry.dart';
 import 'package:katy_mental_health/Persistence/database.dart';
 import 'package:katy_mental_health/Utils/constants.dart';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 class CalendarPage extends StatefulWidget {
   CalendarPage({Key key, this.title}) : super(key: key);
 
@@ -27,6 +29,7 @@ class CalendarPage extends StatefulWidget {
 
 class _CalendarPageState extends State<CalendarPage> {
 
+  FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
 
   DatabaseHelper databaseHelper = DatabaseHelper();
   DateTime selectedDate;
@@ -46,9 +49,63 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   void initState() {
+
+    final List<dynamic> messageHistory = new List<dynamic>();
+
     super.initState();
     _calendarController = CalendarController();
     selectedDate = DateTime.now();
+
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) {
+        print('on message $message');
+        messageHistory.add(message);
+        messageHistory.forEach((history) => print("history "+history));
+        final snackBar = SnackBar(
+          content: Text(message.keys.toString()),
+          action: SnackBarAction(
+            label: 'Dismiss',
+            onPressed: () {
+              //does nothing as it'll dismiss the message
+            },
+          ),
+        );
+      },
+      onResume: (Map<String, dynamic> message) {
+        print('on resume $message');
+        messageHistory.add(message);
+        messageHistory.forEach((history) => print("history "+history));
+        final snackBar = SnackBar(
+          content: Text(message.keys.toString()),
+          action: SnackBarAction(
+            label: 'Dismiss',
+            onPressed: () {
+              //does nothing as it'll dismiss the message
+            },
+          ),
+        );
+      },
+      onLaunch: (Map<String, dynamic> message) {
+        print('on launch $message');
+        messageHistory.add(message);
+        messageHistory.forEach((history) => print("history "+history));
+        final snackBar = SnackBar(
+          content: Text(message.keys.toString()),
+          action: SnackBarAction(
+            label: 'Dismiss',
+            onPressed: () {
+              //does nothing as it'll dismiss the message
+            },
+          ),
+        );
+      },
+    );
+    _firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(sound: true, badge: true, alert: true));
+    _firebaseMessaging.getToken().then((token){
+      print("Token : "+token);
+    });
+
   }
 
 

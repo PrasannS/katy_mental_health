@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:link/link.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'calendar_page.dart';
 
 class MorePage extends StatefulWidget {
   MorePage({Key key, this.title}) : super(key: key);
@@ -21,6 +22,10 @@ class _MorePageState extends State<MorePage> {
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  _showNotificationHistory(List<dynamic> messageHistory) async {
+
   }
 
   @override
@@ -55,7 +60,6 @@ class _MorePageState extends State<MorePage> {
                       title: Text("Watch Ads"),
                       trailing: Icon(Icons.keyboard_arrow_right),
                       onTap: () {
-                        debugPrint("Ads");
 
                       },
                     ),
