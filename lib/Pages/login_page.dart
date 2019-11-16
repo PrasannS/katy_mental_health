@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:katy_mental_health/Utils/auth.dart';
+import 'package:Speculus/Utils/auth.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -97,9 +97,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Flutter login demo'),
-        ),
         body: Stack(
           children: <Widget>[
             _showForm(),

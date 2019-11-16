@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:Speculus/Models/entry.dart';
+import 'package:Speculus/Pages/calendar_page.dart';
+import 'package:Speculus/Persistence/database.dart';
 
 
 //TODO
@@ -16,11 +19,11 @@ class PrivateChat extends StatefulWidget {
 }
 
 class _PrivateChatState extends State<PrivateChat> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final Firestore _firestore = Firestore.instance;
 
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
+  DatabaseHelper databaseHelper = DatabaseHelper();
 
   Future<void> callback() async {
     print(widget.user);
@@ -48,10 +51,14 @@ class _PrivateChatState extends State<PrivateChat> {
         title: Text("Teacher/Adult PrivateChat"),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.close),
+            icon: Icon(Icons.calendar_today),
             onPressed: () {
-              _auth.signOut();
-              Navigator.of(context).popUntil((route) => route.isFirst);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CalendarPage(user: widget.to,preview: true,)),
+              );
+              //_auth.signOut();
+              //Navigator.of(context).popUntil((route) => route.isFirst);
             },
           )
         ],

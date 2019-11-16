@@ -2,7 +2,7 @@ import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import 'package:katy_mental_health/Models/entry.dart';
+import 'package:Speculus/Models/entry.dart';
 
 class DatabaseHelper {
 

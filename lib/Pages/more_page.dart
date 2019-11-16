@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:Speculus/Pages/breathing_page.dart';
 import 'package:link/link.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'calendar_page.dart';
 
 class MorePage extends StatefulWidget {
   MorePage({Key key, this.title}) : super(key: key);
@@ -15,7 +15,7 @@ class MorePage extends StatefulWidget {
 
 class _MorePageState extends State<MorePage> {
 
-  _launchURL() async {
+  _launchURLRESOURCES() async {
     const url = 'https://socialworklicensemap.com/mental-health-resources-list/';
     if (await canLaunch(url)) {
       await launch(url);
@@ -24,8 +24,13 @@ class _MorePageState extends State<MorePage> {
     }
   }
 
-  _showNotificationHistory(List<dynamic> messageHistory) async {
-
+  _launchURLSUGGESTIONS() async {
+    const url = 'https://forms.gle/EhijUFx9kWpay9MEA';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
@@ -35,12 +40,9 @@ class _MorePageState extends State<MorePage> {
               decoration: BoxDecoration(
                 // Box decoration takes a gradient
                 gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: <Color>[
-                    new Color(0xff04a5c1),
-                    new Color(0xfff9f981)
-                  ],
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [new Color(0xff04a5c1), Colors.grey[200]],
                 ),
               ),
               child: ListView(
@@ -50,20 +52,21 @@ class _MorePageState extends State<MorePage> {
                       title: Text("Resources"),
                       trailing: Icon(Icons.keyboard_arrow_right),
                       onTap: (){
-                        _launchURL();
+                        _launchURLRESOURCES();
                       },
                     ),
 
-
+/*
                   ListTile(
                       leading: Icon(Icons.tv),
                       title: Text("Watch Ads"),
                       trailing: Icon(Icons.keyboard_arrow_right),
                       onTap: () {
+                        debugPrint("Ads");
 
                       },
                     ),
-
+*/
 
                   ListTile(
                       leading: Icon(Icons.lightbulb_outline),
@@ -71,6 +74,7 @@ class _MorePageState extends State<MorePage> {
                       trailing: Icon(Icons.keyboard_arrow_right),
                       onTap: () {
                         debugPrint("Suggestions");
+                        _launchURLSUGGESTIONS();
                       },
                     ),
 
@@ -80,7 +84,10 @@ class _MorePageState extends State<MorePage> {
                       title: Text("Breathing"),
                       trailing: Icon(Icons.keyboard_arrow_right),
                       onTap: () {
-                        debugPrint("Breathing");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => BreathingPage()),
+                        );
                       },
                     ),
 
@@ -89,6 +96,7 @@ class _MorePageState extends State<MorePage> {
                     //spacer
                   ),
 
+                  /*
                   ListTile(
                       leading: Icon(Icons.notifications),
                       title: Text("Notifications"),
@@ -108,7 +116,7 @@ class _MorePageState extends State<MorePage> {
                       },
                     ),
 
-
+*/
 
                 ],
               )

@@ -32,7 +32,30 @@ class _BreathingPageState extends State<BreathingPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return MaterialApp(
-        home: Scaffold(body: SizedBox.expand(child: breathingButton())));
+      home: Scaffold(
+        body: Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(4, 40, 0, 0),
+                child: Row(
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.arrow_back),
+                      onPressed: () => {Navigator.pop(context)},
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 10,
+              child: breathingButton(),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -44,6 +67,7 @@ class _BreathingAnimationState extends State<breathingButton>
     with SingleTickerProviderStateMixin {
   AnimationController controller;
 
+
   void initState() {
     super.initState();
     controller = AnimationController(
@@ -51,28 +75,32 @@ class _BreathingAnimationState extends State<breathingButton>
   }
 
   Widget build(BuildContext context) {
-    return Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-      BreathingAnimation(
-        controller: controller,
-      ),
-      AnimatedBuilder(
-          animation: controller,
-          builder: (BuildContext context,
-              Widget child) {
-            return Text(
-              timerString,
-              style: TextStyle(
-                  fontSize: 112.0,
-                  color: controller.isAnimating ? Colors.indigo : Colors.transparent),
-            );
-          }),
-    ]);
+    return Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          BreathingAnimation(
+            controller: controller,
+          ),
+          AnimatedBuilder(
+              animation: controller,
+              builder: (BuildContext context, Widget child) {
+                return Text(
+                  timerString,
+                  style: TextStyle(
+                      fontSize: 112.0,
+                      color: controller.isAnimating
+                          ? Colors.indigo
+                          : Colors.transparent),
+                );
+              }),
+        ]);
   }
 
   String get timerString {
-    Duration duration = controller.duration * controller.value + Duration(seconds: 1);
-    if (duration.inSeconds == 8)
-      return '';
+    Duration duration =
+        controller.duration * controller.value + Duration(seconds: 1);
+    if (duration.inSeconds == 8) return '';
     return '${duration.inSeconds}';
   }
 }
@@ -102,7 +130,7 @@ class BreathingAnimation extends StatelessWidget {
                   Icons.favorite,
                   size: 50,
                 ),
-                onPressed: _start,
+                onPressed: controller.isAnimating ? null : _start,
                 foregroundColor: Colors.red,
                 elevation: 0.0,
                 backgroundColor: Colors.transparent,
@@ -114,7 +142,7 @@ class BreathingAnimation extends StatelessWidget {
 
   Future _start() async {
     try {
-      for (int i = 0; i < 3; i++) {
+      for (;;) {
         controller.duration = Duration(milliseconds: 4000);
         await controller
             .forward(from: 0.0) // start paper animation over

@@ -4,9 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_circular_slider/flutter_circular_slider.dart';
-import 'package:katy_mental_health/Models/entry.dart';
-import 'package:katy_mental_health/Persistence/database.dart';
-import 'package:katy_mental_health/Utils/constants.dart';
+import 'package:Speculus/Models/entry.dart';
+import 'package:Speculus/Persistence/database.dart';
+import 'package:Speculus/Utils/constants.dart';
 
 class AnswerPage extends StatefulWidget {
   @override
@@ -35,7 +35,7 @@ class _AnswerPageState extends State<AnswerPage> {
   int currentQuestion = 0;
   int endTime;
   int qODID = 0;
-  int selectedOpt = 0;
+  int selectedOpt = 1;
   Entry e = new Entry();
 
   List<int> ends = [0,0,0,254,254,254,254,254,254,254];
@@ -94,8 +94,8 @@ class _AnswerPageState extends State<AnswerPage> {
     e.answer=QDController.text;
     e.activity=selectedOpt;
     e.question_id=qODID;
-    e.mood=ends[1];
-    e.sleep=ends[0];
+    e.mood=ends[0];
+    e.sleep=ends[1];
     e.water=ends[2];
     e.note=noteController.text;
     if(widget.time==0)
@@ -130,7 +130,6 @@ class _AnswerPageState extends State<AnswerPage> {
           },
         ));
     }
-    print(widgets);
     return widgets;
 
   }
@@ -138,33 +137,6 @@ class _AnswerPageState extends State<AnswerPage> {
   Widget build(BuildContext context) {
 
     List<Widget> questionWidgets = [
-      new SingleCircularSlider(
-        255,
-        20,
-        height: 380.0,
-        width: 380.0,
-        primarySectors: 0,
-        secondarySectors: 0,
-        baseColor: Color.fromRGBO(255, 255, 255, 0.1),
-        selectionColor: baseColor,
-        handlerColor: Colors.white,
-        sliderStrokeWidth: 50,
-        handlerOutterRadius: 12.0,
-        onSelectionChange: _updateLabels,
-        showRoundedCapInSelection: false,
-        showHandlerOutter: true,
-        child: Padding(
-            padding: const EdgeInsets.all(42.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: 20),
-                Text('${((ends[currentQuestion]*24)/255).round()} Hours',
-                    style: TextStyle(fontSize: 24.0, color: Colors.white)),
-              ],
-            )),
-        shouldCountLaps: false,
-      ),
       new SingleCircularSlider(
         255,
         ends[currentQuestion],
@@ -187,6 +159,33 @@ class _AnswerPageState extends State<AnswerPage> {
               children: [
                 SizedBox(height: 20),
                 Text('${Constants.moods[((ends[currentQuestion]*2.99)/255).floor()]}',
+                    style: TextStyle(fontSize: 24.0, color: Colors.white)),
+              ],
+            )),
+        shouldCountLaps: false,
+      ),
+      new SingleCircularSlider(
+        255,
+        20,
+        height: 380.0,
+        width: 380.0,
+        primarySectors: 0,
+        secondarySectors: 0,
+        baseColor: Color.fromRGBO(255, 255, 255, 0.1),
+        selectionColor: baseColor,
+        handlerColor: Colors.white,
+        sliderStrokeWidth: 50,
+        handlerOutterRadius: 12.0,
+        onSelectionChange: _updateLabels,
+        showRoundedCapInSelection: false,
+        showHandlerOutter: true,
+        child: Padding(
+            padding: const EdgeInsets.all(42.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 20),
+                Text('${((ends[currentQuestion]*12)/255).round()} Hours',
                     style: TextStyle(fontSize: 24.0, color: Colors.white)),
               ],
             )),
@@ -296,6 +295,7 @@ class _AnswerPageState extends State<AnswerPage> {
                               currentQuestion++;
                             }
                             else{
+                              Text('SUBMIT');
                               submit();
                               Navigator.pop(context);
                             }

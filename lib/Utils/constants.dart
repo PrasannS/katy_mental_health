@@ -1,8 +1,7 @@
 class Constants{
 
-  static List<String> questions = ["How Much Sleep did you get?", "What is your mood?","How much water have you drank today?",
-    "Question of the Day:","What was your most impactful activity today?", "Any Notes for Today?", "Submit?"];
-
+  static List<String> questions = ["What was your overall mood today?", "How Much Sleep did you get?","How much water have you drank today?",
+    "Question of the Day:","Which category impacted you the most today?", "Any Notes for Today?", "Submit?"];
 
   static List<String> moods = ["Bad","Meh","Good",];
 
@@ -33,11 +32,11 @@ class Constants{
   static List<String> questionOptions = [
     "Work",
     "Education",
-    "Relax",
+    "Relaxation",
     "Family",
     "Food",
     "Friends",
-    "Extra-Curiccullar",
+    "Extra-Curricular",
     "Other"
   ];
 

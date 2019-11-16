@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:katy_mental_health/Pages/answer_page.dart';
-import 'package:katy_mental_health/Pages/calendar_page.dart';
-import 'package:katy_mental_health/Pages/more_page.dart';
-import 'package:katy_mental_health/Pages/community_page.dart';
-import 'package:katy_mental_health/Pages/stats_page.dart';
+import 'package:Speculus/Models/entry.dart';
+import 'package:Speculus/Pages/answer_page.dart';
+import 'package:Speculus/Pages/calendar_page.dart';
+import 'package:Speculus/Pages/more_page.dart';
+import 'package:Speculus/Pages/community_page.dart';
+import 'package:Speculus/Pages/stats_page.dart';
 
 
 class MyHomePage extends StatefulWidget {
@@ -33,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     _tabController.addListener(_tabControllerListener);
     _tabList = [
       Container(
-          child:new CalendarPage()
+          child:new CalendarPage(preview: false,user: widget.userid,)
       ),
       Container(
           child:new StatsPage()
@@ -63,8 +64,12 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         controller: _tabController,
         children: _tabList,
       ),
+
+      /*
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.lightBlue,
+        foregroundColor: Colors.grey[200],
         onPressed: () {
           Navigator.push(
             context,
@@ -75,6 +80,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         child: Icon(Icons.add),
         elevation: 2.0,
       ),
+      */
       bottomNavigationBar: BottomNavigationBar(
         unselectedItemColor: Colors.redAccent,
         selectedItemColor: Colors.blue,
