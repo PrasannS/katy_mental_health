@@ -35,7 +35,6 @@ class Entry {
     activity:int.parse(json["activity"]),
     answer:json["answer"],
     note:json["note"],
-
   );
 
   factory Entry.fromMap2(Map<String, dynamic> json) => new Entry(
@@ -48,7 +47,6 @@ class Entry {
     activity:json["activity"],
     answer:json["answer"],
     note:json["note"],
-
   );
 
 
