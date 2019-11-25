@@ -143,18 +143,20 @@ class _CalendarPageState extends State<CalendarPage> {
     return TableCalendar(
       calendarController: _calendarController,
       daysOfWeekStyle: DaysOfWeekStyle(
-          weekendStyle: TextStyle(
-        color: Colors.amber,
-      )),
+        weekendStyle: TextStyle(
+          color: Colors.blueAccent[400]
+        )
+      ),
       startingDayOfWeek: StartingDayOfWeek.monday,
       calendarStyle: CalendarStyle(
-          selectedColor: Colors.blueAccent[400],
-          todayColor: Colors.blue[200],
-          markersColor: Colors.blueAccent[700],
-          outsideDaysVisible: false,
-          weekendStyle: TextStyle(
-            color: Colors.amber,
-          )),
+        selectedColor: Colors.blueAccent[400],
+        todayColor: Colors.blue[200],
+        markersColor: Colors.blueAccent[700],
+        outsideDaysVisible: false,
+        weekendStyle: TextStyle(
+          color: Colors.blueAccent[400]
+        )
+      ),
       headerStyle: HeaderStyle(
         formatButtonTextStyle:
             TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
@@ -220,14 +222,15 @@ class _CalendarPageState extends State<CalendarPage> {
               ],
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             ),
-            new RaisedButton(
-              child: Text('${Constants.questionOptions[e.activity]}'),
-              color: Color.fromRGBO(255, 255, 255, .5),
-              textColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40.0),
+        new RaisedButton(
+                child: Text('${Constants.questionOptions[e.activity-1]}'),
+                color: Color.fromRGBO(255, 255, 255, .5),
+                textColor: Colors.white,
+                //shape: RoundedRectangleBorder(
+                  //borderRadius: BorderRadius.circular(40.0),
+                //),
               ),
-            ),
+
             getTextWidget(Constants.questionsOfTheDay[e.question_id]),
             getTextWidget(e.answer),
             getTextWidget(e.note),

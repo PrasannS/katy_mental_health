@@ -14,16 +14,12 @@ class AnswerPage extends StatefulWidget {
   final int time;
 
   AnswerPage({Key key, @required this.time}) : super(key: key);
-
 }
 
 class _AnswerPageState extends State<AnswerPage> {
   final baseColor = Color.fromRGBO(255, 255, 255, 0.3);
 
   DatabaseHelper databaseHelper = DatabaseHelper();
-
-
-
 
   final QDController = TextEditingController();
   final noteController = TextEditingController();
@@ -33,113 +29,112 @@ class _AnswerPageState extends State<AnswerPage> {
   int days = 0;
   int level = 255;
   int currentQuestion = 0;
-  int endTime;
   int qODID = 0;
   int selectedOpt = 1;
+  bool refresh = false;
   Entry e = new Entry();
 
-  List<int> ends = [0,0,0,254,254,254,254,254,254,254];
+  List<int> ends = [20, 20, 20, 254, 254, 254, 254, 254, 254, 254];
+  List<int> levels = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  List<String> measure = ["hours", "mood", "glasses"];
+  List<double> times = [12.0, 2.99, 8.0];
+  double moodEnd = 20.0;
 
   @override
   void initState() {
     super.initState();
     Random r = new Random();
-    qODID = r.nextInt(Constants.questionsOfTheDay.length-1);
+    qODID = r.nextInt(Constants.questionsOfTheDay.length - 1);
     print(widget.time);
   }
 
   void _updateLabels(int init, int end, int laps) {
     setState(() {
       inBedTime = init;
+      print(laps.toString());
       ends[currentQuestion] = end;
       days = laps;
-      level = end >= 255 ? 255 : end;
+      levels[currentQuestion] = laps;
     });
   }
 
-  void nextQuestion(){
+  void nextQuestion() {
     setState(() {
-      if(currentQuestion!=6) {
+      if (currentQuestion != 6) {
         currentQuestion++;
-      }
-      else{
+      } else {
         submit();
       }
     });
   }
 
-  void selected(int a ){
+  void selected(int a) {
     setState(() {
-      selectedOpt=a;
+      selectedOpt = a;
       print(selectedOpt);
       currentQuestion++;
     });
   }
 
-  void prevQuestion(){
-      setState(() {
-      if(currentQuestion!=0)
-      currentQuestion--;
+  void prevQuestion() {
+    setState(() {
+      if (currentQuestion != 0) currentQuestion--;
     });
   }
 
-  LinearGradient getGradient(int a){
+  LinearGradient getGradient(int a) {
     return new LinearGradient(
         begin: Alignment.topRight,
         end: Alignment.bottomLeft,
-        colors: [Color.fromRGBO(50, 0, 255-ends[currentQuestion],1.0), Color.fromRGBO(0, ends[currentQuestion], 50,1.0)]);
+        colors: [
+          Color.fromRGBO(50, 0, 255 - ends[currentQuestion], 1.0),
+          Color.fromRGBO(0, ends[currentQuestion], 50, 1.0)
+        ]);
   }
 
-  void submit() async{
-    e.answer=QDController.text;
-    e.activity=selectedOpt;
-    e.question_id=qODID;
-    e.mood=ends[1];
-    e.sleep=ends[0];
-    e.water=ends[2];
-    e.note=noteController.text;
-    if(widget.time==0)
-    e.datetime= new DateTime.now().millisecondsSinceEpoch;
+  void submit() async {
+    e.answer = QDController.text;
+    e.activity = selectedOpt;
+    e.question_id = qODID;
+    e.mood = ends[1];
+    e.sleep = ends[0];
+    e.water = ends[2];
+    e.note = noteController.text;
+    if (widget.time == 0)
+      e.datetime = new DateTime.now().millisecondsSinceEpoch;
     else
-      e.datetime=widget.time;
+      e.datetime = widget.time;
     databaseHelper.insertEntry(e);
     print(e.toString());
-    Future<List<Entry>>d = databaseHelper.getEntryList();
-    d.then((entryList){
-      print(entryList[entryList.length-1].toString());
+    Future<List<Entry>> d = databaseHelper.getEntryList();
+    d.then((entryList) {
+      print(entryList[entryList.length - 1].toString());
     });
-
   }
 
-
-  List<Widget> getOptions(){
-
+  List<Widget> getOptions() {
     List<Widget> widgets = new List<Widget>();
     int i = 0;
-    for(String s in Constants.questionOptions){
-      widgets.add(
-        new FlatButton(
-          child: Text('$s'),
-          color: baseColor,
-          textColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40.0),
-          ),
-          onPressed: ()=>{
-            selected(Constants.questionOptions.indexOf(s))
-          },
-        ));
+    for (String s in Constants.questionOptions) {
+      widgets.add(new FlatButton(
+        child: Text('$s'),
+        color: baseColor,
+        textColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(40.0),
+        ),
+        onPressed: () => {selected(Constants.questionOptions.indexOf(s))},
+      ));
     }
     return widgets;
-
   }
+
   @override
   Widget build(BuildContext context) {
-
     List<Widget> questionWidgets = [
       new SingleCircularSlider(
         255,
-        20,
+        ends[currentQuestion],
         height: 380.0,
         width: 380.0,
         primarySectors: 0,
@@ -158,11 +153,64 @@ class _AnswerPageState extends State<AnswerPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(height: 20),
-                Text('${((ends[currentQuestion]*24)/255).round()} Hours',
+                Text(
+                    '${((ends[currentQuestion] * 12) / 255).round() + levels[currentQuestion] * 12} Hours',
                     style: TextStyle(fontSize: 24.0, color: Colors.white)),
               ],
             )),
         shouldCountLaps: false,
+      ),
+//      new SingleCircularSlider(
+//        255,
+//        ends[currentQuestion],
+//        height: 380.0,
+//        width: 380.0,
+//        primarySectors: 0,
+//        secondarySectors: 0,
+//        baseColor: Color.fromRGBO(255, 255, 255, 0.1),
+//        selectionColor: Color.fromRGBO(255, 255, 255, 0.3),
+//        handlerColor: Colors.white,
+//        sliderStrokeWidth: 50,
+//        handlerOutterRadius: 12.0,
+//        onSelectionChange: _updateLabels,
+//        showRoundedCapInSelection: false,
+//        showHandlerOutter: true,
+//        child: Padding(
+//            padding: const EdgeInsets.all(42.0),
+//            child: Column(
+//              mainAxisAlignment: MainAxisAlignment.center,
+//              children: [
+//                SizedBox(height: 20),
+//                Text(
+//                    '${Constants.moods[((ends[currentQuestion] * 2.99) / 255).floor()]}',
+//                    style: TextStyle(fontSize: 24.0, color: Colors.white)),
+//              ],
+//            )),
+//        shouldCountLaps: false,
+//      ),
+      new Column(
+        children: <Widget>[
+          Text(
+              '${Constants.moods[((ends[currentQuestion] * 2.99) / 255).floor()]}',
+              style: TextStyle(fontSize: 24.0, color: Colors.white)),
+          SliderTheme(
+              data: SliderThemeData(
+                thumbColor: Colors.blue,
+              ),
+              child: Slider(
+                label:
+                    '${Constants.moods[((ends[currentQuestion] * 2.99) / 255).floor()]}',
+                min: 0,
+                max: 255,
+                value: moodEnd,
+                onChanged: (val) {
+                  setState(() {
+                    ends[1] = moodEnd.floor();
+                    moodEnd = val;
+                  });
+                },
+              )),
+        ],
       ),
       new SingleCircularSlider(
         255,
@@ -185,60 +233,30 @@ class _AnswerPageState extends State<AnswerPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(height: 20),
-                Text('${Constants.moods[((ends[currentQuestion]*2.99)/255).floor()]}',
-                    style: TextStyle(fontSize: 24.0, color: Colors.white)),
-              ],
-            )),
-        shouldCountLaps: false,
-      ),
-      new SingleCircularSlider(
-        255,
-        ends[currentQuestion],
-        height: 380.0,
-        width: 380.0,
-        primarySectors: 0,
-        secondarySectors: 0,
-        baseColor: Color.fromRGBO(255, 255, 255, 0.1),
-        selectionColor: Color.fromRGBO(255, 255, 255, 0.3),
-        handlerColor: Colors.white,
-        sliderStrokeWidth: 50,
-        handlerOutterRadius: 12.0,
-        onSelectionChange: _updateLabels,
-        showRoundedCapInSelection: false,
-        showHandlerOutter: true,
-        child: Padding(
-            padding: const EdgeInsets.all(42.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: 20),
-                Text('${((ends[currentQuestion]*8)/255).round()} Glasses',
+                Text(
+                    '${((ends[currentQuestion] * 8) / 255).round() + levels[currentQuestion] * 8} Glasses',
                     style: TextStyle(fontSize: 24.0, color: Colors.white)),
               ],
             )),
         shouldCountLaps: false,
       ),
       new SizedBox(
-        height: 200,
-        width: 380,
-        child: ListView(
-          children: <Widget>[
-            Text(
-              "${Constants.questionsOfTheDay[qODID]}"
-            ),
-            TextField(
-              controller: QDController,
-            ),
-          ],
-        )
-      ),
+          height: 200,
+          width: 380,
+          child: ListView(
+            children: <Widget>[
+              Text("${Constants.questionsOfTheDay[qODID]}"),
+              TextField(
+                controller: QDController,
+              ),
+            ],
+          )),
       new SizedBox(
           height: 380,
           width: 380,
           child: ListView(
             children: getOptions(),
-          )
-      ),
+          )),
       new SizedBox(
         height: 200,
         width: 380,
@@ -250,20 +268,16 @@ class _AnswerPageState extends State<AnswerPage> {
         height: 200,
         width: 380,
       ),
-
-
     ];
-
-
-
 
     return Scaffold(
         body: SafeArea(
             child: Container(
                 decoration: BoxDecoration(
-                    gradient:getGradient(level),
-                    color: Color.fromARGB(100, level, 20, 20)
-                ),
+                    color: ends[currentQuestion] < 128
+                        ? Color.fromARGB(150, 255, ends[currentQuestion] * 2, 0)
+                        : Color.fromARGB(150,
+                            255 - (ends[currentQuestion] - 128) * 2, 255, 0)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -272,39 +286,39 @@ class _AnswerPageState extends State<AnswerPage> {
                       style: TextStyle(color: Colors.white),
                     ),
                     questionWidgets[currentQuestion],
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                      FlatButton(
-                        child: Text('BACK'),
-                        color: baseColor,
-                        textColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50.0),
-                        ),
-                        onPressed: prevQuestion ,
-                      ),
-                      FlatButton(
-                        child: Text('NEXT'),
-                        color: baseColor,
-                        textColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50.0),
-                        ),
-                        onPressed:  ()=>{
-                          setState(() {
-                            if(currentQuestion!=6) {
-                              currentQuestion++;
-                            }
-                            else{
-                              submit();
-                              Navigator.pop(context);
-                            }
-                          })
-                        },
-                      ),
-                    ]),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          FlatButton(
+                            child: Text('BACK'),
+                            color: baseColor,
+                            textColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50.0),
+                            ),
+                            onPressed: prevQuestion,
+                          ),
+                          FlatButton(
+                            child: Text('NEXT'),
+                            color: baseColor,
+                            textColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50.0),
+                            ),
+                            onPressed: () => {
+                              setState(() {
+                                if (currentQuestion != 6) {
+                                  currentQuestion++;
+                                } else {
+                                  submit();
+                                  Navigator.pop(context);
+                                }
+                              })
+                            },
+                          ),
+                        ]),
                   ],
-                )
-            )));
+                ))));
   }
 
   @override
@@ -312,5 +326,4 @@ class _AnswerPageState extends State<AnswerPage> {
     // TODO: implement dispose
     super.dispose();
   }
-
 }
