@@ -108,10 +108,14 @@ LineChartData lineData(List<int> dates, List<List<int>> bigList) {
           switch (value.toInt()) {
             case 0:
               return '0';
-            case 85:
-              return '1/3';
-            case 171:
-              return '2/3';
+            case 4:
+              return '4';
+            case 8:
+              return '8';
+            case 12:
+              return '12';
+            case 13:
+              return '12+';
           }
           return '';
         },
@@ -126,7 +130,7 @@ LineChartData lineData(List<int> dates, List<List<int>> bigList) {
     minX: 0,
     maxX: bigList[0].length - 1.0,
     minY: 0,
-    maxY: 255,
+    maxY: 13,
     lineBarsData: getActualLineData(bigList),
   );
 }

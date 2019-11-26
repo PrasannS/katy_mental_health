@@ -31,13 +31,11 @@ class _AnswerPageState extends State<AnswerPage> {
   int currentQuestion = 0;
   int qODID = 0;
   int selectedOpt = 1;
-  bool refresh = false;
   Entry e = new Entry();
 
   List<int> ends = [20, 20, 20, 254, 254, 254, 254, 254, 254, 254];
   List<int> levels = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-  List<String> measure = ["hours", "mood", "glasses"];
-  List<double> times = [12.0, 2.99, 8.0];
+  List<bool> above = [false, false, false, false, false, false, false, false, false];
   double moodEnd = 20.0;
 
   @override
@@ -96,9 +94,9 @@ class _AnswerPageState extends State<AnswerPage> {
     e.answer = QDController.text;
     e.activity = selectedOpt;
     e.question_id = qODID;
-    e.mood = ends[1];
-    e.sleep = ends[0];
-    e.water = ends[2];
+    e.mood = ((ends[1] * 12) / 255).floor();
+    e.sleep = above[0] ? 13 : ((ends[0] * 12) / 255).round();
+    e.water = above[2] ? 13 : ((ends[currentQuestion] * 12) / 255).round();
     e.note = noteController.text;
     if (widget.time == 0)
       e.datetime = new DateTime.now().millisecondsSinceEpoch;
@@ -152,6 +150,20 @@ class _AnswerPageState extends State<AnswerPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                FlatButton(
+                  onPressed: () {
+                    setState(() {
+                      above[currentQuestion] = true;
+                      ends[currentQuestion] = 255;
+                      currentQuestion++;
+                     });
+                  },
+                  child: Text("12+", style: TextStyle(color: Colors.white),),
+                  color: baseColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                ),
                 SizedBox(height: 20),
                 Text(
                     '${((ends[currentQuestion] * 12) / 255).round() + levels[currentQuestion] * 12} Hours',
@@ -232,9 +244,23 @@ class _AnswerPageState extends State<AnswerPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                FlatButton(
+                  onPressed: () {
+                    setState(() {
+                      above[currentQuestion] = true;
+                      ends[currentQuestion] = 255;
+                      currentQuestion++;
+                    });
+                  },
+                  child: Text("12+", style: TextStyle(color: Colors.white),),
+                  color: baseColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                ),
                 SizedBox(height: 20),
                 Text(
-                    '${((ends[currentQuestion] * 8) / 255).round() + levels[currentQuestion] * 8} Glasses',
+                    '${((ends[currentQuestion] * 12) / 255).round() + levels[currentQuestion] * 10} Glasses',
                     style: TextStyle(fontSize: 24.0, color: Colors.white)),
               ],
             )),
