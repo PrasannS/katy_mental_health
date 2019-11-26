@@ -215,7 +215,7 @@ Widget genPieGraph(List<int> dataList) {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const <Widget>[
                 Indicator(
-                  color: Color(0xff0293ee),
+                  color: Color(0xff1ab802),
                   text: 'Good',
                   isSquare: true,
                 ),
@@ -231,7 +231,7 @@ Widget genPieGraph(List<int> dataList) {
                   height: 4,
                 ),
                 Indicator(
-                  color: Color(0xff845bef),
+                  color: Color(0xffb80202),
                   text: 'Bad',
                   isSquare: true,
                 ),
@@ -269,7 +269,7 @@ List<PieChartSectionData> getActualPieData(List<int> dataList) {
       switch (i) {
         case 0:
           return PieChartSectionData(
-            color: const Color(0xff0293ee),
+            color: const Color(0xff1ab802),
             value: countData[0] + 0.0,
             title: ((countData[0] / dataList.length * 1000).round() / 10)
                     .toString() +
@@ -282,7 +282,7 @@ List<PieChartSectionData> getActualPieData(List<int> dataList) {
           );
         case 1:
           return PieChartSectionData(
-            color: const Color(0xfff8b250),
+            color: const Color(0xffb80202),
             value: countData[1] + 0.0,
             title: ((countData[1] / dataList.length * 1000).round() / 10)
                     .toString() +
@@ -431,7 +431,7 @@ class BarChartSample1State extends State<BarChartSample1> {
                     activity = 'Education';
                     break;
                   case 2:
-                    activity = 'Relax';
+                    activity = 'Relaxation';
                     break;
                   case 3:
                     activity = 'Family';
@@ -474,7 +474,7 @@ class BarChartSample1State extends State<BarChartSample1> {
                 case 1:
                   return 'Edu';
                 case 2:
-                  return 'Relax';
+                  return 'Relaxation';
                 case 3:
                   return 'Family';
                 case 4:

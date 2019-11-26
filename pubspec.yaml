@@ -39,7 +39,10 @@ flutter_icons:
 
 
 flutter:
-
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/Roboto-Regular.ttf
   uses-material-design: true
 
 
