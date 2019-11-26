@@ -49,7 +49,7 @@ class _MorePageState extends State<MorePage> {
                 children: <Widget>[
                   ListTile(
                       leading: Icon(Icons.book),
-                      title: Text("Resources"),
+                      title: Text("Resources", style: TextStyle(fontFamily: 'Roboto')),
                       trailing: Icon(Icons.keyboard_arrow_right),
                       onTap: (){
                         _launchURLRESOURCES();

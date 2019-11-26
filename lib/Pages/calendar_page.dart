@@ -164,7 +164,7 @@ class _CalendarPageState extends State<CalendarPage> {
           color: Colors.blueAccent[400],
           borderRadius: BorderRadius.circular(16.0),
         ),
-      ),
+    ),
       onDaySelected: _onDaySelected,
     );
   }
