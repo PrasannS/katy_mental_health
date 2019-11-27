@@ -78,8 +78,11 @@ class _AnswerPageState extends State<AnswerPage> {
 
   void prevQuestion(){
       setState(() {
-      if(currentQuestion!=0)
-      currentQuestion--;
+      if(currentQuestion!=0) {
+        currentQuestion--;
+      } else {
+        Navigator.pop(context);
+      }
     });
   }
 

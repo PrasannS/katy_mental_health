@@ -78,7 +78,7 @@ class _CalendarPageState extends State<CalendarPage> {
           child: ListView(
             children: <Widget>[
               Container(
-                height: 50,
+                height: 30,
           ),
               //custom icon
               //m icon without header
