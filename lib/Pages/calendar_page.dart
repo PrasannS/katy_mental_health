@@ -77,6 +77,9 @@ class _CalendarPageState extends State<CalendarPage> {
           ),
           child: ListView(
             children: <Widget>[
+              Container(
+                height: 50,
+          ),
               //custom icon
               //m icon without header
               Container(
@@ -236,6 +239,7 @@ class _CalendarPageState extends State<CalendarPage> {
       ));
     });
   }
+
 
   void getEntriesFromFB() {
     _firestore
