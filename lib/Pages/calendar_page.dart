@@ -34,10 +34,12 @@ class _CalendarPageState extends State<CalendarPage> {
   CalendarController _calendarController;
   final Firestore _firestore = Firestore.instance;
   final baseColor = Color.fromRGBO(255, 255, 255, 0.3);
-  List<Widget> entries = new List<Widget>();
   List<Entry> entryList = new List<Entry>();
   int refreshState = 0;
   int currentmood = 190;
+  bool hasEntries = false;
+  int avgMood = 150;
+
   @override
   void dispose() {
     _calendarController.dispose();
@@ -51,7 +53,6 @@ class _CalendarPageState extends State<CalendarPage> {
     _calendarController = CalendarController();
     selectedDate = DateTime.now();
     String s = widget.user;
-    print(s);
     _firestore
         .collection('calendars')
         .document(s)
@@ -60,13 +61,12 @@ class _CalendarPageState extends State<CalendarPage> {
         .then((snapshot) {
       for (DocumentSnapshot ds in snapshot.documents)
         entryList.add(new Entry.fromMap2(ds.data));
-      print(snapshot.documents.length);
+      _onDaySelected(selectedDate, null);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    /// Example Calendar Carousel without header and custom prev & next button
     return new Scaffold(
         body: SingleChildScrollView(
             child: Container(
@@ -84,7 +84,29 @@ class _CalendarPageState extends State<CalendarPage> {
                 child: _buildTableCalendar(),
               ),
               Column(
-                children: entries,
+                children: [
+                  FutureBuilder(
+                    future: databaseHelper.getEntryList(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<Entry>> snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.none:
+                          return Text('Press button to start.');
+                        case ConnectionState.active:
+                          return Text("Active...");
+                        case ConnectionState.waiting:
+                          return Text("Loading...");
+                        case ConnectionState.done:
+                          if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          }
+                          return Column(
+                              children: getEntriesForDay(snapshot.data));
+                      }
+                      return Text("what"); // unreachable
+                    },
+                  ),
+                ],
               ),
 
               /*
@@ -120,7 +142,7 @@ class _CalendarPageState extends State<CalendarPage> {
           ),
         )),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: hasEntries ? FloatingActionButton(
           backgroundColor: Colors.lightBlue,
           foregroundColor: Colors.grey[200],
           onPressed: () {
@@ -129,34 +151,28 @@ class _CalendarPageState extends State<CalendarPage> {
               MaterialPageRoute(
                   builder: (context) =>
                       AnswerPage(time: selectedDate.millisecondsSinceEpoch)),
-            ).then((value)
-            {
+            ).then((value) {
               _onDaySelected(selectedDate, null);
             });
           },
           child: Icon(Icons.add),
           elevation: 2.0,
-        ));
+        ): Container(),
+    );
   }
 
   Widget _buildTableCalendar() {
     return TableCalendar(
       calendarController: _calendarController,
       daysOfWeekStyle: DaysOfWeekStyle(
-        weekendStyle: TextStyle(
-          color: Colors.blueAccent[400]
-        )
-      ),
+          weekendStyle: TextStyle(color: Colors.blueAccent[400])),
       startingDayOfWeek: StartingDayOfWeek.monday,
       calendarStyle: CalendarStyle(
-        selectedColor: Colors.blueAccent[400],
-        todayColor: Colors.blue[200],
-        markersColor: Colors.blueAccent[700],
-        outsideDaysVisible: false,
-        weekendStyle: TextStyle(
-          color: Colors.blueAccent[400]
-        )
-      ),
+          selectedColor: getDayGradient(),
+          todayColor: Colors.blue[200],
+          markersColor: Colors.blueAccent[700],
+          outsideDaysVisible: false,
+          weekendStyle: TextStyle(color: Colors.blueAccent[400])),
       headerStyle: HeaderStyle(
         formatButtonTextStyle:
             TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
@@ -164,7 +180,7 @@ class _CalendarPageState extends State<CalendarPage> {
           color: Colors.blueAccent[400],
           borderRadius: BorderRadius.circular(16.0),
         ),
-    ),
+      ),
       onDaySelected: _onDaySelected,
     );
   }
@@ -206,39 +222,38 @@ class _CalendarPageState extends State<CalendarPage> {
         colors: [new Color(0xff04a5c1), Colors.white]);
   }
 
-  void openEntry(Entry e) {
-    setState(() {
-      currentmood = e.mood;
-      entries = new List<Widget>();
-      entries.add(new Container(
-        height: 400,
-        child: ListView(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                getIconWithValue(Icons.airline_seat_flat, e.sleep),
-                getIconWithValue(Icons.child_care, e.mood),
-                getIconWithValue(Icons.invert_colors, e.water),
-              ],
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            ),
-        new RaisedButton(
-                child: Text('${Constants.questionOptions[e.activity-1]}'),
-                color: Color.fromRGBO(255, 255, 255, .5),
-                textColor: Colors.white,
-                //shape: RoundedRectangleBorder(
-                  //borderRadius: BorderRadius.circular(40.0),
-                //),
-              ),
-
-            getTextWidget(Constants.questionsOfTheDay[e.question_id]),
-            getTextWidget(e.answer),
-            getTextWidget(e.note),
-          ],
-        ),
-      ));
-    });
-  }
+//  void openEntry(Entry e) {
+//    setState(() {
+//      currentmood = (e.mood * 255 / 12).floor();
+//      entries = new List<Widget>();
+//      entries.add(new Container(
+//        height: 400,
+//        child: ListView(
+//          children: <Widget>[
+//            Row(
+//              children: <Widget>[
+//                getIconWithValue(Icons.airline_seat_flat, e.sleep),
+//                getIconWithValue(Icons.child_care, e.mood),
+//                getIconWithValue(Icons.invert_colors, e.water),
+//              ],
+//              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//            ),
+//            new RaisedButton(
+//              child: Text('${Constants.questionOptions[e.activity - 1]}'),
+//              color: Color.fromRGBO(255, 255, 255, .5),
+//              textColor: Colors.white,
+//              //shape: RoundedRectangleBorder(
+//              //borderRadius: BorderRadius.circular(40.0),
+//              //),
+//            ),
+//            getTextWidget(Constants.questionsOfTheDay[e.question_id]),
+//            getTextWidget(e.answer),
+//            getTextWidget(e.note),
+//          ],
+//        ),
+//      ));
+//    });
+//  }
 
   void getEntriesFromFB() {
     _firestore
@@ -254,92 +269,80 @@ class _CalendarPageState extends State<CalendarPage> {
     });
   }
 
-  void _onDaySelected(DateTime day, List events) {
+  void _onDaySelected(DateTime day, List events) async {
     setState(() {
       selectedDate = day;
-      if (!widget.preview) {
-        entries = new List<Widget>();
-        Future<List<Entry>> d = databaseHelper.getEntryList();
-        d.then((entryList) {
-          print(entryList[entryList.length - 1]);
-          for (Entry e in entryList) {
-            DateTime today = DateTime.fromMillisecondsSinceEpoch(e.datetime);
-            if (day.year == today.year &&
-                day.month == today.month &&
-                day.day == today.day) {
-              entries.add(new RaisedButton(
-                child: Text('${Constants.questionOptions[e.activity]}'),
-                color: Color.fromRGBO(255 - e.mood, e.mood, 50, .5),
-                textColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40.0),
-                ),
-                onPressed: () => {openEntry(e)},
-              ));
-            } else {
-              currentmood = 150;
-            }
+    });
+    print("Finish day selected");
+  }
 
-          }
-        });
-      } else {
-        print("other USER");
-        entries = new List<Widget>();
-        for (Entry e in entryList) {
-          DateTime today = DateTime.fromMillisecondsSinceEpoch(e.datetime);
-          if (day.year == today.year &&
-              day.month == today.month &&
-              day.day == today.day) {
-            entries.add(new RaisedButton(
+  List<Widget> getEntriesForDay(List<Entry> givenEntries) {
+    if (!widget.preview) {
+      List<Widget> genEntries = new List<Widget>();
+      hasEntries = givenEntries.length > 0;
+      for (Entry e in givenEntries) {
+        DateTime today = DateTime.fromMillisecondsSinceEpoch(e.datetime);
+        if (selectedDate.year == today.year &&
+            selectedDate.month == today.month &&
+            selectedDate.day == today.day) {
+          genEntries.add(new RaisedButton(
               child: Text('${Constants.questionOptions[e.activity]}'),
-              color: Color.fromRGBO(255 - e.mood, e.mood, 50, .5),
+              color: getColorFromMood(e.mood),
               textColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(40.0),
               ),
-              onPressed: () => {openEntry(e)},
-            ));
-          } else {
-            currentmood = 150;
-          }
+              onPressed: () {
+                print("pressed");
+                //openEntry(e)},
+              }));
+        } else {
+          currentmood = 150;
         }
       }
-    });
-  }
-
-
-  int getAvgMood(DateTime day) {
-    selectedDate = day;
-    entries = new List<Widget>();
-    int total = 0;
-    int i = 0;
-    Future<List<Entry>> d = databaseHelper.getEntryList();
-    d.then((entryList) {
+      return genEntries;
+    } else {
+      print("other USER");
+      List<Widget> genEntries = new List<Widget>();
       for (Entry e in entryList) {
         DateTime today = DateTime.fromMillisecondsSinceEpoch(e.datetime);
-        if (day.year == today.year &&
-            day.month == today.month &&
-            day.day == today.day) {
-          i++;
-          total += e.mood;
-          entries.add(new RaisedButton(
+        if (selectedDate.year == today.year &&
+            selectedDate.month == today.month &&
+            selectedDate.day == today.day) {
+          genEntries.add(new RaisedButton(
             child: Text('${Constants.questionOptions[e.activity]}'),
-            color: Color.fromRGBO(255 - e.mood, e.mood, 50, .5),
+            color: getColorFromMood(e.mood),
             textColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(40.0),
             ),
-            onPressed: () => {openEntry(e)},
+            onPressed: () {
+              print("pressed");
+              //openEntry(e)
+            },
           ));
         } else {
           currentmood = 150;
         }
       }
-    });
-    if (i > 0)
-      return (total / i).round();
-    else {
-      return -1;
+      return genEntries;
+    }
+  }
+
+  Color getColorFromMood(int mood) {
+    int calcMood = (mood * 255 / 12).floor();
+    if (calcMood < 128) {
+      return Color.fromARGB(150, 255, calcMood * 2, 0);
+    } else {
+      return Color.fromARGB(150, 255 - (calcMood - 128) * 2, 255, 0);
+    }
+  }
+
+  Color getDayGradient() {
+    if (avgMood < 128) {
+      return Color.fromARGB(150, 255, avgMood * 2, 0);
+    } else {
+      return Color.fromARGB(150, 255 - (avgMood - 128) * 2, 255, 0);
     }
   }
 }
