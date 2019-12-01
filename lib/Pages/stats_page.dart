@@ -67,6 +67,9 @@ class _StatsPageState extends State<StatsPage> {
     d.then((entryList) {
       updateGraphs(entryList);
     });
+    List<int> holdMood = new List<int>();
+    for (int i = 0; i < mood.length; i++)
+      holdMood.add(mood[i]);
     return MaterialApp(
         home: Scaffold(
       body: Container(
@@ -92,7 +95,7 @@ class _StatsPageState extends State<StatsPage> {
                   style: TextStyle(color: Colors.white, fontSize: 30),
                   textAlign: TextAlign.center,
                 )),
-            genPieGraph(mood),
+            genPieGraph(holdMood),
             Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
