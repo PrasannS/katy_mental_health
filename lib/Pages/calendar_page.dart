@@ -67,117 +67,131 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        body: SingleChildScrollView(
-            child: Container(
-          height: 900,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            gradient: getGradient(currentmood),
-          ),
-          child: ListView(
-            children: <Widget>[
-              //custom icon
-              //m icon without header
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 16.0),
-                child: _buildTableCalendar(),
-              ),
-              Column(
-                children: [
-                  FutureBuilder(
-                    future: databaseHelper.getEntryList(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<Entry>> snapshot) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.none:
-                          return Text('Press button to start.');
-                        case ConnectionState.active:
-                          return Text("Active...");
-                        case ConnectionState.waiting:
-                          return Text("Loading...");
-                        case ConnectionState.done:
-                          if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
-                          }
-                          return Column(
-                              children: getEntriesForDay(snapshot.data));
-                      }
-                      return Text("what"); // unreachable
-                    },
-                  ),
-                ],
-              ),
-
-              /*
-                FlatButton(
-                  color: Colors.transparent,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AnswerPage(time:selectedDate.millisecondsSinceEpoch)),
-                    );
-                    _onDaySelected(selectedDate, null);
-                  },
-                  textColor: Colors.white,
-                  padding: const EdgeInsets.all(0.0),
+    print("build: " + hasEntries.toString());
+    return FutureBuilder(
+      future: databaseHelper.getEntryList(),
+      builder: (BuildContext context, AsyncSnapshot<List<Entry>> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+            return Text('Press button to start.');
+          case ConnectionState.active:
+            return Text("Active...");
+          case ConnectionState.waiting:
+            return new Scaffold(
+              body: SingleChildScrollView(
                   child: Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: <Color>[
-                          Color(0xFF0D47A1),
-                          Color(0xFF1976D2),
-                          Color(0xFF42A5F5),
-                        ],
-                      ),
-                    ),
-                    padding: const EdgeInsets.all(30.0),
-                    child: const Icon(Icons.add
-                    ),
-                  ),
+                height: 900,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  gradient: getGradient(currentmood),
                 ),
-                */
-              //
-            ],
-          ),
-        )),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButton: hasEntries ? FloatingActionButton(
-          backgroundColor: Colors.lightBlue,
-          foregroundColor: Colors.grey[200],
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      AnswerPage(time: selectedDate.millisecondsSinceEpoch)),
-            ).then((value) {
-              _onDaySelected(selectedDate, null);
-            });
-          },
-          child: Icon(Icons.add),
-          elevation: 2.0,
-        ): Container(),
+                child: ListView(
+                  children: <Widget>[
+                    Container(
+                      height: 30,
+                    ),
+                    //custom icon
+                    //m icon without header
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10.0), //16
+                      child: _buildTableCalendar(),
+                    ),
+                  ],
+                ),
+              )),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.endFloat,
+              floatingActionButton: hasEntries == false
+                  ? FloatingActionButton(
+                      backgroundColor: Colors.lightBlue,
+                      foregroundColor: Colors.grey[200],
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AnswerPage(
+                                  time: selectedDate.millisecondsSinceEpoch)),
+                        ).then((value) {
+                          _onDaySelected(selectedDate, null);
+                        });
+                      },
+                      child: Icon(Icons.add),
+                      elevation: 2.0,
+                    )
+                  : Container(),
+            );
+          case ConnectionState.done:
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            }
+            return new Scaffold(
+              body: SingleChildScrollView(
+                  child: Container(
+                height: 900,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  gradient: getGradient(currentmood),
+                ),
+                child: ListView(
+                  children: <Widget>[
+                    Container(
+                      height: 30,
+                    ),
+                    //custom icon
+                    //m icon without header
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10.0), //16
+                      child: _buildTableCalendar(),
+                    ),
+                    Column(
+                      children: getEntriesForDay(snapshot.data),
+                    )
+                  ],
+                ),
+              )),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.endFloat,
+              floatingActionButton: hasEntries == false
+                  ? FloatingActionButton(
+                      backgroundColor: Colors.lightBlue,
+                      foregroundColor: Colors.grey[200],
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AnswerPage(
+                                  time: selectedDate.millisecondsSinceEpoch)),
+                        ).then((value) {
+                          _onDaySelected(selectedDate, null);
+                        });
+                      },
+                      child: Icon(Icons.add),
+                      elevation: 2.0,
+                    )
+                  : Container(),
+            );
+        }
+        return Text("what"); // unreachable
+      },
     );
   }
 
   Widget _buildTableCalendar() {
     return TableCalendar(
       calendarController: _calendarController,
-      daysOfWeekStyle: DaysOfWeekStyle(
-          weekendStyle: TextStyle(color: Colors.blueAccent[400])),
+      daysOfWeekStyle:
+          DaysOfWeekStyle(weekendStyle: TextStyle(color: Colors.black38)),
       startingDayOfWeek: StartingDayOfWeek.monday,
       calendarStyle: CalendarStyle(
           selectedColor: getDayGradient(),
           todayColor: Colors.blue[200],
-          markersColor: Colors.blueAccent[700],
           outsideDaysVisible: false,
-          weekendStyle: TextStyle(color: Colors.blueAccent[400])),
+          weekendStyle: TextStyle(color: Colors.black)),
       headerStyle: HeaderStyle(
         formatButtonTextStyle:
             TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
         formatButtonDecoration: BoxDecoration(
-          color: Colors.blueAccent[400],
+          color: Colors.indigo,
           borderRadius: BorderRadius.circular(16.0),
         ),
       ),
@@ -222,38 +236,37 @@ class _CalendarPageState extends State<CalendarPage> {
         colors: [new Color(0xff04a5c1), Colors.white]);
   }
 
-//  void openEntry(Entry e) {
-//    setState(() {
-//      currentmood = (e.mood * 255 / 12).floor();
-//      entries = new List<Widget>();
-//      entries.add(new Container(
-//        height: 400,
-//        child: ListView(
-//          children: <Widget>[
-//            Row(
-//              children: <Widget>[
-//                getIconWithValue(Icons.airline_seat_flat, e.sleep),
-//                getIconWithValue(Icons.child_care, e.mood),
-//                getIconWithValue(Icons.invert_colors, e.water),
-//              ],
-//              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//            ),
-//            new RaisedButton(
-//              child: Text('${Constants.questionOptions[e.activity - 1]}'),
-//              color: Color.fromRGBO(255, 255, 255, .5),
-//              textColor: Colors.white,
-//              //shape: RoundedRectangleBorder(
-//              //borderRadius: BorderRadius.circular(40.0),
-//              //),
-//            ),
-//            getTextWidget(Constants.questionsOfTheDay[e.question_id]),
-//            getTextWidget(e.answer),
-//            getTextWidget(e.note),
-//          ],
-//        ),
-//      ));
-//    });
-//  }
+  Widget openEntry(Entry e) {
+    currentmood = (e.mood * 255 / 12).floor();
+    print("MOOD" + e.mood.toString());
+    return new Container(
+      height: 400,
+      child: ListView(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              getIconWithValue(Icons.airline_seat_flat, e.sleep),
+              getIconWithValue(Icons.child_care, e.mood),
+              getIconWithValue(Icons.invert_colors, e.water),
+            ],
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          ),
+          new RaisedButton(
+            child: Text('${Constants.questionOptions[e.activity]}'),
+            color: getColorFromMood(e.mood),
+            textColor: Colors.white,
+            onPressed: () {print("pressed");},
+            //shape: RoundedRectangleBorder(
+            //borderRadius: BorderRadius.circular(40.0),
+            //),
+          ),
+          getTextWidget(Constants.questionsOfTheDay[e.question_id]),
+          getTextWidget(e.answer),
+          getTextWidget(e.note),
+        ],
+      ),
+    );
+  }
 
   void getEntriesFromFB() {
     _firestore
@@ -269,7 +282,7 @@ class _CalendarPageState extends State<CalendarPage> {
     });
   }
 
-  void _onDaySelected(DateTime day, List events) async {
+  void _onDaySelected(DateTime day, List events) {
     setState(() {
       selectedDate = day;
     });
@@ -280,26 +293,18 @@ class _CalendarPageState extends State<CalendarPage> {
     if (!widget.preview) {
       List<Widget> genEntries = new List<Widget>();
       hasEntries = givenEntries.length > 0;
+      print("getEntries: " + hasEntries.toString());
       for (Entry e in givenEntries) {
         DateTime today = DateTime.fromMillisecondsSinceEpoch(e.datetime);
         if (selectedDate.year == today.year &&
             selectedDate.month == today.month &&
             selectedDate.day == today.day) {
-          genEntries.add(new RaisedButton(
-              child: Text('${Constants.questionOptions[e.activity]}'),
-              color: getColorFromMood(e.mood),
-              textColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40.0),
-              ),
-              onPressed: () {
-                print("pressed");
-                //openEntry(e)},
-              }));
+          genEntries.add(openEntry(e));
         } else {
           currentmood = 150;
         }
       }
+      hasEntries = genEntries.length > 0;
       return genEntries;
     } else {
       print("other USER");

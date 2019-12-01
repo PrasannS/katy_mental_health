@@ -102,7 +102,7 @@ class _PrivateChatState extends State<PrivateChat> {
               ),
             ),
             Container(
-              child: Row(
+            child: Row(
                 children: <Widget>[
                   Expanded(
                     child: TextField(

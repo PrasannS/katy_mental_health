@@ -42,14 +42,13 @@ class _AnswerPageState extends State<AnswerPage> {
   void initState() {
     super.initState();
     Random r = new Random();
-    qODID = r.nextInt(Constants.questionsOfTheDay.length - 1);
+    qODID = r.nextInt(Constants.questionsOfTheDay.length-1);
     print(widget.time);
   }
 
   void _updateLabels(int init, int end, int laps) {
     setState(() {
       inBedTime = init;
-      print(laps.toString());
       ends[currentQuestion] = end;
       days = laps;
       levels[currentQuestion] = laps;
@@ -74,9 +73,13 @@ class _AnswerPageState extends State<AnswerPage> {
     });
   }
 
-  void prevQuestion() {
-    setState(() {
-      if (currentQuestion != 0) currentQuestion--;
+  void prevQuestion(){
+      setState(() {
+      if(currentQuestion!=0) {
+        currentQuestion--;
+      } else {
+        Navigator.pop(context);
+      }
     });
   }
 
@@ -96,7 +99,7 @@ class _AnswerPageState extends State<AnswerPage> {
     e.question_id = qODID;
     e.mood = ((ends[1] * 12) / 255).floor();
     e.sleep = above[0] ? 13 : ((ends[0] * 12) / 255).round();
-    e.water = above[2] ? 13 : ((ends[currentQuestion] * 12) / 255).round();
+    e.water = above[2] ? 13 : ((ends[2] * 12) / 255).round();
     e.note = noteController.text;
     if (widget.time == 0)
       e.datetime = new DateTime.now().millisecondsSinceEpoch;
@@ -129,6 +132,9 @@ class _AnswerPageState extends State<AnswerPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    String textt = (currentQuestion == 6) ? "SUBMIT" : "NEXT";
+
     List<Widget> questionWidgets = [
       new SingleCircularSlider(
         255,
@@ -138,7 +144,7 @@ class _AnswerPageState extends State<AnswerPage> {
         primarySectors: 0,
         secondarySectors: 0,
         baseColor: Color.fromRGBO(255, 255, 255, 0.1),
-        selectionColor: baseColor,
+        selectionColor: Color.fromRGBO(255, 255, 255, 0.3),
         handlerColor: Colors.white,
         sliderStrokeWidth: 50,
         handlerOutterRadius: 12.0,
@@ -312,37 +318,37 @@ class _AnswerPageState extends State<AnswerPage> {
                       style: TextStyle(color: Colors.white),
                     ),
                     questionWidgets[currentQuestion],
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          FlatButton(
-                            child: Text('BACK'),
-                            color: baseColor,
-                            textColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50.0),
-                            ),
-                            onPressed: prevQuestion,
-                          ),
-                          FlatButton(
-                            child: Text('NEXT'),
-                            color: baseColor,
-                            textColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50.0),
-                            ),
-                            onPressed: () => {
-                              setState(() {
-                                if (currentQuestion != 6) {
-                                  currentQuestion++;
-                                } else {
-                                  submit();
-                                  Navigator.pop(context);
-                                }
-                              })
-                            },
-                          ),
-                        ]),
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                      FlatButton(
+                        child: Text('BACK'),
+                        color: baseColor,
+                        textColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        onPressed: prevQuestion ,
+                      ),
+                      FlatButton(
+                        child: Text(textt),
+                        color: baseColor,
+                        textColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        onPressed:  ()=>{
+                          setState(() {
+                            if(currentQuestion!=6) {
+                              currentQuestion++;
+                            }
+                            else{
+                              Text('SUBMIT');
+                              submit();
+                              Navigator.pop(context);
+                            }
+                          })
+                        },
+                      ),
+                    ]),
                   ],
                 ))));
   }
