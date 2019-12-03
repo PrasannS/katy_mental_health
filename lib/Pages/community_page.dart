@@ -73,11 +73,15 @@ class _CommunityPageState extends State<CommunityPage> {
 
   @override
   Widget build(BuildContext context) {
-    chats.insert(
-        0,
-        SizedBox(
-          height: 20,
-        ));
+    if (chats[0].toStringShort() != 'Sized Box')
+      {
+        chats.insert(
+            0,
+            SizedBox(
+              height: 20,
+            ));
+      }
+
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
