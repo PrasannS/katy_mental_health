@@ -1,3 +1,4 @@
+import 'package:Speculus/Pages/emergency_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Speculus/Pages/breathing_page.dart';
@@ -47,6 +48,17 @@ class _MorePageState extends State<MorePage> {
               ),
               child: ListView(
                 children: <Widget>[
+                  ListTile(
+                    leading: Icon(Icons.compare_arrows),
+                    title: Text("Emergency"),
+                    trailing: Icon(Icons.keyboard_arrow_right),
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => EmergencyPage()),
+                      );
+                    },
+                  ),
                   ListTile(
                       leading: Icon(Icons.book),
                       title: Text("Resources", style: TextStyle(fontFamily: 'Roboto')),

@@ -314,18 +314,7 @@ class _CalendarPageState extends State<CalendarPage> {
         if (selectedDate.year == today.year &&
             selectedDate.month == today.month &&
             selectedDate.day == today.day) {
-          genEntries.add(new RaisedButton(
-            child: Text('${Constants.questionOptions[e.activity]}'),
-            color: getColorFromMood(e.mood),
-            textColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(40.0),
-            ),
-            onPressed: () {
-              print("pressed");
-              //openEntry(e)
-            },
-          ));
+          genEntries.add(openEntry(e));
         } else {
           currentmood = 150;
         }

@@ -71,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         backgroundColor: Colors.lightBlue,
         foregroundColor: Colors.grey[200],
         onPressed: () {
-          Navigator.push(
+           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => AnswerPage(time: DateTime.now().millisecondsSinceEpoch)),
           );
@@ -89,7 +89,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           setState(() {
             _currentIndex = currentIndex;
           });
-
           _tabController.animateTo(_currentIndex);
         },
         items: [
