@@ -80,7 +80,6 @@ class _CalendarPageState extends State<CalendarPage> {
             return new Scaffold(
               body: SingleChildScrollView(
                   child: Container(
-                height: 900,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   gradient: getGradient(currentmood),
@@ -127,7 +126,6 @@ class _CalendarPageState extends State<CalendarPage> {
             return new Scaffold(
               body: SingleChildScrollView(
                   child: Container(
-                height: 900,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   gradient: getGradient(currentmood),
