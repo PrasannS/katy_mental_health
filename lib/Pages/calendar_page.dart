@@ -197,8 +197,10 @@ class _CalendarPageState extends State<CalendarPage> {
           if (events.isNotEmpty) {
             children.add(
               Positioned(
-                right: 1,
-                bottom: 1,
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0,
                 child: _buildEventsMarker(date, events),
               ),
             );
@@ -247,14 +249,14 @@ class _CalendarPageState extends State<CalendarPage> {
 
   Widget _buildEventsMarker(DateTime date, List events) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(0, 0, 4.5, 4.5),
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
       child: Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: getColorFromMood(events[0]).withOpacity(0.5),
       ),
-      width: 69.5,
-      height: 69.5,
+      width: 250,
+      height: 250,
     ),);
   }
 
