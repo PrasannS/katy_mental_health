@@ -276,7 +276,8 @@ class _CalendarPageState extends State<CalendarPage> {
         begin: Alignment.topRight, end: Alignment.bottomLeft,
 
         //colors: [Color.fromRGBO(255-a, 0, 50,.5), Color.fromRGBO(0,a, 50,0.5)]);
-        colors: [new Color(0xff04a5c1), Colors.white]);
+        //colors: [new Color(0xff04a5c1), Colors.white]);
+        colors: [new Color(0xff7F7FD5), new Color(0xff91EAE4)]);
   }
 
   Widget openEntry(Entry e) {

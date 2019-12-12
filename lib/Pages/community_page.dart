@@ -94,7 +94,8 @@ class _CommunityPageState extends State<CommunityPage> {
           gradient: new LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
-              colors: [new Color(0xff04a5c1), Colors.grey[300]]),
+              //colors: [new Color(0xff04a5c1), Colors.grey[300]]),
+              colors: [new Color(0xff7F7FD5), new Color(0xff91EAE4)]),
         ),
         child: Center(
           // Center is a layout widget. It takes a single child and positions it
