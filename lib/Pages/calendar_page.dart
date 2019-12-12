@@ -281,7 +281,7 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   Widget openEntry(Entry e) {
-    currentmood = (e.mood * 255 / 12).floor();
+    currentmood = (e.mood * 255 / 12).round();
     print("MOOD" + e.mood.toString());
     return new Container(
       height: 400,

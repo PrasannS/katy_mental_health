@@ -108,7 +108,7 @@ class _AnswerPageState extends State<AnswerPage> {
     e.answer = QDController.text;
     e.activity = selectedOpt;
     e.question_id = qODID;
-    e.mood = ((ends[0] * 12) / 255).floor();
+    e.mood = ((ends[0] * 12) / 255).round();
     e.sleep = above[1] ? 13 : ((ends[1] * 12) / 255).round();
     e.water = above[2] ? 13 : ((ends[2] * 12) / 255).round();
     e.note = noteController.text;
