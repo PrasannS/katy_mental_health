@@ -43,7 +43,6 @@ class _AnswerPageState extends State<AnswerPage> {
     super.initState();
     Random r = new Random();
     qODID = r.nextInt(Constants.questionsOfTheDay.length-1);
-    print(widget.time);
   }
 
   void _updateLabels(int init, int end, int laps) {

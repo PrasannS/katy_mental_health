@@ -1,4 +1,5 @@
 import 'package:Speculus/Pages/emergency_page.dart';
+import 'package:Speculus/Pages/entries_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Speculus/Pages/breathing_page.dart';
@@ -56,6 +57,17 @@ class _MorePageState extends State<MorePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => EmergencyPage()),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.list),
+                    title: Text("See All Entries"),
+                    trailing: Icon(Icons.keyboard_arrow_right),
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => EntriesPage()),
                       );
                     },
                   ),

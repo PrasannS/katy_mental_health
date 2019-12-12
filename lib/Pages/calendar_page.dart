@@ -68,6 +68,7 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     print("build: " + hasEntries.toString());
+    print("DateTime Calendar: " + selectedDate.day.toString() + " "+selectedDate.month.toString() + " " + selectedDate.year.toString());
     return FutureBuilder(
       future: databaseHelper.getEntryList(),
       builder: (BuildContext context, AsyncSnapshot<List<Entry>> snapshot) {
@@ -81,6 +82,7 @@ class _CalendarPageState extends State<CalendarPage> {
               body: SingleChildScrollView(
                   child: Container(
                 width: double.infinity,
+                height: MediaQuery.of(context).size.height,
                 decoration: BoxDecoration(
                   gradient: getGradient(currentmood),
                 ),
@@ -93,7 +95,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     //m icon without header
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 10.0), //16
-                      child: _buildTableCalendar(),
+                      child: _buildTableCalendar(snapshot.data),
                     ),
                   ],
                 ),
@@ -127,6 +129,7 @@ class _CalendarPageState extends State<CalendarPage> {
               body: SingleChildScrollView(
                   child: Container(
                 width: double.infinity,
+                height: MediaQuery.of(context).size.height,
                 decoration: BoxDecoration(
                   gradient: getGradient(currentmood),
                 ),
@@ -139,7 +142,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     //m icon without header
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 10.0), //16
-                      child: _buildTableCalendar(),
+                      child: _buildTableCalendar(snapshot.data),
                     ),
                     Column(
                       children: getEntriesForDay(snapshot.data),
@@ -174,16 +177,45 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
-  Widget _buildTableCalendar() {
+  Widget _buildTableCalendar(List<Entry> data) {
+    Map<DateTime, List> events = new Map<DateTime, List>();
+    if (data != null)
+      {
+        for (int i = 0; i < data.length; i++)
+          {
+            print("Date " + i.toString() + ": " + DateTime.fromMillisecondsSinceEpoch(data[i].datetime).toString());
+            events.putIfAbsent(new DateTime.fromMillisecondsSinceEpoch(data[i].datetime), () => new List<int>());
+            events[new DateTime.fromMillisecondsSinceEpoch(data[i].datetime)].add(data[i].mood);
+          }
+      }
+    print("Date " + ": " + selectedDate.toString());
+    print("CONTAINS: " + events.containsKey(selectedDate).toString());
     return TableCalendar(
+      builders: CalendarBuilders(
+        markersBuilder: (context, date, events, holidays) {
+          final children = <Widget>[];
+          if (events.isNotEmpty) {
+            children.add(
+              Positioned(
+                right: 1,
+                bottom: 1,
+                child: _buildEventsMarker(date, events),
+              ),
+            );
+          }
+          return children;
+        }
+      ),
+      events: events,
       calendarController: _calendarController,
       daysOfWeekStyle:
           DaysOfWeekStyle(weekendStyle: TextStyle(color: Colors.black38)),
       startingDayOfWeek: StartingDayOfWeek.monday,
       calendarStyle: CalendarStyle(
-          selectedColor: getDayGradient(),
+          selectedColor: Colors.black.withOpacity(0.3), //getDayGradient(),
           todayColor: Colors.blue[200],
           outsideDaysVisible: false,
+          markersColor: Colors.yellow,
           weekendStyle: TextStyle(color: Colors.black)),
       headerStyle: HeaderStyle(
         formatButtonTextStyle:
@@ -211,6 +243,19 @@ class _CalendarPageState extends State<CalendarPage> {
       height: 50,
       width: 120,
     );
+  }
+
+  Widget _buildEventsMarker(DateTime date, List events) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(0, 0, 4.5, 4.5),
+      child: Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: getColorFromMood(events[0]).withOpacity(0.5),
+      ),
+      width: 69.5,
+      height: 69.5,
+    ),);
   }
 
   Widget getTextWidget(String s) {
