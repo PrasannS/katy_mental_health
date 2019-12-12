@@ -1,6 +1,6 @@
 class Constants{
 
-  static List<String> questions = ["How Much Sleep did you get?", "What is your mood?","How much water have you drank today?",
+  static List<String> questions = ["What is your mood?", "How much sleep did you get?", "How much water have you drank today?",
     "Question of the Day:","Which category impacted you most today?", "Any Notes for Today?", "Submit?"];
 
 

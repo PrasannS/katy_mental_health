@@ -1,5 +1,6 @@
 import 'package:Speculus/Pages/emergency_page.dart';
 import 'package:Speculus/Pages/entries_page.dart';
+import 'package:Speculus/Pages/minigames_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Speculus/Pages/breathing_page.dart';
@@ -102,6 +103,17 @@ class _MorePageState extends State<MorePage> {
                       },
                     ),
 
+                  ListTile(
+                    leading: Icon(Icons.gamepad),
+                    title: Text("Play Game"),
+                    trailing: Icon(Icons.keyboard_arrow_right),
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MinigamesPage()),
+                      );
+                    },
+                  ),
 
                   ListTile(
                       leading: Icon(Icons.wb_sunny),

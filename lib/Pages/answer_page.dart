@@ -7,6 +7,7 @@ import 'package:flutter_circular_slider/flutter_circular_slider.dart';
 import 'package:Speculus/Models/entry.dart';
 import 'package:Speculus/Persistence/database.dart';
 import 'package:Speculus/Utils/constants.dart';
+import 'package:flutter_xlider/flutter_xlider.dart';
 
 class AnswerPage extends StatefulWidget {
   @override
@@ -35,14 +36,24 @@ class _AnswerPageState extends State<AnswerPage> {
 
   List<int> ends = [20, 20, 20, 254, 254, 254, 254, 254, 254, 254];
   List<int> levels = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-  List<bool> above = [false, false, false, false, false, false, false, false, false];
+  List<bool> above = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
   double moodEnd = 20.0;
 
   @override
   void initState() {
     super.initState();
     Random r = new Random();
-    qODID = r.nextInt(Constants.questionsOfTheDay.length-1);
+    qODID = r.nextInt(Constants.questionsOfTheDay.length - 1);
   }
 
   void _updateLabels(int init, int end, int laps) {
@@ -72,9 +83,9 @@ class _AnswerPageState extends State<AnswerPage> {
     });
   }
 
-  void prevQuestion(){
-      setState(() {
-      if(currentQuestion!=0) {
+  void prevQuestion() {
+    setState(() {
+      if (currentQuestion != 0) {
         currentQuestion--;
       } else {
         Navigator.pop(context);
@@ -96,8 +107,8 @@ class _AnswerPageState extends State<AnswerPage> {
     e.answer = QDController.text;
     e.activity = selectedOpt;
     e.question_id = qODID;
-    e.mood = ((ends[1] * 12) / 255).floor();
-    e.sleep = above[0] ? 13 : ((ends[0] * 12) / 255).round();
+    e.mood = ((ends[0] * 12) / 255).floor();
+    e.sleep = above[1] ? 13 : ((ends[1] * 12) / 255).round();
     e.water = above[2] ? 13 : ((ends[2] * 12) / 255).round();
     e.note = noteController.text;
     if (widget.time == 0)
@@ -131,7 +142,6 @@ class _AnswerPageState extends State<AnswerPage> {
 
   @override
   Widget build(BuildContext context) {
-
     String textt = (currentQuestion == 6) ? "SUBMIT" : "NEXT";
 
     List<Widget> questionWidgets = [
@@ -155,80 +165,38 @@ class _AnswerPageState extends State<AnswerPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                FlatButton(
-                  onPressed: () {
-                    setState(() {
-                      above[currentQuestion] = true;
-                      ends[currentQuestion] = 255;
-                      currentQuestion++;
-                     });
-                  },
-                  child: Text("12+", style: TextStyle(color: Colors.white),),
-                  color: baseColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                ),
                 SizedBox(height: 20),
                 Text(
-                    '${((ends[currentQuestion] * 12) / 255).round() + levels[currentQuestion] * 12} Hours',
+                    '${Constants.moods[((ends[currentQuestion] * 2.99) / 255).floor()]}',
                     style: TextStyle(fontSize: 24.0, color: Colors.white)),
               ],
             )),
         shouldCountLaps: false,
       ),
-//      new SingleCircularSlider(
-//        255,
-//        ends[currentQuestion],
-//        height: 380.0,
-//        width: 380.0,
-//        primarySectors: 0,
-//        secondarySectors: 0,
-//        baseColor: Color.fromRGBO(255, 255, 255, 0.1),
-//        selectionColor: Color.fromRGBO(255, 255, 255, 0.3),
-//        handlerColor: Colors.white,
-//        sliderStrokeWidth: 50,
-//        handlerOutterRadius: 12.0,
-//        onSelectionChange: _updateLabels,
-//        showRoundedCapInSelection: false,
-//        showHandlerOutter: true,
-//        child: Padding(
-//            padding: const EdgeInsets.all(42.0),
-//            child: Column(
-//              mainAxisAlignment: MainAxisAlignment.center,
-//              children: [
-//                SizedBox(height: 20),
-//                Text(
-//                    '${Constants.moods[((ends[currentQuestion] * 2.99) / 255).floor()]}',
-//                    style: TextStyle(fontSize: 24.0, color: Colors.white)),
-//              ],
-//            )),
-//        shouldCountLaps: false,
-//      ),
       new Column(
         children: <Widget>[
           Text(
-              '${Constants.moods[((ends[currentQuestion] * 2.99) / 255).floor()]}',
+              '${((ends[currentQuestion] * 12) / 255).round()} hours',
               style: TextStyle(fontSize: 24.0, color: Colors.white)),
-          SliderTheme(
-              data: SliderThemeData(
-                thumbColor: Colors.blue,
-              ),
-              child: Slider(
-                label:
-                    '${Constants.moods[((ends[currentQuestion] * 2.99) / 255).floor()]}',
-                min: 0,
-                max: 255,
-                value: moodEnd,
-                onChanged: (val) {
-                  setState(() {
-                    ends[1] = moodEnd.floor();
-                    moodEnd = val;
-                  });
-                },
-              )),
+          FlutterSlider(
+            values: [20],
+            max: 255,
+            min: 0,
+            handlerAnimation: FlutterSliderHandlerAnimation(
+                curve: Curves.elasticOut,
+                reverseCurve: Curves.bounceIn,
+                duration: Duration(milliseconds: 500),
+                scale: 1.5),
+            onDragging: (handlerIndex, lowerValue, upperValue) {
+              ends[currentQuestion] = lowerValue.floor();
+              setState(() {});
+            },
+            tooltip: FlutterSliderTooltip(disabled: true),
+          )
         ],
       ),
+
+
       new SingleCircularSlider(
         255,
         ends[currentQuestion],
@@ -257,7 +225,10 @@ class _AnswerPageState extends State<AnswerPage> {
                       currentQuestion++;
                     });
                   },
-                  child: Text("12+", style: TextStyle(color: Colors.white),),
+                  child: Text(
+                    "12+",
+                    style: TextStyle(color: Colors.white),
+                  ),
                   color: baseColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
@@ -317,44 +288,44 @@ class _AnswerPageState extends State<AnswerPage> {
                       style: TextStyle(color: Colors.white),
                     ),
                     questionWidgets[currentQuestion],
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                      FlatButton(
-                        child: Text('BACK'),
-                        color: baseColor,
-                        textColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50.0),
-                        ),
-                        onPressed: prevQuestion ,
-                      ),
-                      FlatButton(
-                        child: Text(textt),
-                        color: baseColor,
-                        textColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50.0),
-                        ),
-                        onPressed:  ()=>{
-                          setState(() {
-                            if(currentQuestion!=6) {
-                              currentQuestion++;
-                            }
-                            else{
-                              Text('SUBMIT');
-                              submit();
-                              Navigator.pop(context);
-                            }
-                          })
-                        },
-                      ),
-                    ]),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          FlatButton(
+                            child: Text('BACK'),
+                            color: baseColor,
+                            textColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50.0),
+                            ),
+                            onPressed: prevQuestion,
+                          ),
+                          FlatButton(
+                            child: Text(textt),
+                            color: baseColor,
+                            textColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50.0),
+                            ),
+                            onPressed: () => {
+                              setState(() {
+                                if (currentQuestion != 6) {
+                                  currentQuestion++;
+                                } else {
+                                  Text('SUBMIT');
+                                  submit();
+                                  Navigator.pop(context);
+                                }
+                              })
+                            },
+                          ),
+                        ]),
                   ],
                 ))));
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 }

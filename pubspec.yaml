@@ -1,7 +1,6 @@
 name: Speculus
 description: An app to record your mood and your activities.
 
-
 version: 1.0.1+1
 
 environment:
@@ -14,6 +13,7 @@ dependencies:
   firebase_messaging: ^5.1.6
 
   fl_chart: ^0.3.4
+  flutter_xlider: ^2.6.1
   table_calendar: ^2.1.0
   flutter_circular_slider : ^2.5.0
   sqflite: ^1.1.7+1
@@ -35,7 +35,7 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "icon/logo1.png"
+  image_path: "icon/resizedlogo.png"
 
 
 flutter:

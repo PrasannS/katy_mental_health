@@ -22,7 +22,10 @@ class EntriesPage extends StatelessWidget {
               return Text('Error, please refresh the page');
             }
             return new Scaffold(
-              body: ListView.builder(
+              appBar: AppBar(
+                title: new Text("All Entries"),
+              ),
+              body: snapshot.data.length != 0 ? ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, i) {
                   DateTime date = DateTime.fromMillisecondsSinceEpoch(
@@ -38,7 +41,8 @@ class EntriesPage extends StatelessWidget {
                     ],
                   );
                 },
-              ),
+              ) :
+               Center(child: Text("You have no entries!\nAdd them from the calendar page", style: TextStyle(fontSize: 20, color: Colors.grey))),
             );
         }
         return Text('Error, please refresh the page');
