@@ -44,7 +44,8 @@ class _MorePageState extends State<MorePage> {
                 gradient: LinearGradient(
                   begin: Alignment.topRight,
                   end: Alignment.bottomLeft,
-                  colors: [new Color(0xff04a5c1), Colors.grey[200]],
+                  //colors: [new Color(0xff04a5c1), Colors.grey[200]],
+                    colors: [new Color(0xff7F7FD5), new Color(0xff91EAE4)],
                 ),
               ),
               child: ListView(
