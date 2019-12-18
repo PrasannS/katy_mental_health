@@ -1,5 +1,6 @@
 import 'package:Speculus/Pages/emergency_page.dart';
 import 'package:Speculus/Pages/entries_page.dart';
+import 'package:Speculus/Pages/suggestions_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Speculus/Pages/breathing_page.dart';
@@ -92,7 +93,7 @@ class _MorePageState extends State<MorePage> {
                       },
                     ),
 */
-
+/*
                   ListTile(
                       leading: Icon(Icons.lightbulb_outline),
                       title: Text("Suggestions"),
@@ -102,6 +103,19 @@ class _MorePageState extends State<MorePage> {
                         _launchURLSUGGESTIONS();
                       },
                     ),
+*/
+
+                  ListTile(
+                    leading: Icon(Icons.lightbulb_outline),
+                    title: Text("Suggestions"),
+                    trailing: Icon(Icons.keyboard_arrow_right),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SuggestionsPage()),
+                      );
+                    },
+                  ),
 
 
                   ListTile(

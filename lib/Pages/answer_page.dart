@@ -38,7 +38,7 @@ class _AnswerPageState extends State<AnswerPage> {
   List<bool> above = [false, false, false, false, false, false, false, false, false];
   double moodEnd = 20.0;
 
-  List<String> colorList = ["5D26C1"
+  List<String> colorList = ["#5D26C1"
 ,"#5C27C0"
 ,"#5C28BF"
 ,"#5C29BF"
