@@ -67,8 +67,6 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("build: " + hasEntries.toString());
-    print("DateTime Calendar: " + selectedDate.day.toString() + " "+selectedDate.month.toString() + " " + selectedDate.year.toString());
     return FutureBuilder(
       future: databaseHelper.getEntryList(),
       builder: (BuildContext context, AsyncSnapshot<List<Entry>> snapshot) {
@@ -183,13 +181,10 @@ class _CalendarPageState extends State<CalendarPage> {
       {
         for (int i = 0; i < data.length; i++)
           {
-            print("Date " + i.toString() + ": " + DateTime.fromMillisecondsSinceEpoch(data[i].datetime).toString());
             events.putIfAbsent(new DateTime.fromMillisecondsSinceEpoch(data[i].datetime), () => new List<int>());
             events[new DateTime.fromMillisecondsSinceEpoch(data[i].datetime)].add(data[i].mood);
           }
       }
-    print("Date " + ": " + selectedDate.toString());
-    print("CONTAINS: " + events.containsKey(selectedDate).toString());
     return TableCalendar(
       builders: CalendarBuilders(
         markersBuilder: (context, date, events, holidays) {
@@ -284,7 +279,6 @@ class _CalendarPageState extends State<CalendarPage> {
 
   Widget openEntry(Entry e) {
     currentmood = (e.mood * 255 / 12).round();
-    print("MOOD" + e.mood.toString());
     return new Container(
       height: 400,
       child: ListView(
@@ -332,14 +326,12 @@ class _CalendarPageState extends State<CalendarPage> {
     setState(() {
       selectedDate = day;
     });
-    print("Finish day selected");
   }
 
   List<Widget> getEntriesForDay(List<Entry> givenEntries) {
     if (!widget.preview) {
       List<Widget> genEntries = new List<Widget>();
       hasEntries = givenEntries.length > 0;
-      print("getEntries: " + hasEntries.toString());
       for (Entry e in givenEntries) {
         DateTime today = DateTime.fromMillisecondsSinceEpoch(e.datetime);
         if (selectedDate.year == today.year &&

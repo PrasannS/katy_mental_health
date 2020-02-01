@@ -33,6 +33,7 @@ class _BreathingPageState extends State<BreathingPage> {
     // than having to individually change instances of widgets.
     return MaterialApp(
       home: Scaffold(
+        backgroundColor: Colors.yellow[25],
         body: Column(
           children: [
             Expanded(
@@ -89,6 +90,18 @@ class _BreathingAnimationState extends State<breathingButton>
                   timerString,
                   style: TextStyle(
                       fontSize: 112.0,
+                      color: controller.isAnimating
+                          ? Colors.indigo
+                          : Colors.transparent),
+                );
+              }),
+          AnimatedBuilder(
+              animation: controller,
+              builder: (BuildContext context, Widget child) {
+                return Text(
+                  controller.status.toString() == 'AnimationStatus.forward'? 'Breathe In' : 'Breathe Out',
+                  style: TextStyle(
+                      fontSize: 30.0,
                       color: controller.isAnimating
                           ? Colors.indigo
                           : Colors.transparent),
