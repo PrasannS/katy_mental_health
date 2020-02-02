@@ -1,3 +1,4 @@
+import 'package:Speculus/Pages/ads_page.dart';
 import 'package:Speculus/Pages/emergency_page.dart';
 import 'package:Speculus/Pages/entries_page.dart';
 import 'package:Speculus/Pages/minigames_page.dart';
@@ -6,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:Speculus/Pages/breathing_page.dart';
 import 'package:link/link.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_admob/firebase_admob.dart';
+
+const String testDevice = 'Mobile_id';
 
 class MorePage extends StatefulWidget {
   MorePage({Key key, this.title}) : super(key: key);
@@ -17,6 +21,44 @@ class MorePage extends StatefulWidget {
 }
 
 class _MorePageState extends State<MorePage> {
+
+  /*
+  //ad stuff
+  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+    testDevices: testDevice != null ? <String>[testDevice] : null,
+    nonPersonalizedAds: true,
+    keywords: <String>['Game', 'Mario'],
+  );
+
+  BannerAd _bannerAd;
+
+  BannerAd createBannerAd(){
+    return BannerAd(
+      adUnitId: BannerAd.testAdUnitId,
+          size: AdSize.banner,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event){
+        print("BannerAd $event");
+      }
+    );
+  }
+
+  @override
+  void initState(){
+    FirebaseAdMob.instance.initialize(
+      appId: BannerAd.testAdUnitId
+    );
+
+    _bannerAd = createBannerAd()..load()..show();
+    super.initState();
+  }
+
+  @override
+  void dispose(){
+    _bannerAd.dispose();
+    super.dispose();
+  }
+*/
 
   _launchURLRESOURCES() async {
     const url = 'https://socialworklicensemap.com/mental-health-resources-list/';
@@ -128,10 +170,20 @@ class _MorePageState extends State<MorePage> {
                       },
                     ),
 
-
                   ListTile(
-                    //spacer
+                    leading: Icon(Icons.tv),
+                    title: Text("Watch Ads"),
+                    trailing: Icon(Icons.keyboard_arrow_right),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AdPage()),
+                      );
+                    },
+
                   ),
+
+
 
                   /*
                   ListTile(
