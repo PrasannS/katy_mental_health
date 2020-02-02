@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:Speculus/Pages/breathing_page.dart';
 import 'package:link/link.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_admob/firebase_admob.dart';
+
+const String testDevice = 'Mobile_id';
 
 class MorePage extends StatefulWidget {
   MorePage({Key key, this.title}) : super(key: key);
@@ -17,6 +20,53 @@ class MorePage extends StatefulWidget {
 }
 
 class _MorePageState extends State<MorePage> {
+  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+    testDevices: testDevice != null ? <String>[testDevice] : null,
+    nonPersonalizedAds: true,
+    keywords: <String>['Game', 'Mario'],
+  );
+
+  BannerAd _bannerAd;
+  InterstitialAd _interstitialAd;
+
+  BannerAd createBannerAd() {
+    return BannerAd(
+        adUnitId: BannerAd.testAdUnitId,
+        //Change BannerAd adUnitId with Admob ID
+        size: AdSize.banner,
+        targetingInfo: targetingInfo,
+        listener: (MobileAdEvent event) {
+          print("BannerAd $event");
+        });
+  }
+
+  InterstitialAd createInterstitialAd() {
+    return InterstitialAd(
+        adUnitId: InterstitialAd.testAdUnitId,
+        //Change Interstitial AdUnitId with Admob ID
+        targetingInfo: targetingInfo,
+        listener: (MobileAdEvent event) {
+          print("IntersttialAd $event");
+        });
+  }
+
+  @override
+  void initState() {
+    FirebaseAdMob.instance.initialize(appId: BannerAd.testAdUnitId);
+    //Change appId With Admob Id
+    _bannerAd = createBannerAd()
+      ..load()
+      ..show();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bannerAd.dispose();
+    //_interstitialAd.dispose();
+    super.dispose();
+  }
+
 
   _launchURLRESOURCES() async {
     const url = 'https://socialworklicensemap.com/mental-health-resources-list/';
