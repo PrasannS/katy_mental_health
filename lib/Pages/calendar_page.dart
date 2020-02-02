@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:Speculus/Pages/answer_page.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:table_calendar/table_calendar.dart';
 import 'package:Speculus/Models/entry.dart';
@@ -86,8 +87,14 @@ class _CalendarPageState extends State<CalendarPage> {
                 ),
                 child: ListView(
                   children: <Widget>[
+
                     Container(
                       height: 30,
+                    ),
+                    Text(
+                      "Calendar",
+                      style: GoogleFonts.dancingScript(textStyle: TextStyle(fontSize: 30)),
+                      textAlign: TextAlign.center,
                     ),
                     //custom icon
                     //m icon without header
@@ -134,8 +141,14 @@ class _CalendarPageState extends State<CalendarPage> {
                 child: ListView(
                   children: <Widget>[
                     Container(
-                      height: 30,
+                      height: 10,
                     ),
+                    Text(
+                      "Calendar",
+                      style: GoogleFonts.dancingScript(textStyle: TextStyle(fontSize: 30,)),
+                      textAlign: TextAlign.center,
+                    ),
+                    Divider(),
                     //custom icon
                     //m icon without header
                     Container(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:Speculus/Models/entry.dart';
 import 'package:Speculus/Persistence/database.dart';
 import 'graph_types.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class StatsPage extends StatefulWidget {
   StatsPage({Key key, this.title}) : super(key: key);
@@ -81,6 +82,12 @@ class _StatsPageState extends State<StatsPage> {
                 colors: [new Color(0xff7F7FD5), new Color(0xff91EAE4)])),
         child: ListView(
           children: <Widget>[
+            Text(
+              "My Statistics",
+              style: GoogleFonts.dancingScript(textStyle: TextStyle(fontSize: 30)),
+              textAlign: TextAlign.center,
+            ),
+            Divider(),
             Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
