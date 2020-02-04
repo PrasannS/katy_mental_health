@@ -1,3 +1,6 @@
+import 'package:Speculus/Pages/emergency_page.dart';
+import 'package:Speculus/Pages/entries_page.dart';
+import 'package:Speculus/Pages/minigames_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Speculus/Pages/breathing_page.dart';
@@ -42,14 +45,37 @@ class _MorePageState extends State<MorePage> {
                 gradient: LinearGradient(
                   begin: Alignment.topRight,
                   end: Alignment.bottomLeft,
-                  colors: [new Color(0xff04a5c1), Colors.grey[200]],
+                  //colors: [new Color(0xff04a5c1), Colors.grey[200]],
+                    colors: [new Color(0xff7F7FD5), new Color(0xff91EAE4)],
                 ),
               ),
               child: ListView(
                 children: <Widget>[
                   ListTile(
+                    leading: Icon(Icons.compare_arrows),
+                    title: Text("Emergency"),
+                    trailing: Icon(Icons.keyboard_arrow_right),
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => EmergencyPage()),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.list),
+                    title: Text("See All Entries"),
+                    trailing: Icon(Icons.keyboard_arrow_right),
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => EntriesPage()),
+                      );
+                    },
+                  ),
+                  ListTile(
                       leading: Icon(Icons.book),
-                      title: Text("Resources"),
+                      title: Text("Resources", style: TextStyle(fontFamily: 'Roboto')),
                       trailing: Icon(Icons.keyboard_arrow_right),
                       onTap: (){
                         _launchURLRESOURCES();
@@ -78,6 +104,17 @@ class _MorePageState extends State<MorePage> {
                       },
                     ),
 
+                  ListTile(
+                    leading: Icon(Icons.gamepad),
+                    title: Text("Play Game"),
+                    trailing: Icon(Icons.keyboard_arrow_right),
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MinigamesPage()),
+                      );
+                    },
+                  ),
 
                   ListTile(
                       leading: Icon(Icons.wb_sunny),

@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 
-//TODO
 class Chat extends StatefulWidget {
   static const String id = "CHAT";
   final String user;

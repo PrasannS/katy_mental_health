@@ -41,8 +41,6 @@ class _CommunityPageState extends State<CommunityPage> {
       CollectionReference v = _firestore.collection('calendars').document(widget.user).collection("entries");
       Future<List<Entry>>d = databaseHelper.getEntryList();
       d.then((entryList){
-        print(entryList.toString());
-        print("HERE");
         for(Entry e in entryList){
           v.add(e.toMap());
         }
@@ -66,18 +64,20 @@ class _CommunityPageState extends State<CommunityPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     getChats();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    chats.insert(
-        0,
-        SizedBox(
-          height: 20,
-        ));
+    if(chats[0].toStringShort() != "SizedBox") {
+      chats.insert(
+          0,
+          SizedBox(
+            height: 20,
+          ));
+    }
+
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -90,7 +90,8 @@ class _CommunityPageState extends State<CommunityPage> {
           gradient: new LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
-              colors: [new Color(0xff04a5c1), Colors.grey[300]]),
+              //colors: [new Color(0xff04a5c1), Colors.grey[300]]),
+              colors: [new Color(0xff7F7FD5), new Color(0xff91EAE4)]),
         ),
         child: Center(
           // Center is a layout widget. It takes a single child and positions it

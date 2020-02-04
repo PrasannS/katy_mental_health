@@ -6,7 +6,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'indicator.dart';
 import 'dart:async';
 
-Widget genLineGraph(List<int> dates, List<List<int>> bigList, List<String> names) {
+Widget genLineGraph(
+    List<int> dates, List<List<int>> bigList, List<String> names) {
   return Container(
     decoration: BoxDecoration(
       borderRadius: const BorderRadius.all(
@@ -88,11 +89,29 @@ LineChartData lineData(List<int> dates, List<List<int>> bigList) {
             color: Colors.blue[700], fontWeight: FontWeight.bold, fontSize: 16),
         getTitles: (value) {
           if (value == bigList[0].length ~/ 4)
-            return DateTime.fromMillisecondsSinceEpoch(dates[value ~/ 1]).month.toString() + "/" + DateTime.fromMillisecondsSinceEpoch(dates[value ~/ 1]).day.toString();
+            return DateTime.fromMillisecondsSinceEpoch(dates[value ~/ 1])
+                    .month
+                    .toString() +
+                "/" +
+                DateTime.fromMillisecondsSinceEpoch(dates[value ~/ 1])
+                    .day
+                    .toString();
           else if (value == bigList[0].length ~/ 2)
-            return DateTime.fromMillisecondsSinceEpoch(dates[value ~/ 1]).month.toString() + "/" + DateTime.fromMillisecondsSinceEpoch(dates[value ~/ 1]).day.toString();
+            return DateTime.fromMillisecondsSinceEpoch(dates[value ~/ 1])
+                    .month
+                    .toString() +
+                "/" +
+                DateTime.fromMillisecondsSinceEpoch(dates[value ~/ 1])
+                    .day
+                    .toString();
           else if (value == bigList[0].length * 3 ~/ 4)
-            return DateTime.fromMillisecondsSinceEpoch(dates[value ~/ 1]).month.toString() + "/" + DateTime.fromMillisecondsSinceEpoch(dates[value ~/ 1]).day.toString();
+            return DateTime.fromMillisecondsSinceEpoch(dates[value ~/ 1])
+                    .month
+                    .toString() +
+                "/" +
+                DateTime.fromMillisecondsSinceEpoch(dates[value ~/ 1])
+                    .day
+                    .toString();
           return '';
         },
         margin: 8,
@@ -108,10 +127,14 @@ LineChartData lineData(List<int> dates, List<List<int>> bigList) {
           switch (value.toInt()) {
             case 0:
               return '0';
-            case 85:
-              return '1/3';
-            case 171:
-              return '2/3';
+            case 4:
+              return '4';
+            case 8:
+              return '8';
+            case 12:
+              return '12';
+            case 13:
+              return '12+';
           }
           return '';
         },
@@ -126,7 +149,7 @@ LineChartData lineData(List<int> dates, List<List<int>> bigList) {
     minX: 0,
     maxX: bigList[0].length - 1.0,
     minY: 0,
-    maxY: 255,
+    maxY: 13,
     lineBarsData: getActualLineData(bigList),
   );
 }
@@ -179,74 +202,76 @@ Widget genPieGraph(List<int> dataList) {
     dataList.add(87);
     dataList.add(172);
   }
-    return AspectRatio(
-      aspectRatio: 1.3,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(
-            Radius.circular(18),
-          ),
-          color: Colors.transparent,
+  for (int i = 0; i < dataList.length; i++)
+    dataList[i] = (dataList[i] * 255 / 12).round();
+  return AspectRatio(
+    aspectRatio: 1.3,
+    child: Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(
+          Radius.circular(18),
         ),
-        child: Row(
-          children: <Widget>[
-            const SizedBox(
-              height: 18,
-            ),
-            Expanded(
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: FlChart(
-                  chart: PieChart(
-                    PieChartData(
-                        borderData: FlBorderData(
-                          show: false,
-                        ),
-                        sectionsSpace: 0,
-                        centerSpaceRadius: 40,
-                        sections: getActualPieData(dataList)),
-                  ),
+        color: Colors.transparent,
+      ),
+      child: Row(
+        children: <Widget>[
+          const SizedBox(
+            height: 18,
+          ),
+          Expanded(
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: FlChart(
+                chart: PieChart(
+                  PieChartData(
+                      borderData: FlBorderData(
+                        show: false,
+                      ),
+                      sectionsSpace: 0,
+                      centerSpaceRadius: 40,
+                      sections: getActualPieData(dataList)),
                 ),
               ),
             ),
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const <Widget>[
-                Indicator(
-                  color: Color(0xff0293ee),
-                  text: 'Good',
-                  isSquare: true,
-                ),
-                SizedBox(
-                  height: 4,
-                ),
-                Indicator(
-                  color: Color(0xfff8b250),
-                  text: 'Meh',
-                  isSquare: true,
-                ),
-                SizedBox(
-                  height: 4,
-                ),
-                Indicator(
-                  color: Color(0xff845bef),
-                  text: 'Bad',
-                  isSquare: true,
-                ),
-                SizedBox(
-                  height: 18,
-                ),
-              ],
-            ),
-            const SizedBox(
-              width: 28,
-            ),
-          ],
-        ),
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const <Widget>[
+              Indicator(
+                color: Color(0xff1ab802),
+                text: 'Good',
+                isSquare: true,
+              ),
+              SizedBox(
+                height: 4,
+              ),
+              Indicator(
+                color: Color(0xfff8b250),
+                text: 'Meh',
+                isSquare: true,
+              ),
+              SizedBox(
+                height: 4,
+              ),
+              Indicator(
+                color: Color(0xffb80202),
+                text: 'Bad',
+                isSquare: true,
+              ),
+              SizedBox(
+                height: 18,
+              ),
+            ],
+          ),
+          const SizedBox(
+            width: 28,
+          ),
+        ],
       ),
-    );
+    ),
+  );
 }
 
 List<PieChartSectionData> getActualPieData(List<int> dataList) {
@@ -269,7 +294,7 @@ List<PieChartSectionData> getActualPieData(List<int> dataList) {
       switch (i) {
         case 0:
           return PieChartSectionData(
-            color: const Color(0xff0293ee),
+            color: const Color(0xff1ab802),
             value: countData[0] + 0.0,
             title: ((countData[0] / dataList.length * 1000).round() / 10)
                     .toString() +
@@ -295,7 +320,7 @@ List<PieChartSectionData> getActualPieData(List<int> dataList) {
           );
         case 2:
           return PieChartSectionData(
-            color: const Color(0xff845bef),
+            color: const Color(0xffb80202),
             value: countData[2] + 0.0,
             title: ((countData[2] / dataList.length * 1000).round() / 10)
                     .toString() +
@@ -431,7 +456,7 @@ class BarChartSample1State extends State<BarChartSample1> {
                     activity = 'Education';
                     break;
                   case 2:
-                    activity = 'Relax';
+                    activity = 'Relaxation';
                     break;
                   case 3:
                     activity = 'Family';
@@ -450,11 +475,10 @@ class BarChartSample1State extends State<BarChartSample1> {
                     break;
                 }
                 if (touchedSpot.spot.y != 0)
-                return TooltipItem(
-                    activity + '\n' + (touchedSpot.spot.y - 1).toString(),
-                    TextStyle(color: Colors.yellow));
-                return TooltipItem(
-                    activity + '\n' + (0).toString(),
+                  return TooltipItem(
+                      activity + '\n' + (touchedSpot.spot.y - 1).toString(),
+                      TextStyle(color: Colors.yellow));
+                return TooltipItem(activity + '\n' + (0).toString(),
                     TextStyle(color: Colors.yellow));
               }).toList();
             }),
@@ -474,7 +498,7 @@ class BarChartSample1State extends State<BarChartSample1> {
                 case 1:
                   return 'Edu';
                 case 2:
-                  return 'Relax';
+                  return 'Relaxation';
                 case 3:
                   return 'Family';
                 case 4:

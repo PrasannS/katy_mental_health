@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:Speculus/Models/entry.dart';
 import 'package:Speculus/Persistence/database.dart';
 import 'graph_types.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class StatsPage extends StatefulWidget {
   StatsPage({Key key, this.title}) : super(key: key);
@@ -67,6 +68,9 @@ class _StatsPageState extends State<StatsPage> {
     d.then((entryList) {
       updateGraphs(entryList);
     });
+    List<int> holdMood = new List<int>();
+    for (int i = 0; i < mood.length; i++)
+      holdMood.add(mood[i]);
     return MaterialApp(
         home: Scaffold(
       body: Container(
@@ -74,9 +78,16 @@ class _StatsPageState extends State<StatsPage> {
             gradient: new LinearGradient(
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,
-                colors: [new Color(0xff04a5c1), Colors.grey[300]])),
+                //colors: [new Color(0xff04a5c1), Colors.grey[300]])),
+                colors: [new Color(0xff7F7FD5), new Color(0xff91EAE4)])),
         child: ListView(
           children: <Widget>[
+            Text(
+              "My Statistics",
+              style: GoogleFonts.dancingScript(textStyle: TextStyle(fontSize: 30)),
+              textAlign: TextAlign.center,
+            ),
+            Divider(),
             Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
@@ -92,7 +103,7 @@ class _StatsPageState extends State<StatsPage> {
                   style: TextStyle(color: Colors.white, fontSize: 30),
                   textAlign: TextAlign.center,
                 )),
-            genPieGraph(mood),
+            genPieGraph(holdMood),
             Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(

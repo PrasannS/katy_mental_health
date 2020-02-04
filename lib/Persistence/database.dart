@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:Speculus/Models/entry.dart';
+import 'package:path/path.dart';
 
 class DatabaseHelper {
 
@@ -33,7 +34,7 @@ class DatabaseHelper {
   Future<Database> initializeDatabase() async {
     // Get the directory path for both Android and iOS to store database.
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + 'appdb.db';
+    String path = join(directory.path, "appdb.db");
 
     // Open/create the database at a given path
     var entrysDatabase = await openDatabase(path, version: 3, onCreate: _createDb);

@@ -1,7 +1,6 @@
 name: Speculus
 description: An app to record your mood and your activities.
 
-
 version: 1.0.1+1
 
 environment:
@@ -15,11 +14,12 @@ dependencies:
   flutter_local_notifications: 0.8.4+3
 
   fl_chart: ^0.3.4
+  flutter_xlider: ^2.6.1
   table_calendar: ^2.1.0
   flutter_circular_slider : ^2.5.0
   sqflite: ^1.1.7+1
   path_provider: ^1.4.0
-  cloud_firestore: ^0.12.9
+  cloud_firestore: ^0.13.0+1
   firebase_core: ^0.4.0+8
   firebase_auth: ^0.14.0
   provider: ^3.0.0+1
@@ -27,6 +27,7 @@ dependencies:
   link: ^1.0.0
   url_launcher:
   uuid: ^2.0.2
+  google_fonts: ^0.3.6
 
 dev_dependencies:
   flutter_test:
@@ -36,11 +37,14 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "icon/logo1.png"
+  image_path: "icon/resizedlogo.png"
 
 
 flutter:
-
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/Roboto-Regular.ttf
   uses-material-design: true
 
 

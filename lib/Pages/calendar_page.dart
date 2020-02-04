@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:Speculus/Pages/answer_page.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:table_calendar/table_calendar.dart';
 import 'package:Speculus/Models/entry.dart';
@@ -34,10 +35,12 @@ class _CalendarPageState extends State<CalendarPage> {
   CalendarController _calendarController;
   final Firestore _firestore = Firestore.instance;
   final baseColor = Color.fromRGBO(255, 255, 255, 0.3);
-  List<Widget> entries = new List<Widget>();
   List<Entry> entryList = new List<Entry>();
   int refreshState = 0;
   int currentmood = 190;
+  bool hasEntries = false;
+  int avgMood = 150;
+
   @override
   void dispose() {
     _calendarController.dispose();
@@ -51,7 +54,6 @@ class _CalendarPageState extends State<CalendarPage> {
     _calendarController = CalendarController();
     selectedDate = DateTime.now();
     String s = widget.user;
-    print(s);
     _firestore
         .collection('calendars')
         .document(s)
@@ -60,109 +62,176 @@ class _CalendarPageState extends State<CalendarPage> {
         .then((snapshot) {
       for (DocumentSnapshot ds in snapshot.documents)
         entryList.add(new Entry.fromMap2(ds.data));
-      print(snapshot.documents.length);
+      _onDaySelected(selectedDate, null);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    /// Example Calendar Carousel without header and custom prev & next button
-    return new Scaffold(
-        body: SingleChildScrollView(
-            child: Container(
-          height: 900,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            gradient: getGradient(currentmood),
-          ),
-          child: ListView(
-            children: <Widget>[
-              Container(
-                height: 30,
-          ),
-              //custom icon
-              //m icon without header
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 10.0), //16
-                child: _buildTableCalendar(),
-              ),
-              Column(
-                children: entries,
-              ),
-
-              /*
-                FlatButton(
-                  color: Colors.transparent,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AnswerPage(time:selectedDate.millisecondsSinceEpoch)),
-                    );
-                    _onDaySelected(selectedDate, null);
-                  },
-                  textColor: Colors.white,
-                  padding: const EdgeInsets.all(0.0),
+    return FutureBuilder(
+      future: databaseHelper.getEntryList(),
+      builder: (BuildContext context, AsyncSnapshot<List<Entry>> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+            return Text('Press button to start.');
+          case ConnectionState.active:
+            return Text("Active...");
+          case ConnectionState.waiting:
+            return new Scaffold(
+              body: SingleChildScrollView(
                   child: Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: <Color>[
-                          Color(0xFF0D47A1),
-                          Color(0xFF1976D2),
-                          Color(0xFF42A5F5),
-                        ],
-                      ),
-                    ),
-                    padding: const EdgeInsets.all(30.0),
-                    child: const Icon(Icons.add
-                    ),
-                  ),
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                  gradient: getGradient(currentmood),
                 ),
-                */
-              //
-            ],
-          ),
-        )),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.lightBlue,
-          foregroundColor: Colors.grey[200],
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      AnswerPage(time: selectedDate.millisecondsSinceEpoch)),
-            ).then((value)
-            {
-              _onDaySelected(selectedDate, null);
-            });
-          },
-          child: Icon(Icons.add),
-          elevation: 2.0,
-        ));
+                child: ListView(
+                  children: <Widget>[
+
+                    Container(
+                      height: 30,
+                    ),
+                    Text(
+                      "Calendar",
+                      style: GoogleFonts.dancingScript(textStyle: TextStyle(fontSize: 30)),
+                      textAlign: TextAlign.center,
+                    ),
+                    //custom icon
+                    //m icon without header
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10.0), //16
+                      child: _buildTableCalendar(snapshot.data),
+                    ),
+                  ],
+                ),
+              )),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.endFloat,
+              floatingActionButton: hasEntries == false
+                  ? FloatingActionButton(
+                      backgroundColor: Colors.lightBlue,
+                      foregroundColor: Colors.grey[200],
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AnswerPage(
+                                  time: selectedDate.millisecondsSinceEpoch)),
+                        ).then((value) {
+                          _onDaySelected(selectedDate, null);
+                        });
+                      },
+                      child: Icon(Icons.add),
+                      elevation: 2.0,
+                    )
+                  : Container(),
+            );
+          case ConnectionState.done:
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            }
+            return new Scaffold(
+              body: SingleChildScrollView(
+                  child: Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                  gradient: getGradient(currentmood),
+                ),
+                child: ListView(
+                  children: <Widget>[
+                    Container(
+                      height: 10,
+                    ),
+                    Text(
+                      "Calendar",
+                      style: GoogleFonts.dancingScript(textStyle: TextStyle(fontSize: 30,)),
+                      textAlign: TextAlign.center,
+                    ),
+                    Divider(),
+                    //custom icon
+                    //m icon without header
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10.0), //16
+                      child: _buildTableCalendar(snapshot.data),
+                    ),
+                    Column(
+                      children: getEntriesForDay(snapshot.data),
+                    )
+                  ],
+                ),
+              )),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.endFloat,
+              floatingActionButton: hasEntries == false
+                  ? FloatingActionButton(
+                      backgroundColor: Colors.lightBlue,
+                      foregroundColor: Colors.grey[200],
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AnswerPage(
+                                  time: selectedDate.millisecondsSinceEpoch)),
+                        ).then((value) {
+                          _onDaySelected(selectedDate, null);
+                        });
+                      },
+                      child: Icon(Icons.add),
+                      elevation: 2.0,
+                    )
+                  : Container(),
+            );
+        }
+        return Text("what"); // unreachable
+      },
+    );
   }
 
-  Widget _buildTableCalendar() {
+  Widget _buildTableCalendar(List<Entry> data) {
+    Map<DateTime, List> events = new Map<DateTime, List>();
+    if (data != null)
+      {
+        for (int i = 0; i < data.length; i++)
+          {
+            events.putIfAbsent(new DateTime.fromMillisecondsSinceEpoch(data[i].datetime), () => new List<int>());
+            events[new DateTime.fromMillisecondsSinceEpoch(data[i].datetime)].add(data[i].mood);
+          }
+      }
     return TableCalendar(
+      builders: CalendarBuilders(
+        markersBuilder: (context, date, events, holidays) {
+          final children = <Widget>[];
+          if (events.isNotEmpty) {
+            children.add(
+              Positioned(
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0,
+                child: _buildEventsMarker(date, events),
+              ),
+            );
+          }
+          return children;
+        }
+      ),
+      events: events,
       calendarController: _calendarController,
-      daysOfWeekStyle: DaysOfWeekStyle(
-          weekendStyle: TextStyle(
-        color: Colors.amber,
-      )),
+      daysOfWeekStyle:
+          DaysOfWeekStyle(weekendStyle: TextStyle(color: Colors.black38)),
       startingDayOfWeek: StartingDayOfWeek.monday,
       calendarStyle: CalendarStyle(
-          selectedColor: Colors.blueAccent[400],
+          selectedColor: Colors.black.withOpacity(0.3), //getDayGradient(),
           todayColor: Colors.blue[200],
-          markersColor: Colors.blueAccent[700],
           outsideDaysVisible: false,
-          weekendStyle: TextStyle(
-            color: Colors.amber,
-          )),
+          markersColor: Colors.yellow,
+          weekendStyle: TextStyle(color: Colors.black)),
       headerStyle: HeaderStyle(
         formatButtonTextStyle:
             TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
         formatButtonDecoration: BoxDecoration(
-          color: Colors.blueAccent[400],
+          color: Colors.indigo,
           borderRadius: BorderRadius.circular(16.0),
         ),
       ),
@@ -186,6 +255,19 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
+  Widget _buildEventsMarker(DateTime date, List events) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+      child: Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: getColorFromMood(events[0]).withOpacity(0.5),
+      ),
+      width: 250,
+      height: 250,
+    ),);
+  }
+
   Widget getTextWidget(String s) {
     return Row(
       children: <Widget>[
@@ -204,42 +286,40 @@ class _CalendarPageState extends State<CalendarPage> {
         begin: Alignment.topRight, end: Alignment.bottomLeft,
 
         //colors: [Color.fromRGBO(255-a, 0, 50,.5), Color.fromRGBO(0,a, 50,0.5)]);
-        colors: [new Color(0xff04a5c1), Colors.white]);
+        //colors: [new Color(0xff04a5c1), Colors.white]);
+        colors: [new Color(0xff7F7FD5), new Color(0xff91EAE4)]);
   }
 
-  void openEntry(Entry e) {
-    setState(() {
-      currentmood = e.mood;
-      entries = new List<Widget>();
-      entries.add(new Container(
-        height: 400,
-        child: ListView(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                getIconWithValue(Icons.airline_seat_flat, e.sleep),
-                getIconWithValue(Icons.child_care, e.mood),
-                getIconWithValue(Icons.invert_colors, e.water),
-              ],
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            ),
-            new RaisedButton(
-              child: Text('${Constants.questionOptions[e.activity]}'),
-              color: Color.fromRGBO(255, 255, 255, .5),
-              textColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40.0),
-              ),
-            ),
-            getTextWidget(Constants.questionsOfTheDay[e.question_id]),
-            getTextWidget(e.answer),
-            getTextWidget(e.note),
-          ],
-        ),
-      ));
-    });
+  Widget openEntry(Entry e) {
+    currentmood = (e.mood * 255 / 12).round();
+    return new Container(
+      height: 400,
+      child: ListView(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              getIconWithValue(Icons.airline_seat_flat, e.sleep),
+              getIconWithValue(Icons.child_care, e.mood),
+              getIconWithValue(Icons.invert_colors, e.water),
+            ],
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          ),
+          new RaisedButton(
+            child: Text('${Constants.questionOptions[e.activity]}'),
+            color: getColorFromMood(e.mood),
+            textColor: Colors.white,
+            onPressed: () {print("pressed");},
+            //shape: RoundedRectangleBorder(
+            //borderRadius: BorderRadius.circular(40.0),
+            //),
+          ),
+          getTextWidget(Constants.questionsOfTheDay[e.question_id]),
+          getTextWidget(e.answer),
+          getTextWidget(e.note),
+        ],
+      ),
+    );
   }
-
 
   void getEntriesFromFB() {
     _firestore
@@ -258,89 +338,56 @@ class _CalendarPageState extends State<CalendarPage> {
   void _onDaySelected(DateTime day, List events) {
     setState(() {
       selectedDate = day;
-      if (!widget.preview) {
-        entries = new List<Widget>();
-        Future<List<Entry>> d = databaseHelper.getEntryList();
-        d.then((entryList) {
-          print(entryList[entryList.length - 1]);
-          for (Entry e in entryList) {
-            DateTime today = DateTime.fromMillisecondsSinceEpoch(e.datetime);
-            if (day.year == today.year &&
-                day.month == today.month &&
-                day.day == today.day) {
-              entries.add(new RaisedButton(
-                child: Text('${Constants.questionOptions[e.activity]}'),
-                color: Color.fromRGBO(255 - e.mood, e.mood, 50, .5),
-                textColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40.0),
-                ),
-                onPressed: () => {openEntry(e)},
-              ));
-            } else {
-              currentmood = 150;
-            }
-
-          }
-        });
-      } else {
-        print("other USER");
-        entries = new List<Widget>();
-        for (Entry e in entryList) {
-          DateTime today = DateTime.fromMillisecondsSinceEpoch(e.datetime);
-          if (day.year == today.year &&
-              day.month == today.month &&
-              day.day == today.day) {
-            entries.add(new RaisedButton(
-              child: Text('${Constants.questionOptions[e.activity]}'),
-              color: Color.fromRGBO(255 - e.mood, e.mood, 50, .5),
-              textColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40.0),
-              ),
-              onPressed: () => {openEntry(e)},
-            ));
-          } else {
-            currentmood = 150;
-          }
-        }
-      }
     });
   }
 
-
-  int getAvgMood(DateTime day) {
-    selectedDate = day;
-    entries = new List<Widget>();
-    int total = 0;
-    int i = 0;
-    Future<List<Entry>> d = databaseHelper.getEntryList();
-    d.then((entryList) {
-      for (Entry e in entryList) {
+  List<Widget> getEntriesForDay(List<Entry> givenEntries) {
+    if (!widget.preview) {
+      List<Widget> genEntries = new List<Widget>();
+      hasEntries = givenEntries.length > 0;
+      for (Entry e in givenEntries) {
         DateTime today = DateTime.fromMillisecondsSinceEpoch(e.datetime);
-        if (day.year == today.year &&
-            day.month == today.month &&
-            day.day == today.day) {
-          i++;
-          total += e.mood;
-          entries.add(new RaisedButton(
-            child: Text('${Constants.questionOptions[e.activity]}'),
-            color: Color.fromRGBO(255 - e.mood, e.mood, 50, .5),
-            textColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(40.0),
-            ),
-            onPressed: () => {openEntry(e)},
-          ));
+        if (selectedDate.year == today.year &&
+            selectedDate.month == today.month &&
+            selectedDate.day == today.day) {
+          genEntries.add(openEntry(e));
         } else {
           currentmood = 150;
         }
       }
-    });
-    if (i > 0)
-      return (total / i).round();
-    else {
-      return -1;
+      hasEntries = genEntries.length > 0;
+      return genEntries;
+    } else {
+      print("other USER");
+      List<Widget> genEntries = new List<Widget>();
+      for (Entry e in entryList) {
+        DateTime today = DateTime.fromMillisecondsSinceEpoch(e.datetime);
+        if (selectedDate.year == today.year &&
+            selectedDate.month == today.month &&
+            selectedDate.day == today.day) {
+          genEntries.add(openEntry(e));
+        } else {
+          currentmood = 150;
+        }
+      }
+      return genEntries;
+    }
+  }
+
+  Color getColorFromMood(int mood) {
+    int calcMood = (mood * 255 / 12).floor();
+    if (calcMood < 128) {
+      return Color.fromARGB(150, 255, calcMood * 2, 0);
+    } else {
+      return Color.fromARGB(150, 255 - (calcMood - 128) * 2, 255, 0);
+    }
+  }
+
+  Color getDayGradient() {
+    if (avgMood < 128) {
+      return Color.fromARGB(150, 255, avgMood * 2, 0);
+    } else {
+      return Color.fromARGB(150, 255 - (avgMood - 128) * 2, 255, 0);
     }
   }
 }
