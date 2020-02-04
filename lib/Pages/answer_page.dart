@@ -139,7 +139,7 @@ class _AnswerPageState extends State<AnswerPage> {
   @override
   Widget build(BuildContext context) {
 
-    String textt = (currentQuestion == 6) ? "SUBMIT" : "NEXT";
+    String text;
 
     List<Widget> questionWidgets = [
       new SingleCircularSlider(
@@ -283,7 +283,9 @@ class _AnswerPageState extends State<AnswerPage> {
                         onPressed: prevQuestion ,
                       ),
                       FlatButton(
-                        child: Text(textt),
+                        child: Text(
+                            text = (currentQuestion == 6) ? "SUBMIT" : "NEXT"
+                        ),
                         color: baseColor,
                         textColor: Colors.white,
                         shape: RoundedRectangleBorder(
