@@ -10,7 +10,31 @@ class MinigamesPage extends StatefulWidget {
 }
 
 class _MinigamesPageState extends State<MinigamesPage> {
+  List<Color> _colors = [ //Get list of colors
+    Colors.red,
+    Colors.blue,
+    Colors.orange,
+    Colors.teal,
+    Colors.purple
+  ];
+
+  _onChanged(){
+    setState(() {
+      clicks++;
+      counter++;
+      if(counter >= 20){
+        index++;
+        if(index >= _colors.length){
+          index = 0;
+        }
+        counter = 0;
+      }
+    });
+  }
+
   int clicks = 0;
+  int counter = 0;
+  int index = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -20,29 +44,27 @@ class _MinigamesPageState extends State<MinigamesPage> {
       ),
       body: Center(
           child: RaisedButton(
-        color: Colors.deepPurple[200],
+        color: _colors[index],
         shape: new RoundedRectangleBorder(
           borderRadius: new BorderRadius.circular(40.0),
         ),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width / 4,
-          height: MediaQuery.of(context).size.height / 4,
-          child: Center(
-            child: Text(
-              clicks.toString(),
-              style: TextStyle(fontSize: 30),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width / 4,
+            height: MediaQuery.of(context).size.height / 4,
+            child: Center(
+              child: Text(
+                clicks.toString(),
+                style: TextStyle(fontSize: 30),
+              ),
             ),
           ),
-        ),
-        onPressed: () {
-          setState(() {
-            clicks++;
-          });
-        },
+        onPressed: _onChanged,
       )),
     );
   }
 }
+
+
 
 class bubble extends StatefulWidget {
   createState() => _bubble();

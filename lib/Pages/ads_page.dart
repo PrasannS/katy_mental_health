@@ -73,6 +73,8 @@ class _AdPageState extends State<AdPage> {
           title: Text("Watch Ads"),
         ),
         body: Center(
+
+            //child: Text("Watch ads to help earn money to be donated to mental health organizations!"),
             child: RaisedButton(
               child: Text('Click to Watch'),
               onPressed: () {
